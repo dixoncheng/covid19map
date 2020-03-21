@@ -5,9 +5,14 @@ import L from "leaflet";
 const Map = ({ center, zoom, markers }) => {
   const mapRef = useRef();
 
-  const nzBounds = [
+  const mapBounds = [
     [-32.90178557, 164.67596054],
     [-48.57478991, 181.27441406]
+  ];
+
+  const nzBounds = [
+    [-34.76671725, 166.2361908],
+    [-47.30251579, 177.66849518]
   ];
 
   useEffect(() => {
@@ -29,7 +34,7 @@ const Map = ({ center, zoom, markers }) => {
     <div>
       <LeafletMap
         ref={mapRef}
-        maxBounds={nzBounds}
+        maxBounds={mapBounds}
         center={center}
         zoom={zoom}
         maxZoom={10}
