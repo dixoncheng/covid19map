@@ -39,6 +39,21 @@ export default class MyDocument extends Document {
             href="https://unpkg.com/leaflet-geosearch@latest/assets/css/leaflet.css"
             rel="stylesheet"
           />
+
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-93113-28"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'UA-93113-28');
+              `
+            }}
+          />
         </Head>
         <body>
           <Main />
