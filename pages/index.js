@@ -1,5 +1,6 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import styled from "styled-components";
 import fetch from "node-fetch";
 import cheerio from "cheerio";
@@ -16,6 +17,17 @@ const Home = ({ data, lastUpdated, totalCases }) => {
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
 
+  const [view, setView] = useState("");
+  const [location, setLocation] = useState();
+
+  const showLocation = location => {
+    const loc = data.find(x => location === x.location);
+    if (loc) {
+      setLocation(loc);
+      setView("details");
+    }
+  };
+
   return (
     <div className="container">
       <Head>
@@ -26,45 +38,86 @@ const Home = ({ data, lastUpdated, totalCases }) => {
           <Map center={center} zoom={zoom} markers={data} />
         </Main>
         <Info>
-          <img className="logo" src="/logo.svg" />
-          <h1>Covid-19 Map</h1>
-          <h2>Current Cases in New Zealand</h2>
+          {view === "details" ? (
+            <Details>
+              <BackButton type="button" onClick={() => setView("")}>
+                &lt; Back to summary
+              </BackButton>
 
-          <div className="meta">
-            <small>Last updated {lastUpdated}</small>
-            <br />
-            <small>
-              Source:{" "}
-              <a
-                href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ministry of Health
-              </a>
-            </small>
-          </div>
+              <Bar>
+                {location.location}
+                <span>
+                  {location.numCases}{" "}
+                  {location.numCases === 1 ? "Case" : "Cases"}
+                </span>
+              </Bar>
 
-          <h2 className="split">
-            Total number of cases <span>{totalCases}</span>
-          </h2>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Location</th>
-                <th>Case/s</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, i) => (
-                <tr key={i}>
-                  <td>{item.location}</td>
-                  <td>{item.numCases}</td>
-                </tr>
+              {location?.cases.map((item, i) => (
+                <Case key={i}>
+                  <h3>Case {item.caseId}</h3>
+                  <div className="details">
+                    <div className="age">
+                      {item.age}
+                      {item.age && item.gender ? ", " : ""} {item.gender}
+                    </div>
+                    {item.details}
+                  </div>
+                </Case>
               ))}
-            </tbody>
-          </table>
+            </Details>
+          ) : (
+            <Summary>
+              <img className="logo" src="/logo.svg" />
+              <h1>Covid-19 Map</h1>
+              <h2>Current Cases in New Zealand</h2>
+              <div className="meta">
+                <small>Last updated {lastUpdated}</small>
+                <br />
+                <small>
+                  Source:{" "}
+                  <a
+                    href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ministry of Health
+                  </a>
+                </small>
+              </div>
+              <h2 className="split">
+                Total number of cases <span>{totalCases}</span>
+              </h2>
+
+              <Bar>
+                Location
+                <span>Case/s</span>
+              </Bar>
+              {data.map((item, i) => (
+                <Location
+                  key={i}
+                  type="button"
+                  onClick={() => showLocation(item.location)}
+                >
+                  {item.location}
+                  <span>{item.numCases}</span>
+                </Location>
+              ))}
+
+              <p>
+                <small>
+                  Any feedback, ideas, or if you'd like to help, please contact{" "}
+                  <a href="mailto:mail@covid19map.nz">mail@covid19map.nz</a> |{" "}
+                  <a
+                    href="https://github.com/dixoncheng/covid19map"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Github
+                  </a>
+                </small>
+              </p>
+            </Summary>
+          )}
         </Info>
       </Wrap>
     </div>
@@ -73,7 +126,7 @@ const Home = ({ data, lastUpdated, totalCases }) => {
 
 export default Home;
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const response = await fetch(URL);
   const html = await response.text();
   const $ = await cheerio.load(html);
@@ -85,19 +138,24 @@ export async function getStaticProps(context) {
     cases.push({
       caseId: $(elem)
         .find("td:nth-child(1)")
-        .text(),
+        .text()
+        .trim(),
       location: $(elem)
         .find("td:nth-child(2)")
-        .text(),
+        .text()
+        .trim(),
       age: $(elem)
         .find("td:nth-child(3)")
-        .text(),
+        .text()
+        .trim(),
       gender: $(elem)
         .find("td:nth-child(4)")
-        .text(),
+        .text()
+        .trim(),
       details: $(elem)
         .find("td:nth-child(5)")
         .text()
+        .trim()
     });
   });
 
@@ -111,21 +169,30 @@ export async function getStaticProps(context) {
     if (item.location === "Southern DHB") {
       item.location = "Dunedin";
     }
+
+    if (item.gender === "M") {
+      item.gender = "Male";
+    }
+    if (item.gender === "F") {
+      item.gender = "Female";
+    }
+
     const n = data.find(x => item.location === x.location);
     if (n) {
       n.numCases++;
+      n.cases.push(item);
     } else {
       const loc = locations.find(x => item.location === x.location);
       if (loc) {
         data.push({
           location: item.location,
           numCases: 1,
-          latlng: loc.latlng
+          latlng: loc.latlng,
+          cases: [item]
         });
       }
     }
   });
-  // console.log(summary);
 
   data.sort((a, b) => (a.numCases > b.numCases ? -1 : 1));
 
@@ -161,12 +228,16 @@ const Info = styled.div`
   background: ${light};
   @media (min-width: ${breakpoint}) {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     height: 100vh;
-    max-width: 375px;
+    width: 375px;
   }
   a {
     color: ${dark};
   }
+`;
+
+const Summary = styled.div`
   .logo {
     width: 73px;
   }
@@ -197,7 +268,7 @@ const Info = styled.div`
   th {
     font-size: 24px;
     text-align: left;
-    padding: 10px 15px;
+    padding: 7px 15px;
     &:last-child {
       text-align: right;
     }
@@ -210,4 +281,58 @@ const Info = styled.div`
     background: white;
     border-top: solid ${light} 4px;
   }
+`;
+
+const Location = styled.button`
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  background: white;
+  padding: 7px 15px;
+  margin-top: 4px;
+  border: none;
+  width: 100%;
+  transition: 0.3s ease;
+  color: ${dark};
+  :hover {
+    background: #bee1dd;
+  }
+`;
+
+const Details = styled.div``;
+
+const Bar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  background: ${green};
+  color: white;
+  padding: 7px 15px;
+`;
+
+const Case = styled.div`
+  font-size: 14px;
+  margin-top: 4px;
+  h3 {
+    margin: 0;
+    font-size: 14px;
+    color: white;
+    background: ${teal};
+    padding: 2px 15px;
+  }
+  .age {
+    color: ${teal};
+  }
+  .details {
+    background: white;
+    padding: 10px 15px;
+  }
+`;
+
+const BackButton = styled.button`
+  background: none;
+  border: none;
+  color: ${dark};
+  margin-bottom: 1.5em;
+  padding: 0;
 `;

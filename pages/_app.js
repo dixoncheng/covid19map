@@ -31,4 +31,7 @@ const Styles = createGlobalStyle`
         margin: 0;
         font-family: 'Nunito', sans-serif;
     }
+    button {
+      cursor: pointer;
+    }
 `;
