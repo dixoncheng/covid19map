@@ -57,6 +57,20 @@ export default class MyDocument extends Document {
               `
             }}
           />
+          <meta property="og:url" content="https://covid19map.nz/" />
+          <meta property="og:title" content="Covid-19 map NZ" />
+          <meta
+            property="og:description"
+            content="A visual look at the current Covid-19 cases in New Zealand"
+          />
+          <meta
+            property="og:image"
+            content="https://covid19map.nz/C19-FBshare.png"
+          />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:type" content="image/png" />
+          <meta property="og:locale" content="en_nz" />
         </Head>
         <body>
           <Main />
