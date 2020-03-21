@@ -1,5 +1,6 @@
 const locations = [
   { location: "Auckland", latlng: [-36.852095, 174.7631803] },
+  { location: "Waikato", latlng: [-37.77922725, 175.20103232] },
   { location: "Nelson", latlng: [-41.2710849, 173.2836756] },
   { location: "Manawatu", latlng: [-40.4832071, 175.3832057] },
   { location: "Taupo", latlng: [-38.7993662, 176.11009674] },

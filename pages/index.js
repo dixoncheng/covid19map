@@ -169,7 +169,9 @@ export async function getStaticProps() {
     if (item.location === "Southern DHB") {
       item.location = "Dunedin";
     }
-
+    if (item.location === "Otago") {
+      item.location = "Dunedin";
+    }
     if (item.gender === "M") {
       item.gender = "Male";
     }
@@ -284,6 +286,7 @@ const Summary = styled.div`
 `;
 
 const Location = styled.button`
+  text-decoration: underline;
   display: flex;
   justify-content: space-between;
   font-size: 24px;
