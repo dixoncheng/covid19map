@@ -157,7 +157,6 @@ const Main = styled.div`
 const Info = styled.div`
   color: ${dark};
   box-sizing: border-box;
-
   padding: 20px;
   background: ${light};
   @media (min-width: ${breakpoint}) {
@@ -165,7 +164,6 @@ const Info = styled.div`
     height: 100vh;
     max-width: 375px;
   }
-
   a {
     color: ${dark};
   }
