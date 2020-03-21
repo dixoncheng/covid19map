@@ -56,8 +56,13 @@ const Map = ({ center, zoom, markers }) => {
       </LeafletMap>
       <style jsx global>{`
         .leaflet-container {
-          height: 100vh;
+          height: 50vh;
           width: 100%;
+        }
+        @media (min-width: 768px) {
+          .leaflet-container {
+            height: 100vh;
+          }
         }
         .icon {
           background: #51b6b0;

@@ -12,7 +12,7 @@ const Map = dynamic(() => import("../components/map"), {
   ssr: false
 });
 
-const Home = ({ data, lastUpdated }) => {
+const Home = ({ data, lastUpdated, totalCases }) => {
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
 
@@ -26,10 +26,36 @@ const Home = ({ data, lastUpdated }) => {
           <Map center={center} zoom={zoom} markers={data} />
         </Main>
         <Info>
+          <img className="logo" src="/logo.svg" />
           <h1>Covid-19 Map</h1>
+          <h2>Current Cases in New Zealand</h2>
 
-          <h2>Number of cases</h2>
+          <div className="meta">
+            <small>Last updated {lastUpdated}</small>
+            <br />
+            <small>
+              Source:{" "}
+              <a
+                href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ministry of Health
+              </a>
+            </small>
+          </div>
+
+          <h2 className="split">
+            Total number of cases <span>{totalCases}</span>
+          </h2>
+
           <table>
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Case/s</th>
+              </tr>
+            </thead>
             <tbody>
               {data.map((item, i) => (
                 <tr key={i}>
@@ -39,26 +65,6 @@ const Home = ({ data, lastUpdated }) => {
               ))}
             </tbody>
           </table>
-
-          <p>
-            <a
-              href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Data source - Ministry of Health
-            </a>
-          </p>
-          {/* <p>
-            <a
-              href="https://covid19.govt.nz/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              covid19.govt.nz
-            </a>
-          </p> */}
-          <p>Last updated: {lastUpdated}.</p>
         </Info>
       </Wrap>
     </div>
@@ -96,7 +102,9 @@ export async function getStaticProps(context) {
   });
 
   let data = [];
+  let totalCases = 0;
   cases.forEach(item => {
+    totalCases++;
     if (item.location === "Wellington Region") {
       item.location = "Wellington";
     }
@@ -124,13 +132,22 @@ export async function getStaticProps(context) {
   return {
     props: {
       data,
-      lastUpdated
+      lastUpdated,
+      totalCases
     }
   };
 }
 
+const teal = "#51b6b0";
+const green = "#aacd6e";
+const light = "#edf3f0";
+const dark = "#204e61";
+const breakpoint = "768px";
+
 const Wrap = styled.div`
-  display: flex;
+  @media (min-width: ${breakpoint}) {
+    display: flex;
+  }
 `;
 
 const Main = styled.div`
@@ -138,7 +155,60 @@ const Main = styled.div`
 `;
 
 const Info = styled.div`
+  color: ${dark};
   box-sizing: border-box;
-  width: 300px;
+  width: 375px;
   padding: 20px;
+  background: ${light};
+  @media (min-width: ${breakpoint}) {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  a {
+    color: ${dark};
+  }
+  .logo {
+    width: 73px;
+  }
+  h1 {
+    font-size: 42px;
+    color: ${teal};
+    margin: 0;
+  }
+  h2 {
+    font-size: 23px;
+    color: ${teal};
+    margin: 0 0 1em;
+    line-height: 1.1;
+  }
+  h2.split {
+    display: flex;
+    justify-content: space-between;
+  }
+  .meta {
+    margin: 1.5em 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  td,
+  th {
+    font-size: 24px;
+    text-align: left;
+    padding: 10px 15px;
+    &:last-child {
+      text-align: right;
+    }
+  }
+  th {
+    background: ${green};
+    color: white;
+  }
+  td {
+    background: white;
+    border-top: solid ${light} 4px;
+  }
 `;
