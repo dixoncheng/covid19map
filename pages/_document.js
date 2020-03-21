@@ -58,7 +58,7 @@ export default class MyDocument extends Document {
             }}
           />
           <meta property="og:url" content="https://covid19map.nz/" />
-          <meta property="og:title" content="Covid-19 map NZ" />
+          <meta property="og:title" content="Covid-19 Map NZ" />
           <meta
             property="og:description"
             content="A visual look at the current Covid-19 cases in New Zealand"
