@@ -157,12 +157,13 @@ const Main = styled.div`
 const Info = styled.div`
   color: ${dark};
   box-sizing: border-box;
-  width: 375px;
+
   padding: 20px;
   background: ${light};
   @media (min-width: ${breakpoint}) {
     overflow: auto;
     height: 100vh;
+    max-width: 375px;
   }
 
   a {
