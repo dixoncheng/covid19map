@@ -11,7 +11,10 @@ const locations = [
   { location: "Rotorua", latlng: [-38.1381493, 176.252922] },
   { location: "Northland", latlng: [-35.3712702, 173.7405337] },
   { location: "Taranaki", latlng: [-39.2711067, 174.154795] },
-  { location: "Invercargill", latlng: [-46.4121229, 168.3483269] }
+  { location: "Invercargill", latlng: [-46.4121229, 168.3483269] },
+  { location: "Hamilton", latlng: [-37.7879076, 175.2818068] },
+  { location: "Coramandel", latlng: [-36.7571639, 175.5007016] },
+  { location: "Bay of Plenty", latlng: [-37.9503756, 176.93828736] }
 ];
 
 export default locations;
