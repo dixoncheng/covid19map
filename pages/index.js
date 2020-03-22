@@ -163,15 +163,16 @@ export async function getStaticProps() {
   let totalCases = 0;
   cases.forEach(item => {
     totalCases++;
-    if (item.location === "Wellington Region") {
-      item.location = "Wellington";
+
+    // correct typos on MOH site
+    if (item.location === "Coramandel") {
+      item.location = "Coromandel";
     }
-    if (item.location === "Southern DHB") {
+    if (item.location === "Dundedin") {
       item.location = "Dunedin";
     }
-    if (item.location === "Otago") {
-      item.location = "Dunedin";
-    }
+
+    // normalize genders
     if (item.gender === "M") {
       item.gender = "Male";
     }
@@ -192,11 +193,19 @@ export async function getStaticProps() {
           latlng: loc.latlng,
           cases: [item]
         });
+      } else {
+        // region doesn't exist in constants
+        throw new Error(`No region ${item.location} exist`);
       }
     }
   });
 
-  data.sort((a, b) => (a.numCases > b.numCases ? -1 : 1));
+  data.sort((a, b) => {
+    if (a.numCases === b.numCases) {
+      return a.location > b.location ? 1 : -1;
+    }
+    return a.numCases > b.numCases ? -1 : 1;
+  });
 
   return {
     props: {
