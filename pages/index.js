@@ -67,6 +67,7 @@ const Home = ({ data, lastUpdated, totalCases }) => {
             </Details>
           ) : (
             <Summary>
+              <Alert>Alert Level 2</Alert>
               <img className="logo" src="/logo.svg" />
               <h1>Covid-19 Map</h1>
               <h2>Current Cases in New Zealand</h2>
@@ -163,15 +164,16 @@ export async function getStaticProps() {
   let totalCases = 0;
   cases.forEach(item => {
     totalCases++;
-    if (item.location === "Wellington Region") {
-      item.location = "Wellington";
+
+    // correct typos on MOH site
+    if (item.location === "Coramandel") {
+      item.location = "Coromandel";
     }
-    if (item.location === "Southern DHB") {
+    if (item.location === "Dundedin") {
       item.location = "Dunedin";
     }
-    if (item.location === "Otago") {
-      item.location = "Dunedin";
-    }
+
+    // normalize genders
     if (item.gender === "M") {
       item.gender = "Male";
     }
@@ -192,11 +194,19 @@ export async function getStaticProps() {
           latlng: loc.latlng,
           cases: [item]
         });
+      } else {
+        // region doesn't exist in constants
+        throw new Error(`No region ${item.location} exist`);
       }
     }
   });
 
-  data.sort((a, b) => (a.numCases > b.numCases ? -1 : 1));
+  data.sort((a, b) => {
+    if (a.numCases === b.numCases) {
+      return a.location > b.location ? 1 : -1;
+    }
+    return a.numCases > b.numCases ? -1 : 1;
+  });
 
   return {
     props: {
@@ -211,10 +221,11 @@ const teal = "#51b6b0";
 const green = "#aacd6e";
 const light = "#edf3f0";
 const dark = "#204e61";
-const breakpoint = "768px";
+const sm = "700px";
+const md = "800px";
 
 const Wrap = styled.div`
-  @media (min-width: ${breakpoint}) {
+  @media (min-width: ${sm}) {
     display: flex;
   }
 `;
@@ -228,7 +239,7 @@ const Info = styled.div`
   box-sizing: border-box;
   padding: 20px;
   background: ${light};
-  @media (min-width: ${breakpoint}) {
+  @media (min-width: ${sm}) {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     height: 100vh;
@@ -241,18 +252,27 @@ const Info = styled.div`
 
 const Summary = styled.div`
   .logo {
-    width: 73px;
+    width: 40px;
+    @media (min-width: ${md}) {
+      width: 73px;
+    }
   }
   h1 {
-    font-size: 42px;
+    font-size: 30px;
     color: ${teal};
     margin: 0;
+    @media (min-width: ${md}) {
+      font-size: 42px;
+    }
   }
   h2 {
-    font-size: 23px;
+    font-size: 18px;
     color: ${teal};
     margin: 0 0 1em;
     line-height: 1.1;
+    @media (min-width: ${md}) {
+      font-size: 23px;
+    }
   }
   h2.split {
     display: flex;
@@ -289,7 +309,7 @@ const Location = styled.button`
   text-decoration: underline;
   display: flex;
   justify-content: space-between;
-  font-size: 24px;
+  font-size: 18px;
   background: white;
   padding: 7px 15px;
   margin-top: 4px;
@@ -297,6 +317,9 @@ const Location = styled.button`
   width: 100%;
   transition: 0.3s ease;
   color: ${dark};
+  @media (min-width: ${md}) {
+    font-size: 24px;
+  }
   :hover {
     background: #bee1dd;
   }
@@ -307,10 +330,13 @@ const Details = styled.div``;
 const Bar = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 24px;
+  font-size: 18px;
   background: ${green};
   color: white;
   padding: 7px 15px;
+  @media (min-width: ${md}) {
+    font-size: 24px;
+  }
 `;
 
 const Case = styled.div`
@@ -338,4 +364,12 @@ const BackButton = styled.button`
   color: ${dark};
   margin-bottom: 1.5em;
   padding: 0;
+`;
+
+const Alert = styled.div`
+  padding: 5px 20px;
+  color: white;
+  font-size: 24px;
+  background: #ffcd38 url(/alert.svg) 174px 50% no-repeat;
+  margin: -20px -20px 20px;
 `;
