@@ -17,7 +17,8 @@ const locations = [
   { location: "Bay of Plenty", latlng: [-37.9503756, 176.93828736] },
   { location: "Wellington Region", latlng: [-41.22354735, 175.41575755] },
   { location: "Southern DHB", latlng: [-45.55613134, 170.13322592] },
-  { location: "Otago", latlng: [-45.1299859, 169.5248818] }
+  { location: "Otago", latlng: [-45.1299859, 169.5248818] },
+  { location: "Wairarapa", latlng: [-41.23617985, 175.21969019] }
 ];
 
 export default locations;
