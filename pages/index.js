@@ -120,6 +120,36 @@ const Home = ({ data, lastUpdated, totalCases }) => {
                   </a>
                 </small>
               </p>
+              <p>
+                <small>
+                  Covid-19 Map NZ sources its data directly from the official{" "}
+                  <a
+                    href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ministry of Health page
+                  </a>
+                  . We are in no way responsible for the accuracy of this
+                  information.
+                </small>
+              </p>
+              <p>
+                <small>
+                  Covid-19 Map NZ disclaims and excludes all liability for any
+                  claim, loss, demand or damages of any kind whatsoever
+                  (including for negligence) arising out of or in connection
+                  with the use of either this website or the information,
+                  content or materials included on this site or on any website
+                  we link to.
+                </small>
+              </p>
+              <p>
+                <small>
+                  By viewing and using the site, you will be deemed to agree to
+                  these Terms of use.
+                </small>
+              </p>
             </Summary>
           )}
         </Info>
