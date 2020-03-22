@@ -64,7 +64,7 @@ const Map = ({ center, zoom, markers }) => {
           height: 50vh;
           width: 100%;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 700px) {
           .leaflet-container {
             height: 100vh;
           }

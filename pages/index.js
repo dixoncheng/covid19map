@@ -67,6 +67,7 @@ const Home = ({ data, lastUpdated, totalCases }) => {
             </Details>
           ) : (
             <Summary>
+              <Alert>Alert Level 2</Alert>
               <img className="logo" src="/logo.svg" />
               <h1>Covid-19 Map</h1>
               <h2>Current Cases in New Zealand</h2>
@@ -220,10 +221,11 @@ const teal = "#51b6b0";
 const green = "#aacd6e";
 const light = "#edf3f0";
 const dark = "#204e61";
-const breakpoint = "768px";
+const sm = "700px";
+const md = "800px";
 
 const Wrap = styled.div`
-  @media (min-width: ${breakpoint}) {
+  @media (min-width: ${sm}) {
     display: flex;
   }
 `;
@@ -237,7 +239,7 @@ const Info = styled.div`
   box-sizing: border-box;
   padding: 20px;
   background: ${light};
-  @media (min-width: ${breakpoint}) {
+  @media (min-width: ${sm}) {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     height: 100vh;
@@ -250,18 +252,27 @@ const Info = styled.div`
 
 const Summary = styled.div`
   .logo {
-    width: 73px;
+    width: 40px;
+    @media (min-width: ${md}) {
+      width: 73px;
+    }
   }
   h1 {
-    font-size: 42px;
+    font-size: 30px;
     color: ${teal};
     margin: 0;
+    @media (min-width: ${md}) {
+      font-size: 42px;
+    }
   }
   h2 {
-    font-size: 23px;
+    font-size: 18px;
     color: ${teal};
     margin: 0 0 1em;
     line-height: 1.1;
+    @media (min-width: ${md}) {
+      font-size: 23px;
+    }
   }
   h2.split {
     display: flex;
@@ -298,7 +309,7 @@ const Location = styled.button`
   text-decoration: underline;
   display: flex;
   justify-content: space-between;
-  font-size: 24px;
+  font-size: 18px;
   background: white;
   padding: 7px 15px;
   margin-top: 4px;
@@ -306,6 +317,9 @@ const Location = styled.button`
   width: 100%;
   transition: 0.3s ease;
   color: ${dark};
+  @media (min-width: ${md}) {
+    font-size: 24px;
+  }
   :hover {
     background: #bee1dd;
   }
@@ -316,10 +330,13 @@ const Details = styled.div``;
 const Bar = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 24px;
+  font-size: 18px;
   background: ${green};
   color: white;
   padding: 7px 15px;
+  @media (min-width: ${md}) {
+    font-size: 24px;
+  }
 `;
 
 const Case = styled.div`
@@ -347,4 +364,12 @@ const BackButton = styled.button`
   color: ${dark};
   margin-bottom: 1.5em;
   padding: 0;
+`;
+
+const Alert = styled.div`
+  padding: 5px 20px;
+  color: white;
+  font-size: 24px;
+  background: #ffcd38 url(/alert.svg) 174px 50% no-repeat;
+  margin: -20px -20px 20px;
 `;
