@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
+import styled, { css, createGlobalStyle } from "styled-components";
 
-const Map = ({ center, zoom, markers }) => {
+const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   const mapRef = useRef();
 
   const mapBounds = [
@@ -18,6 +19,12 @@ const Map = ({ center, zoom, markers }) => {
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
   }, []);
+
+  useEffect(() => {
+    if (currentView === "") {
+      mapRef.current.leafletElement.closePopup();
+    }
+  }, [currentView]);
 
   const normalize = val => (val - 0) / (10 - 0);
 
@@ -49,40 +56,58 @@ const Map = ({ center, zoom, markers }) => {
       >
         <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
         {markers.map(({ latlng, numCases, location }, i) => (
-          <Marker key={i} position={latlng} icon={getIcon(numCases)}>
+          <Marker
+            key={i}
+            position={latlng}
+            icon={getIcon(numCases)}
+            onClick={() => onMarkerClick(location)}
+          >
             <Popup>
-              <div>
-                <strong>{location}</strong>
-              </div>
-              <div>Number of cases: {numCases}</div>
+              <StyledPopup>
+                <div className="location">{location}</div>
+                <div className="cases">Number of cases: {numCases}</div>
+              </StyledPopup>
             </Popup>
           </Marker>
         ))}
       </LeafletMap>
-      <style jsx global>{`
-        .leaflet-container {
-          height: 50vh;
-          width: 100%;
-        }
-        @media (min-width: 700px) {
-          .leaflet-container {
-            height: 100vh;
-          }
-        }
-        .icon {
-          background: #51b6b0;
-          color: white;
-          border-radius: 50%;
-          font-size: 16px;
-          font-weight: bold;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: solid white 1px;
-        }
-      `}</style>
+      <Styles />
     </div>
   );
 };
 
 export default Map;
+
+const StyledPopup = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.dark};
+    .location {
+      font-weight: bold;
+      font-size: 16px;
+      font-family: ${theme.font};
+    }
+  `}
+`;
+
+const Styles = createGlobalStyle`
+  .leaflet-container {
+    height: 50vh;
+    width: 100%;
+  }
+  @media (min-width: 700px) {
+    .leaflet-container {
+      height: 100vh;
+    }
+  }
+  .icon {
+    background: #51b6b0;
+    color: white;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid white 1px;
+  }
+`;
