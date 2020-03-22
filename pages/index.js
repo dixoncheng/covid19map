@@ -107,7 +107,10 @@ const Home = ({ data, lastUpdated, totalCases }) => {
               <p>
                 <small>
                   Any feedback, ideas, or if you'd like to help, please contact{" "}
-                  <a href="mailto:mail@covid19map.nz">mail@covid19map.nz</a> |{" "}
+                  <a href="mailto:contact@covid19map.nz">
+                    contact@covid19map.nz
+                  </a>{" "}
+                  |{" "}
                   <a
                     href="https://github.com/dixoncheng/covid19map"
                     target="_blank"
