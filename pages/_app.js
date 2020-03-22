@@ -1,12 +1,21 @@
 // import App from 'next/app'
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 function MyApp({ Component, pageProps }) {
+  const theme = {
+    font: '"Nunito", sans- serif',
+    teal: "#51b6b0",
+    green: "#aacd6e",
+    light: "#edf3f0",
+    dark: "#204e61",
+    sm: "700px",
+    md: "800px"
+  };
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Styles />
       <Component {...pageProps} />
-    </>
+    </ThemeProvider>
   );
 }
 
