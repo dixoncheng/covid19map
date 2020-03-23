@@ -11,11 +11,13 @@ const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 const URL =
   "https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases";
 
+const totalCases = 102;
+
 const Map = dynamic(() => import("../components/map"), {
   ssr: false
 });
 
-const Home = ({ data, lastUpdated, totalCases }) => {
+const Home = ({ data, lastUpdated }) => {
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
 
