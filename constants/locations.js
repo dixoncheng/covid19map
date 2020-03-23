@@ -18,7 +18,9 @@ const locations = [
   { location: "Wellington Region", latlng: [-41.22354735, 175.41575755] },
   { location: "Southern DHB", latlng: [-45.55613134, 170.13322592] },
   { location: "Otago", latlng: [-45.1299859, 169.5248818] },
-  { location: "Wairarapa", latlng: [-41.23617985, 175.21969019] }
+  { location: "Wairarapa", latlng: [-41.23617985, 175.21969019] },
+  { location: "Tasman", latlng: [-41.1891054, 173.0526542] },
+  { location: "Marlborough", latlng: [-41.47447475, 173.83302626] }
 ];
 
 export default locations;
