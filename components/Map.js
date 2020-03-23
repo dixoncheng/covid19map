@@ -54,7 +54,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         animate={true}
         easeLinearity={0.35}
       >
-        <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
         {markers.map(({ latlng, numCases, location }, i) => (
           <Marker
             key={i}
