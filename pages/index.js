@@ -79,7 +79,7 @@ const Home = ({ data, lastUpdated, totalCases }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Alert Level 2
+                Alert Level 3
               </Alert>
               <img className="logo" src="/logo.svg" />
               <h1>Covid-19 Map</h1>
