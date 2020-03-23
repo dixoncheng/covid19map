@@ -85,7 +85,7 @@ const Home = ({ data, lastUpdated }) => {
               <h1>Covid-19 Map</h1>
               <h2>Current Cases in New Zealand</h2>
               <div className="meta">
-                <small>Last updated {lastUpdated}</small>
+                <small>{lastUpdated}</small>
                 <br />
                 <small>
                   Source:{" "}

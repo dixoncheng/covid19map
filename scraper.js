@@ -14,7 +14,10 @@ const scraper = async () => {
 
   const $ = await cheerio.load(html);
 
-  const lastUpdated = $(".page_updated .date").text();
+  // const lastUpdated = $(".page_updated .date").text();
+  const lastUpdated = $(".field-name-body .georgia-italic")
+    .first()
+    .text();
 
   let cases = [];
   $(".table-style-two tbody tr").each((i, elem) => {
