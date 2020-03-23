@@ -2,18 +2,12 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
-import cheerio from "cheerio";
-import locations from "../constants/locations";
-// import mohHtml from "../moh-html";
 
-const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
-
-const URL =
-  "https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases";
+import scraper from "../scraper";
 
 const totalCases = 102;
 
-const Map = dynamic(() => import("../components/map"), {
+const Map = dynamic(() => import("../components/Map"), {
   ssr: false
 });
 
@@ -71,7 +65,9 @@ const Home = ({ data, lastUpdated }) => {
                       {item.age}
                       {item.age && item.gender ? ", " : ""} {item.gender}
                     </div>
-                    {item.details}
+                    {item.details.split(/\r?\n/).map((item, i) => (
+                      <div key={i}>{item}</div>
+                    ))}
                   </div>
                 </Case>
               ))}
@@ -89,7 +85,7 @@ const Home = ({ data, lastUpdated }) => {
               <h1>Covid-19 Map</h1>
               <h2>Current Cases in New Zealand</h2>
               <div className="meta">
-                <small>Last updated {lastUpdated}</small>
+                <small>{lastUpdated}</small>
                 <br />
                 <small>
                   Source:{" "}
@@ -106,20 +102,30 @@ const Home = ({ data, lastUpdated }) => {
                 Total number of cases <span>{totalCases}</span>
               </h2>
 
-              <Bar>
-                Location
-                <span>Case/s</span>
-              </Bar>
-              {data.map((item, i) => (
-                <Location
-                  key={i}
-                  type="button"
-                  onClick={() => showLocation(item.location)}
-                >
-                  {item.location}
-                  <span>{item.numCases}</span>
-                </Location>
-              ))}
+              <SummaryTable cols={2}>
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Case/s</th>
+                    {/* <th>Recovered</th>
+                    <th>Deaths</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item, i) => (
+                    <tr
+                      key={i}
+                      type="button"
+                      onClick={() => showLocation(item.location)}
+                    >
+                      <td>{item.location}</td>
+                      <td>{item.numCases}</td>
+                      {/* <td>0</td>
+                      <td>0</td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </SummaryTable>
 
               <p>
                 <small>
@@ -215,90 +221,7 @@ const Home = ({ data, lastUpdated }) => {
 export default Home;
 
 export async function getStaticProps() {
-  const response = await fetch(URL);
-  const html = await response.text();
-  // const html = mohHtml;
-
-  const $ = await cheerio.load(html);
-
-  const lastUpdated = $(".page_updated .date").text();
-
-  let cases = [];
-  $(".table-style-two tbody tr").each((i, elem) => {
-    cases.push({
-      caseId: $(elem)
-        .find("td:nth-child(1)")
-        .text()
-        .trim(),
-      location: $(elem)
-        .find("td:nth-child(2)")
-        .text()
-        .trim(),
-      age: $(elem)
-        .find("td:nth-child(3)")
-        .text()
-        .trim(),
-      gender: $(elem)
-        .find("td:nth-child(4)")
-        .text()
-        .trim(),
-      details: $(elem)
-        .find("td:nth-child(5)")
-        .text()
-        .trim()
-    });
-  });
-
-  let data = [];
-  let totalCases = 0;
-  cases.forEach(item => {
-    if (item.location) {
-      totalCases++;
-
-      // correct typos on MOH site
-      if (item.location === "Coramandel") {
-        item.location = "Coromandel";
-      }
-      if (item.location === "Dundedin") {
-        item.location = "Dunedin";
-      }
-
-      // normalize genders
-      if (item.gender === "M") {
-        item.gender = "Male";
-      }
-      if (item.gender === "F") {
-        item.gender = "Female";
-      }
-
-      const n = data.find(x => item.location === x.location);
-      if (n) {
-        n.numCases++;
-        n.cases.push(item);
-      } else {
-        const loc = locations.find(x => item.location === x.location);
-        if (loc) {
-          data.push({
-            location: item.location,
-            numCases: 1,
-            latlng: loc.latlng,
-            cases: [item]
-          });
-        } else {
-          // region doesn't exist in constants
-          throw new Error(`No location "${item.location}" exist`);
-        }
-      }
-    }
-  });
-
-  data.sort((a, b) => {
-    if (a.numCases === b.numCases) {
-      return a.location > b.location ? 1 : -1;
-    }
-    return a.numCases > b.numCases ? -1 : 1;
-  });
-
+  const { data, lastUpdated, totalCases } = await scraper();
   return {
     props: {
       data,
@@ -370,49 +293,46 @@ const Summary = styled.div`
     .meta {
       margin: 1.5em 0;
     }
+  `}
+`;
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+const SummaryTable = styled.table`
+  ${({ theme, cols }) => css`
+    width: 100%;
+    border-collapse: collapse;
+
+    tr:hover td {
+      transition: 0.3s ease;
+      background: #bee1dd;
     }
     td,
     th {
-      font-size: 24px;
-      text-align: left;
-      padding: 7px 15px;
-      &:last-child {
-        text-align: right;
+      line-height: 1.2;
+      text-align: center;
+      font-size: 16px;
+      padding: 7px;
+      &:first-child {
+        text-align: left;
+        padding-left: 15px;
       }
+      ${cols === 2 &&
+        css`
+          font-size: 20px;
+          &:last-child {
+            text-align: right;
+            padding-right: 15px;
+          }
+        `}
     }
     th {
       background: ${theme.green};
       color: white;
     }
     td {
+      cursor: pointer;
+      text-decoration: underline;
       background: white;
       border-top: solid ${theme.light} 4px;
-    }
-  `}
-`;
-
-const Location = styled.button`
-  ${({ theme }) => css`
-    text-decoration: underline;
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    background: white;
-    padding: 7px 15px;
-    margin-top: 4px;
-    border: none;
-    width: 100%;
-    transition: 0.3s ease;
-    color: ${theme.dark};
-    @media (min-width: ${theme.md}) {
-      font-size: 24px;
-    }
-    :hover {
-      background: #bee1dd;
     }
   `}
 `;
@@ -423,12 +343,48 @@ const Bar = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    font-size: 18px;
+    font-size: 14px;
     background: ${theme.green};
     color: white;
     padding: 7px 15px;
     @media (min-width: ${theme.md}) {
       font-size: 24px;
+    }
+    span {
+      text-align: right;
+    }
+  `}
+`;
+
+const Location = styled.button`
+  ${({ theme }) => css`
+    text-decoration: underline;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    background: white;
+    padding: 7px 15px;
+    margin-top: 4px;
+    border: none;
+    width: 100%;
+    transition: 0.3s ease;
+    color: ${theme.dark};
+    /* @media (min-width: ${theme.md}) {
+      font-size: 24px;
+    } */
+    :hover {
+      background: #bee1dd;
+    }
+    span {
+        width: 90px;
+        text-align: center;
+        :first-child {
+            flex: 1;
+            text-align: left;
+        }
+        /* :last-child {
+            text-align: right;
+        } */
     }
   `}
 `;
