@@ -20,7 +20,9 @@ const locations = [
   { location: "Otago", latlng: [-45.1299859, 169.5248818] },
   { location: "Wairarapa", latlng: [-41.23617985, 175.21969019] },
   { location: "Tasman", latlng: [-41.1891054, 173.0526542] },
-  { location: "Marlborough", latlng: [-41.47447475, 173.83302626] }
+  { location: "Marlborough", latlng: [-41.47447475, 173.83302626] },
+  { location: "Upper Hutt", latlng: [-41.1240674, 175.0699589] },
+  { location: "Kapiti Coast", latlng: [-40.85657615, 175.19396071] }
 ];
 
 export default locations;
