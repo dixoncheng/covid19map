@@ -4,8 +4,7 @@ import locations from "./constants/locations";
 
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 
-const URL =
-  "https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases";
+const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
 
 const scraper = async () => {
   const response = await fetch(URL);
