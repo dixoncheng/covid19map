@@ -71,7 +71,9 @@ const Home = ({ data, lastUpdated }) => {
                       {item.age}
                       {item.age && item.gender ? ", " : ""} {item.gender}
                     </div>
-                    {item.details}
+                    {item.details.split(/\r?\n/).map((item, i) => (
+                      <div key={i}>{item}</div>
+                    ))}
                   </div>
                 </Case>
               ))}
