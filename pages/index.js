@@ -7,7 +7,7 @@ import scraper from "../scraper";
 
 const totalCases = 102;
 
-const Map = dynamic(() => import("../components/map"), {
+const Map = dynamic(() => import("../components/Map"), {
   ssr: false
 });
 
