@@ -2,14 +2,14 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
-
 import scraper from "../scraper";
-
-const totalCases = 102;
+import PieChart from "../components/PieChart";
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
 });
+
+const totalCases = 102;
 
 const Home = ({ data, lastUpdated }) => {
   const center = { lat: -41.0495881, lng: 173.2682669 };
@@ -81,6 +81,9 @@ const Home = ({ data, lastUpdated }) => {
               >
                 Alert Level 3
               </Alert>
+
+              <PieChart size={335} data={data} />
+
               <img className="logo" src="/logo.svg" />
               <h1>Covid-19 Map</h1>
               <h2>Current Cases in New Zealand</h2>
