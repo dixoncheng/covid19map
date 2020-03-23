@@ -102,20 +102,30 @@ const Home = ({ data, lastUpdated }) => {
                 Total number of cases <span>{totalCases}</span>
               </h2>
 
-              <Bar>
-                Location
-                <span>Case/s</span>
-              </Bar>
-              {data.map((item, i) => (
-                <Location
-                  key={i}
-                  type="button"
-                  onClick={() => showLocation(item.location)}
-                >
-                  {item.location}
-                  <span>{item.numCases}</span>
-                </Location>
-              ))}
+              <SummaryTable cols={2}>
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Case/s</th>
+                    {/* <th>Recovered</th>
+                    <th>Deaths</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item, i) => (
+                    <tr
+                      key={i}
+                      type="button"
+                      onClick={() => showLocation(item.location)}
+                    >
+                      <td>{item.location}</td>
+                      <td>{item.numCases}</td>
+                      {/* <td>0</td>
+                      <td>0</td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </SummaryTable>
 
               <p>
                 <small>
@@ -283,49 +293,46 @@ const Summary = styled.div`
     .meta {
       margin: 1.5em 0;
     }
+  `}
+`;
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+const SummaryTable = styled.table`
+  ${({ theme, cols }) => css`
+    width: 100%;
+    border-collapse: collapse;
+
+    tr:hover td {
+      transition: 0.3s ease;
+      background: #bee1dd;
     }
     td,
     th {
-      font-size: 24px;
-      text-align: left;
-      padding: 7px 15px;
-      &:last-child {
-        text-align: right;
+      line-height: 1.2;
+      text-align: center;
+      font-size: 16px;
+      padding: 7px;
+      &:first-child {
+        text-align: left;
+        padding-left: 15px;
       }
+      ${cols === 2 &&
+        css`
+          font-size: 20px;
+          &:last-child {
+            text-align: right;
+            padding-right: 15px;
+          }
+        `}
     }
     th {
       background: ${theme.green};
       color: white;
     }
     td {
+      cursor: pointer;
+      text-decoration: underline;
       background: white;
       border-top: solid ${theme.light} 4px;
-    }
-  `}
-`;
-
-const Location = styled.button`
-  ${({ theme }) => css`
-    text-decoration: underline;
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    background: white;
-    padding: 7px 15px;
-    margin-top: 4px;
-    border: none;
-    width: 100%;
-    transition: 0.3s ease;
-    color: ${theme.dark};
-    @media (min-width: ${theme.md}) {
-      font-size: 24px;
-    }
-    :hover {
-      background: #bee1dd;
     }
   `}
 `;
@@ -336,12 +343,48 @@ const Bar = styled.div`
   ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
-    font-size: 18px;
+    font-size: 14px;
     background: ${theme.green};
     color: white;
     padding: 7px 15px;
     @media (min-width: ${theme.md}) {
       font-size: 24px;
+    }
+    span {
+      text-align: right;
+    }
+  `}
+`;
+
+const Location = styled.button`
+  ${({ theme }) => css`
+    text-decoration: underline;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    background: white;
+    padding: 7px 15px;
+    margin-top: 4px;
+    border: none;
+    width: 100%;
+    transition: 0.3s ease;
+    color: ${theme.dark};
+    /* @media (min-width: ${theme.md}) {
+      font-size: 24px;
+    } */
+    :hover {
+      background: #bee1dd;
+    }
+    span {
+        width: 90px;
+        text-align: center;
+        :first-child {
+            flex: 1;
+            text-align: left;
+        }
+        /* :last-child {
+            text-align: right;
+        } */
     }
   `}
 `;
