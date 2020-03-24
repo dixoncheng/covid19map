@@ -6,6 +6,8 @@ function MyApp({ Component, pageProps }) {
     font: '"Nunito", sans- serif',
     teal: "#51b6b0",
     green: "#aacd6e",
+    navy: "#025064",
+    yellow: "#ffc906",
     light: "#edf3f0",
     dark: "#204e61",
     sm: "700px",

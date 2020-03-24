@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="117px" height="25px" viewBox="0 0 117 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>alertlevel</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="alertlevel">
+            <rect id="Rectangle" fill="#FFCA07" fill-rule="nonzero" x="0.4" y="0" width="115.7" height="25"></rect>
+            <g id="Group">
+                <polygon id="Path" points="36.6 0 11.6 25 33.4 25 58.4 0"></polygon>
+                <polygon id="Path" points="84 0 59 25 80.7 25 105.7 0"></polygon>
+                <polygon id="Path" points="106.3 25 116.2 25 116.2 15.1"></polygon>
+                <polygon id="Path" points="0.4 0 0.4 10.6 11.1 0"></polygon>
+                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="11.1 0 0.4 10.6 0.4 25 11.6 25 36.6 0"></polygon>
+                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="58.4 0 33.4 25 59 25 84 0"></polygon>
+                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="116.2 0 105.7 0 80.7 25 106.3 25 116.2 15.1"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
