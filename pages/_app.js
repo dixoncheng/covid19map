@@ -9,7 +9,8 @@ function MyApp({ Component, pageProps }) {
     light: "#edf3f0",
     dark: "#204e61",
     sm: "700px",
-    md: "800px"
+    md: "800px",
+    fontFancy: "'Bowlby One', cursive"
   };
   return (
     <ThemeProvider theme={theme}>
