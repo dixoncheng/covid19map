@@ -6,6 +6,7 @@ import styled, { css } from "styled-components";
 import scraper from "../scraper";
 
 const totalCases = 155;
+const toBeLocated = 53;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
@@ -98,9 +99,18 @@ const Home = ({ data, lastUpdated }) => {
                   </a>
                 </small>
               </div>
-              <h2 className="split">
-                Total number of cases <span>{totalCases}</span>
-              </h2>
+
+              <div class="total">
+                <h2 className="split">
+                  Total number of cases <span>{totalCases}</span>
+                </h2>
+
+                <div>
+                  <small>
+                    Information on {toBeLocated} new cases yet to be released
+                  </small>
+                </div>
+              </div>
 
               <SummaryTable cols={2}>
                 <thead>
@@ -280,11 +290,14 @@ const Summary = styled.div`
     h2 {
       font-size: 18px;
       color: ${theme.teal};
-      margin: 0 0 1em;
+      margin: 0;
       line-height: 1.1;
       @media (min-width: ${theme.md}) {
         font-size: 23px;
       }
+    }
+    .total {
+      margin-bottom: 1.5em;
     }
     h2.split {
       display: flex;
