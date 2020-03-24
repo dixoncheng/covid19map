@@ -62,8 +62,10 @@ const Home = ({ data, lastUpdated }) => {
               </Bar>
 
               {location?.cases.map((item, i) => (
-                <Case key={i}>
-                  <h3>Case {item.caseId}</h3>
+                <Case key={i} status={item.status}>
+                  <h3>
+                    {item.status} case {item.caseId}
+                  </h3>
                   <div className="details">
                     <div className="age">
                       {item.age}
@@ -453,7 +455,7 @@ const Location = styled.button`
 `;
 
 const Case = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, status }) => css`
     font-size: 14px;
     margin-top: 4px;
     h3 {
@@ -462,9 +464,17 @@ const Case = styled.div`
       color: white;
       background: ${theme.teal};
       padding: 2px 15px;
+      ${status === "Probable" &&
+        css`
+          background: ${theme.green};
+        `}
     }
     .age {
       color: ${theme.teal};
+      ${status === "Probable" &&
+        css`
+          color: ${theme.green};
+        `}
     }
     .details {
       background: white;
