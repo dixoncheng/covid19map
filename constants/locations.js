@@ -27,7 +27,8 @@ const locations = [
   { location: "Waitemata", latlng: [-36.8212269, 174.66980748] },
   { location: "Christchurch", latlng: [-43.530955, 172.6366455] },
   { location: "Queenstown", latlng: [-45.0321923, 168.661] },
-  { location: "South Canterbury", latlng: [-44.39775519, 171.1967057] }
+  { location: "South Canterbury", latlng: [-44.39775519, 171.1967057] },
+  { location: "Waitaki", latlng: [-44.854979, 170.7076462] }
 ];
 
 export default locations;
