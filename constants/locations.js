@@ -5,7 +5,7 @@ const locations = [
   { location: "Manawatu", latlng: [-40.4832071, 175.3832057] },
   { location: "Taupo", latlng: [-38.7993662, 176.11009674] },
   { location: "Wellington", latlng: [-41.2887953, 174.7772114] },
-  { location: "Hawkes Bay", latlng: [-39.4343279, 176.7652742] },
+  { location: "Hawke’s Bay", latlng: [-39.4343279, 176.7652742] },
   { location: "Canterbury", latlng: [-43.49417615, 171.80984476] },
   { location: "Dunedin", latlng: [-45.8740984, 170.5035755] },
   { location: "Rotorua", latlng: [-38.1381493, 176.252922] },
@@ -22,7 +22,13 @@ const locations = [
   { location: "Tasman", latlng: [-41.1891054, 173.0526542] },
   { location: "Marlborough", latlng: [-41.47447475, 173.83302626] },
   { location: "Upper Hutt", latlng: [-41.1240674, 175.0699589] },
-  { location: "Kapiti Coast", latlng: [-40.85657615, 175.19396071] }
+  { location: "Kapiti Coast", latlng: [-40.85657615, 175.19396071] },
+  { location: "New Plymouth", latlng: [-39.0579941, 174.0806474] },
+  { location: "Waitemata", latlng: [-36.8212269, 174.66980748] },
+  { location: "Christchurch", latlng: [-43.530955, 172.6366455] },
+  { location: "Queenstown", latlng: [-45.0321923, 168.661] },
+  { location: "South Canterbury", latlng: [-44.39775519, 171.1967057] },
+  { location: "Waitaki", latlng: [-44.854979, 170.7076462] }
 ];
 
 export default locations;

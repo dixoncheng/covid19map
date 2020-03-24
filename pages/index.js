@@ -6,7 +6,10 @@ import styled, { css } from "styled-components";
 import scraper from "../scraper";
 
 const totalCases = 155;
-const toBeLocated = 53;
+const confirmedCases = 142;
+const probableCases = 13;
+const recoveredCases = 12;
+const toBeLocated = 0;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
@@ -59,8 +62,10 @@ const Home = ({ data, lastUpdated }) => {
               </Bar>
 
               {location?.cases.map((item, i) => (
-                <Case key={i}>
-                  <h3>Case {item.caseId}</h3>
+                <Case key={i} status={item.status}>
+                  <h3>
+                    {item.status} case {item.caseId}
+                  </h3>
                   <div className="details">
                     <div className="age">
                       {item.age}
@@ -82,9 +87,13 @@ const Home = ({ data, lastUpdated }) => {
               >
                 Alert Level 3
               </Alert>
-              <img className="logo" src="/logo.svg" />
-              <h1>Covid-19 Map</h1>
-              <h2>Current Cases in New Zealand</h2>
+              <Logo>
+                <img className="logo" src="/logo.svg" />
+                <div>
+                  <h1>Covid-19 Map</h1>
+                  <h2>Current Cases in New Zealand</h2>
+                </div>
+              </Logo>
               <div className="meta">
                 <small>{lastUpdated}</small>
                 <br />
@@ -100,16 +109,29 @@ const Home = ({ data, lastUpdated }) => {
                 </small>
               </div>
 
-              <div class="total">
+              <div className="total">
                 <h2 className="split">
                   Total number of cases <span>{totalCases}</span>
                 </h2>
 
-                <div>
-                  <small>
-                    Information on {toBeLocated} new cases yet to be released
-                  </small>
+                <div className="cases-breakdown">
+                  Confirmed cases <span>{confirmedCases}</span>
                 </div>
+                <div className="cases-breakdown">
+                  Probable cases <span>{probableCases}</span>
+                </div>
+
+                <h2 className="split">
+                  Recovered <span>{recoveredCases}</span>
+                </h2>
+
+                {toBeLocated > 0 && (
+                  <div>
+                    <small>
+                      Information on {toBeLocated} new cases yet to be released
+                    </small>
+                  </div>
+                )}
               </div>
 
               <SummaryTable cols={2}>
@@ -273,20 +295,6 @@ const Info = styled.div`
 
 const Summary = styled.div`
   ${({ theme }) => css`
-    .logo {
-      width: 40px;
-      @media (min-width: ${theme.md}) {
-        width: 73px;
-      }
-    }
-    h1 {
-      font-size: 30px;
-      color: ${theme.teal};
-      margin: 0;
-      @media (min-width: ${theme.md}) {
-        font-size: 42px;
-      }
-    }
     h2 {
       font-size: 18px;
       color: ${theme.teal};
@@ -299,12 +307,56 @@ const Summary = styled.div`
     .total {
       margin-bottom: 1.5em;
     }
+    h2 + .cases-breakdown {
+      margin-top: 1px;
+    }
+    .cases-breakdown + h2 {
+      margin-top: 0.5em;
+    }
+    .cases-breakdown {
+      display: flex;
+      justify-content: space-between;
+    }
     h2.split {
       display: flex;
       justify-content: space-between;
     }
     .meta {
-      margin: 1.5em 0;
+      margin: 1em 0;
+    }
+  `}
+`;
+
+const Logo = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 42px;
+      margin-right: 15px;
+      @media (min-width: ${theme.md}) {
+        width: 60px;
+      }
+    }
+    h1 {
+      white-space: nowrap;
+      font-size: 34px;
+      color: ${theme.teal};
+      margin: 0;
+      @media (min-width: ${theme.md}) {
+        font-size: 38px;
+      }
+    }
+    h2 {
+      white-space: nowrap;
+      font-size: 16px;
+      color: ${theme.teal};
+      margin: 0;
+      line-height: 1.1;
+      @media (min-width: ${theme.md}) {
+        font-size: 18px;
+      }
     }
   `}
 `;
@@ -403,7 +455,7 @@ const Location = styled.button`
 `;
 
 const Case = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, status }) => css`
     font-size: 14px;
     margin-top: 4px;
     h3 {
@@ -412,9 +464,17 @@ const Case = styled.div`
       color: white;
       background: ${theme.teal};
       padding: 2px 15px;
+      ${status === "Probable" &&
+        css`
+          background: ${theme.green};
+        `}
     }
     .age {
       color: ${theme.teal};
+      ${status === "Probable" &&
+        css`
+          color: ${theme.green};
+        `}
     }
     .details {
       background: white;

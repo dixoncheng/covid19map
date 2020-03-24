@@ -1,5 +1,5 @@
 // import App from 'next/app'
-import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle, css } from "styled-components";
 
 function MyApp({ Component, pageProps }) {
   const theme = {
@@ -35,13 +35,16 @@ function MyApp({ Component, pageProps }) {
 export default MyApp;
 
 const Styles = createGlobalStyle`
+  ${({ theme }) => css`
     html,
     body {
-        padding: 0;
-        margin: 0;
-        font-family: 'Nunito', sans-serif;
+      padding: 0;
+      margin: 0;
+      font-family: "Nunito", sans-serif;
+      background: ${theme.light};
     }
     button {
       cursor: pointer;
     }
+  `}
 `;

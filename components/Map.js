@@ -26,10 +26,10 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
     }
   }, [currentView]);
 
-  const normalize = val => (val - 0) / (10 - 0);
+  const normalize = val => (val - 0) / (1.5 - 0);
 
   const getIcon = numCases => {
-    const iconSize = 30 + normalize(numCases) * 10;
+    const iconSize = 24 + normalize(numCases);
     return L.divIcon({
       className: "icon",
       iconSize: [iconSize, iconSize],
@@ -103,7 +103,7 @@ const Styles = createGlobalStyle`
     background: #51b6b0;
     color: white;
     border-radius: 50%;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     display: flex;
     justify-content: center;

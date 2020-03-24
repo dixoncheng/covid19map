@@ -19,30 +19,63 @@ const scraper = async () => {
     .text();
 
   let cases = [];
-  $(".table-style-two tbody tr").each((i, elem) => {
-    cases.push({
-      caseId: $(elem)
-        .find("td:nth-child(1)")
-        .text()
-        .trim(),
-      location: $(elem)
-        .find("td:nth-child(2)")
-        .text()
-        .trim(),
-      age: $(elem)
-        .find("td:nth-child(3)")
-        .text()
-        .trim(),
-      gender: $(elem)
-        .find("td:nth-child(4)")
-        .text()
-        .trim(),
-      details: $(elem)
-        .find("td:nth-child(5)")
-        .text()
-        .trim()
+  $(".table-style-two")
+    .eq(0)
+    .find("tbody tr")
+    .each((i, elem) => {
+      cases.push({
+        caseId: $(elem)
+          .find("td:nth-child(1)")
+          .text()
+          .trim(),
+        location: $(elem)
+          .find("td:nth-child(2)")
+          .text()
+          .trim(),
+        age: $(elem)
+          .find("td:nth-child(3)")
+          .text()
+          .trim(),
+        gender: $(elem)
+          .find("td:nth-child(4)")
+          .text()
+          .trim(),
+        details: $(elem)
+          .find("td:nth-child(5)")
+          .text()
+          .trim(),
+        status: "Confirmed"
+      });
     });
-  });
+
+  $(".table-style-two")
+    .eq(1)
+    .find("tbody tr")
+    .each((i, elem) => {
+      cases.push({
+        caseId: $(elem)
+          .find("td:nth-child(1)")
+          .text()
+          .trim(),
+        location: $(elem)
+          .find("td:nth-child(2)")
+          .text()
+          .trim(),
+        age: $(elem)
+          .find("td:nth-child(3)")
+          .text()
+          .trim(),
+        gender: $(elem)
+          .find("td:nth-child(4)")
+          .text()
+          .trim(),
+        details: $(elem)
+          .find("td:nth-child(5)")
+          .text()
+          .trim(),
+        status: "Probable"
+      });
+    });
 
   let data = [];
   let totalCases = 0;
@@ -57,6 +90,9 @@ const scraper = async () => {
       if (item.location === "Dundedin") {
         item.location = "Dunedin";
       }
+      if (item.location === "Hawkes Bay") {
+        item.location = "Hawke’s Bay";
+      }
 
       // normalize genders
       if (item.gender === "M") {
@@ -64,6 +100,9 @@ const scraper = async () => {
       }
       if (item.gender === "F") {
         item.gender = "Female";
+      }
+      if (item.gender === "Not provided") {
+        item.gender = "";
       }
 
       const n = data.find(x => item.location === x.location);
