@@ -5,7 +5,7 @@ import styled, { css } from "styled-components";
 
 import scraper from "../scraper";
 
-const totalCases = 102;
+const totalCases = 155;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
