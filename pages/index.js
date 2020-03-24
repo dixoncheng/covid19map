@@ -109,7 +109,7 @@ const Home = ({ data, lastUpdated }) => {
                 </small>
               </div>
 
-              <div class="total">
+              <div className="total">
                 <h2 className="split">
                   Total number of cases <span>{totalCases}</span>
                 </h2>
