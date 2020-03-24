@@ -5,8 +5,8 @@ import styled, { css } from "styled-components";
 
 import scraper from "../scraper";
 
-const totalCases = 155;
-const toBeLocated = 53;
+const totalCases = 142;
+const toBeLocated = 0;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
@@ -102,14 +102,16 @@ const Home = ({ data, lastUpdated }) => {
 
               <div class="total">
                 <h2 className="split">
-                  Total number of cases <span>{totalCases}</span>
+                  Confirmed cases <span>{totalCases}</span>
                 </h2>
 
-                <div>
-                  <small>
-                    Information on {toBeLocated} new cases yet to be released
-                  </small>
-                </div>
+                {toBeLocated > 0 && (
+                  <div>
+                    <small>
+                      Information on {toBeLocated} new cases yet to be released
+                    </small>
+                  </div>
+                )}
               </div>
 
               <SummaryTable cols={2}>
