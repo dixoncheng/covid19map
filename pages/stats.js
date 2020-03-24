@@ -31,6 +31,34 @@ const Stats = () => {
             </Alert>
           </div>
         </Row>
+        <Row>
+          <Cases>
+            <div>
+              <strong>142</strong> Confirmed Cases
+            </div>
+            <div>
+              <strong>13</strong> Probable Cases
+            </div>
+          </Cases>
+          <Recovered>
+            <div>
+              <strong>12</strong> Recovered
+            </div>
+            <div>
+              Recovery
+              <br />
+              Rate
+              <br />
+              <strong>8%</strong>
+            </div>
+            <div>
+              <People percent={8} />
+            </div>
+          </Recovered>
+          <Deaths>
+            <strong>0</strong>Deaths
+          </Deaths>
+        </Row>
       </Infographic>
     </div>
   );
@@ -61,14 +89,10 @@ const Header = styled.div`
 
 const Row = styled.div`
   ${({ theme }) => css`
-    /* display: grid;
-    grid-gap: 2em;
-    grid-template: 1fr; */
-
     display: flex;
-    padding: 2em 2.5em;
+    padding: 0 2.5em;
+    margin: 2em 0;
     justify-content: space-between;
-
     @media (min-width: ${theme.sm}) {
     }
   `}
@@ -143,6 +167,152 @@ const Alert = styled.div`
     }
 
     @media (min-width: ${theme.sm}) {
+    }
+  `}
+`;
+
+const Cases = styled.div`
+  ${({ theme }) => css`
+    background: #a6e5e3;
+    border-radius: 0.3em;
+    padding: 0.5em 1em 0.5em 3em;
+    font-size: 2.8em;
+    color: ${theme.dark};
+    position: relative;
+
+    :before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -0.5em;
+      width: 3em;
+      height: 3em;
+      background: url(/infographic/cases.svg) center center no-repeat;
+      background-size: contain;
+      transform: translateY(-50%);
+    }
+    strong {
+      color: ${theme.teal};
+      display: inline-block;
+      min-width: 2em;
+    }
+  `}
+`;
+
+const Recovered = styled.div`
+  ${({ theme }) => css`
+    flex: 1;
+    margin: 0 1em;
+    background: ${theme.green};
+    font-size: 2.2em;
+    border-radius: 0.3em;
+    color: ${theme.dark};
+    display: grid;
+    grid-template-columns: 1fr 0.8fr auto;
+    grid-gap: 0 0.6em;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 1em;
+    > div:first-child {
+      border-right: solid ${theme.dark} 0.1em;
+      padding-right: 0.6em;
+      strong {
+        display: block;
+        line-height: 1;
+        font-size: 2.3em;
+        color: white;
+      }
+    }
+    > div:nth-child(2) {
+      font-size: 0.8em;
+      line-height: 1;
+      strong {
+        margin-top: 0.2em;
+        display: block;
+        line-height: 1;
+        font-size: 1.9em;
+        color: white;
+      }
+    }
+    > div:last-child {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  `}
+`;
+
+const People = ({ percent }) => {
+  const peopleToFill = Math.floor(percent / 10);
+  const partPersonToFill = (percent % 10) / 10;
+
+  console.log(`peopleToFill: ${peopleToFill}`);
+  console.log(`partPersonToFill: ${partPersonToFill}`);
+  return (
+    <>
+      {[...Array(10)].map((item, i) => {
+        // console.log(i);
+        let fill;
+        if (i === peopleToFill) {
+          fill = partPersonToFill;
+        } else if (i < peopleToFill) {
+          fill = 1;
+        } else {
+          fill = 0;
+        }
+        // console.log(fill);
+        return (
+          <Person key={i} fill={fill}>
+            <div className="fill"></div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: require(`../public/infographic/recovery.svg?include`)
+              }}
+            />
+          </Person>
+        );
+      })}
+    </>
+  );
+};
+const Person = styled.div`
+  ${({ theme, fill }) => css`
+    display: inline;
+    width: 18%;
+    margin: 0.06em;
+    position: relative;
+    overflow: hidden;
+    background: ${theme.dark};
+    .fill {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: ${fill * 100}%;
+      background: white;
+    }
+    svg {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+
+      display: block;
+    }
+  `}
+`;
+
+const Deaths = styled.div`
+  ${({ theme }) => css`
+    padding: 0.5em 1em;
+    background: ${theme.green};
+    font-size: 2.2em;
+    border-radius: 0.3em;
+    color: ${theme.dark};
+    strong {
+      display: block;
+      line-height: 1;
+      font-size: 2.3em;
+      color: white;
     }
   `}
 `;
