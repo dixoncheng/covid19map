@@ -57,6 +57,9 @@ const scraper = async () => {
       if (item.location === "Dundedin") {
         item.location = "Dunedin";
       }
+      if (item.location === "Hawkes Bay") {
+        item.location = "Hawke’s Bay";
+      }
 
       // normalize genders
       if (item.gender === "M") {
