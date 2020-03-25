@@ -573,7 +573,7 @@ const Person = styled.div`
 
       display: block;
       rect {
-        y: ${16.2 - 16.2 * fill};
+        y: ${16.8 - 16.8 * fill};
       }
     }
   `}
