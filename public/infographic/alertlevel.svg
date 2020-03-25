@@ -1,20 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="117px" height="25px" viewBox="0 0 117 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
-    <title>alertlevel</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="alertlevel">
-            <rect id="Rectangle" fill="#FFCA07" fill-rule="nonzero" x="0.4" y="0" width="115.7" height="25"></rect>
-            <g id="Group">
-                <polygon id="Path" points="36.6 0 11.6 25 33.4 25 58.4 0"></polygon>
-                <polygon id="Path" points="84 0 59 25 80.7 25 105.7 0"></polygon>
-                <polygon id="Path" points="106.3 25 116.2 25 116.2 15.1"></polygon>
-                <polygon id="Path" points="0.4 0 0.4 10.6 11.1 0"></polygon>
-                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="11.1 0 0.4 10.6 0.4 25 11.6 25 36.6 0"></polygon>
-                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="58.4 0 33.4 25 59 25 84 0"></polygon>
-                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="116.2 0 105.7 0 80.7 25 106.3 25 116.2 15.1"></polygon>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 115.8 25" style="enable-background:new 0 0 115.8 25;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFCA07;}
+	.st1{fill:none;}
+	.st2{fill:#FFFFFF;}
+</style>
+<g>
+	<rect class="st0" width="115.7" height="25"/>
+	<g>
+		<polygon class="st1" points="36.2,0 11.2,25 33,25 58,0 		"/>
+		<polygon class="st1" points="83.6,0 58.6,25 80.3,25 105.3,0 		"/>
+		<polygon class="st1" points="105.9,25 115.8,25 115.8,15.1 		"/>
+		<polygon class="st1" points="0,0 0,10.6 10.7,0 		"/>
+		<polygon class="st2" points="10.7,0 0,10.6 0,25 11.2,25 36.2,0 		"/>
+		<polygon class="st2" points="58,0 33,25 58.6,25 83.6,0 		"/>
+		<polygon class="st2" points="115.8,0 105.3,0 80.3,25 105.9,25 115.8,15.1 		"/>
+	</g>
+</g>
 </svg>
