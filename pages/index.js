@@ -8,7 +8,7 @@ const confirmedCases = 189;
 const probableCases = 16;
 // const totalCases = 205;
 const totalCases = confirmedCases + probableCases;
-const recoveredCases = 12;
+const recoveredCases = 22;
 const toBeLocated = 50;
 
 const Map = dynamic(() => import("../components/Map"), {
