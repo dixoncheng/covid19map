@@ -20,12 +20,15 @@ const Stats = ({ data }) => {
     recoveredCases,
     alertlevel,
     deaths,
-    newCases,
     comTrans,
     countriesAffected,
     casesPer1M
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
+
+  const newCases =
+    dailyCases[dailyCases.length - 1].cases -
+    dailyCases[dailyCases.length - 2].cases;
 
   const {
     lastUpdated,
@@ -107,9 +110,9 @@ const Stats = ({ data }) => {
             <NewCases>
               <strong>+{newCases}</strong> New
               <br />
-              confimed
-              <br />
               cases
+              <br />
+              <br />
               <img src="/infographic/nznewcases.svg" />
             </NewCases>
             <Transmissions>
@@ -155,10 +158,13 @@ const Stats = ({ data }) => {
           </div>
 
           <Chart>
-            <div className="head">Confirmed COVID-19 cases in New Zealand</div>
+            <div className="head">COVID-19 cases in New Zealand</div>
             <div className="chart-wrap">
               <ResponsiveContainer>
-                <LineChart data={dailyCases} margin={{ right: 30, bottom: 20 }}>
+                <LineChart
+                  data={dailyCases}
+                  margin={{ left: 10, right: 30, bottom: 20 }}
+                >
                   <XAxis
                     dataKey="days"
                     label={{
@@ -166,13 +172,22 @@ const Stats = ({ data }) => {
                       position: "bottom"
                     }}
                   />
-                  <YAxis />
-                  <Tooltip />
+                  <YAxis
+                    label={{
+                      value: "Cases",
+                      position: "left",
+                      offset: -10,
+                      angle: -90
+                    }}
+                  />
+                  {/* <Tooltip /> */}
                   {/* <Legend /> */}
                   <Line
                     type="monotone"
                     dataKey="cases"
                     stroke="#51b6b0"
+                    strokeWidth={4}
+                    dot={false}
                     // activeDot={{ r: 8 }}
                   />
                   {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
