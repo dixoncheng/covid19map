@@ -536,7 +536,6 @@ const People = ({ percent }) => {
   return (
     <>
       {[...Array(10)].map((item, i) => {
-        // console.log(i);
         let fill;
         if (i === peopleToFill) {
           fill = partPersonToFill;
@@ -548,10 +547,9 @@ const People = ({ percent }) => {
         // console.log(fill);
         return (
           <Person key={i} fill={fill}>
-            <div className="fill"></div>
             <div
               dangerouslySetInnerHTML={{
-                __html: require(`../public/infographic/recovery.svg?include`)
+                __html: require(`../public/infographic/person.svg?include`)
               }}
             />
           </Person>
@@ -567,23 +565,16 @@ const Person = styled.div`
     width: 18%;
     margin: 0.06em;
     position: relative;
-    overflow: hidden;
-    background: ${theme.dark};
-    .fill {
-      position: absolute;
-      z-index: 1;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: ${fill * 100}%;
-      background: white;
-    }
     svg {
       position: relative;
       z-index: 2;
       width: 100%;
+      height: 100%;
 
       display: block;
+      rect {
+        y: ${16.2 - 16.2 * fill};
+      }
     }
   `}
 `;
