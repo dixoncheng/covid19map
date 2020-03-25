@@ -108,7 +108,6 @@ const Home = ({ data, lastUpdated }) => {
                   </a>
                 </small>
               </div>
-
               <div className="total">
                 <h2 className="split">
                   Total number of cases <span>{totalCases}</span>
@@ -133,7 +132,6 @@ const Home = ({ data, lastUpdated }) => {
                   </div>
                 )}
               </div>
-
               <SummaryTable cols={2}>
                 <thead>
                   <tr>
@@ -158,7 +156,6 @@ const Home = ({ data, lastUpdated }) => {
                   ))}
                 </tbody>
               </SummaryTable>
-
               <p>
                 <small>
                   We can only work with the official data that has been released
@@ -182,7 +179,6 @@ const Home = ({ data, lastUpdated }) => {
                   same time to better reflect the affected areas.
                 </small>
               </p>
-
               <p>
                 <small>
                   Any feedback, ideas, or if you'd like to help, please contact{" "}
@@ -206,7 +202,6 @@ const Home = ({ data, lastUpdated }) => {
                   </LinkButton>
                 </small>
               </p>
-
               {termsOpened && (
                 <div>
                   <p>
@@ -242,6 +237,23 @@ const Home = ({ data, lastUpdated }) => {
                   </p>
                 </div>
               )}
+              <p className="made-by">
+                <small>Made by</small>{" "}
+                <a
+                  href="https://www.linkedin.com/in/emilywongnz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/linkedin.svg" />
+                </a>{" "}
+                <a
+                  href="https://www.linkedin.com/in/dixon-cheng/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/linkedin.svg" />
+                </a>
+              </p>
             </Summary>
           )}
         </Info>
@@ -323,6 +335,16 @@ const Summary = styled.div`
     }
     .meta {
       margin: 1em 0;
+    }
+    .made-by {
+      small {
+        position: relative;
+        top: 1px;
+      }
+      img {
+        width: 16px;
+        vertical-align: middle;
+      }
     }
   `}
 `;
