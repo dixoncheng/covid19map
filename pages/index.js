@@ -165,7 +165,7 @@ const Home = ({ data }) => {
               </SummaryTable>
               <p>
                 <small>
-                  We can only work with the official cases that has been
+                  We can only work with the official cases that have been
                   released by the{" "}
                   <a
                     href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
