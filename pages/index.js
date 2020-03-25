@@ -2,12 +2,12 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
-
 import scraper from "../scraper";
 
-const totalCases = 205;
-const confirmedCases = 142;
-const probableCases = 13;
+const confirmedCases = 189;
+const probableCases = 16;
+// const totalCases = 205;
+const totalCases = confirmedCases + probableCases;
 const recoveredCases = 12;
 const toBeLocated = 50;
 

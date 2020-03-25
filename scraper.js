@@ -119,8 +119,10 @@ const scraper = async () => {
             cases: [item]
           });
         } else {
-          // region doesn't exist in constants
-          throw new Error(`No location "${item.location}" exist`);
+          if (item.location !== "TBC") {
+            // region doesn't exist in constants
+            throw new Error(`No location "${item.location}" exist`);
+          }
         }
       }
     }
