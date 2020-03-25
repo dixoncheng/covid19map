@@ -103,7 +103,7 @@ const Stats = ({ data }) => {
           </Deaths>
         </Row>
         <Row>
-          <div>
+          <div className="flex-mobile">
             <NewCases>
               <strong>+{newCases}</strong> New
               <br />
@@ -120,7 +120,7 @@ const Stats = ({ data }) => {
               <img src="/infographic/commtrans.svg" />
             </Transmissions>
           </div>
-          <div>
+          <div className="flex-mobile">
             <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
@@ -215,13 +215,16 @@ const Stats = ({ data }) => {
         </Row>
         <Row>
           <Globe>
-            <img src="/infographic/magnify.svg" />
-            <div className="text">
-              <strong>{countriesAffected}</strong>
-              Countries
-              <br />
-              Affected
+            <div className="globe">
+              <img src="/infographic/world.svg" />
+              <div className="text">
+                <strong>{countriesAffected}</strong>
+                Countries
+                <br />
+                Affected
+              </div>
             </div>
+            <img className="mag" src="/infographic/magnifyingglass.svg" />
           </Globe>
           <Ranking>
             <div className="head">Total cases per 1m population</div>
@@ -249,7 +252,7 @@ const Stats = ({ data }) => {
           </Clipboard>
         </Row>
         <Footer>
-          <div class="head">Sources:</div>
+          <div className="head">Sources:</div>
           <a
             href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
             target="_blank"
@@ -276,9 +279,10 @@ export default Stats;
 
 const Infographic = styled.div`
   ${({ theme }) => css`
-    font-size: 1vw;
+    font-size: 2vw;
     background: #d9f4f3;
     @media (min-width: ${theme.sm}) {
+      font-size: 1vw;
     }
   `}
 `;
@@ -297,11 +301,29 @@ const Header = styled.div`
 
 const Row = styled.div`
   ${({ theme }) => css`
-    display: flex;
-    padding: 0 2.5em;
-    margin: 2em 0;
+    padding: 0 2em;
+    margin: 2em 0 0;
     justify-content: space-between;
+    > div {
+      margin-top: 0.7em;
+      margin-bottom: 0.7em;
+    }
     @media (min-width: ${theme.sm}) {
+      display: flex;
+      padding: 0 2.5em;
+      > div {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+    .flex-mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @media (min-width: ${theme.sm}) {
+        display: block;
+      }
     }
   `}
 `;
@@ -310,8 +332,13 @@ const Total = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    font-size: 1.45em;
-    margin-right: 16em;
+    font-size: 1em;
+    padding-top: 14em;
+    @media (min-width: ${theme.sm}) {
+      padding-top: 0;
+      margin-right: 16em;
+      font-size: 1.45em;
+    }
     h1 {
       font-weight: normal;
       margin: 0 1em 0 0;
@@ -321,15 +348,14 @@ const Total = styled.div`
       text-transform: uppercase;
       line-height: 1.1;
     }
-    @media (min-width: ${theme.sm}) {
-    }
   `}
 `;
 
 const TotalNumber = styled.div`
   ${({ theme, num }) => css`
+    display: flex;
     color: ${theme.green};
-    font-size: 6em;
+    font-size: 5em;
     ${num > 999 &&
       css`
         font-size: 4.5em;
@@ -343,6 +369,9 @@ const TotalNumber = styled.div`
       margin: 0.03em;
       font-weight: bold;
       line-height: 1;
+    }
+    @media (min-width: ${theme.sm}) {
+      font-size: 6em;
     }
   `}
 `;
@@ -415,7 +444,6 @@ const Cases = styled.div`
 const Recovered = styled.div`
   ${({ theme }) => css`
     flex: 1;
-    margin: 0 1em;
     background: ${theme.green};
     font-size: 2.2em;
     border-radius: 0.3em;
@@ -426,6 +454,9 @@ const Recovered = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0.5em 1em;
+    @media (min-width: ${theme.sm}) {
+      margin: 0 1em;
+    }
     > div:first-child {
       border-right: solid ${theme.dark} 0.1em;
       padding-right: 0.6em;
@@ -553,7 +584,6 @@ const NewCases = styled.div`
 
 const Transmissions = styled.div`
   ${({ theme }) => css`
-    margin-top: 2em;
     padding: 2em 1.3em 1.3em;
     background: white;
     border-radius: 0.4em;
@@ -563,6 +593,9 @@ const Transmissions = styled.div`
     color: ${theme.dark};
     line-height: 1.1;
     position: relative;
+    @media (min-width: ${theme.sm}) {
+      margin-top: 2em;
+    }
     strong {
       display: block;
       font-size: 3em;
@@ -580,9 +613,11 @@ const Transmissions = styled.div`
 
 const Genders = styled.div`
   ${({ theme }) => css`
-    margin: 0 3.5em;
     color: ${theme.dark};
-    margin-bottom: 1.2em;
+    @media (min-width: ${theme.sm}) {
+      /* font-size: 6em; */
+      margin: 0 3.5em 1.2em;
+    }
     .head {
       font-family: ${theme.fontFancy};
       font-size: 2.1em;
@@ -647,6 +682,10 @@ const Genders = styled.div`
 const Soap = styled.div`
   ${({ theme }) => css`
     text-align: right;
+    /* position: relative; */
+    /* left: 2em; */
+    /* @media (min-width: ${theme.sm}) {
+    } */
     img {
       width: 25em;
     }
@@ -687,13 +726,21 @@ const Ages = styled.div`
     }
     .chart {
       display: flex;
+      flex-direction: column;
+      height: 90em;
+      @media (min-width: ${theme.sm}) {
+        flex-direction: row;
+        height: auto;
+      }
     }
     .foot {
+      display: none;
       background-color: white;
       padding: 0.6em 0.8em;
       font-size: 1.6em;
       color: ${theme.dark};
       strong {
+        display: block;
         color: ${theme.green};
       }
     }
@@ -703,21 +750,34 @@ const Ages = styled.div`
 const Age = styled.div`
   ${({ theme, percent }) => css`
     cursor: pointer;
-    height: 9em;
-    font-size: 1.2em;
+    font-size: 2em;
     color: white;
     text-align: center;
-    width: ${percent}%;
+    height: ${percent}%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+
     line-height: 1.1;
+    min-height: 2.6em;
     min-width: 2.6em;
+    @media (min-width: ${theme.sm}) {
+      font-size: 1.2em;
+      width: ${percent}%;
+      height: 9em;
+      flex-direction: column;
+    }
     strong {
-      display: block;
       font-weight: normal;
       opacity: 0.9;
+      display: block;
+      :before {
+        content: " - ";
+        margin-left: 0.4em;
+        @media (min-width: ${theme.sm}) {
+          display: none;
+        }
+      }
     }
     :nth-child(1) {
       background-color: ${theme.teal};
@@ -755,16 +815,33 @@ const Age = styled.div`
 const Globe = styled.div`
   ${({ theme }) => css`
     position: relative;
-    left: -2.5em;
-    margin-right: -2.5em;
 
-    img {
-      width: 28em;
+    font-size: 1.3em;
+    @media (min-width: ${theme.sm}) {
+      font-size: 1em;
+    }
+
+    .globe {
+      position: relative;
+      left: 1em;
+      width: 25em;
+      margin: 0 auto;
+      display: block;
+    }
+    .mag {
+      width: 25em;
+      position: absolute;
+      bottom: 0;
+      left: -2.5em;
+      display: none;
+      @media (min-width: ${theme.sm}) {
+        display: block;
+      }
     }
     .text {
       position: absolute;
       top: 2em;
-      left: 3.3em;
+      left: 1.6em;
       font-size: 2.4em;
       font-family: ${theme.fontFancy};
       text-align: center;
@@ -816,13 +893,21 @@ const Ranking = styled.div`
 
 const Clipboard = styled.div`
   ${({ theme }) => css`
-    width: 20em;
+    margin: 3em auto 0 !important;
+    @media (min-width: ${theme.sm}) {
+      width: 30em;
+      margin: 0 !important;
+      width: 20em;
+    }
     > div {
       background: #a6e5e3;
       border-radius: 0.5em;
       position: relative;
-      top: 2em;
+      margin-top: 5em;
       padding: 2.5em 2em 2em;
+      @media (min-width: ${theme.sm}) {
+        margin-top: 3em;
+      }
     }
     img {
       position: absolute;
@@ -838,6 +923,12 @@ const Clipboard = styled.div`
       font-family: ${theme.fontFancy};
       line-height: 1.1;
       margin-bottom: 0.6em;
+      br {
+        display: none;
+        @media (min-width: ${theme.sm}) {
+          display: block;
+        }
+      }
     }
     .location {
       font-size: 1.7em;
