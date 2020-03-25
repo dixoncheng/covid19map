@@ -85,7 +85,7 @@ const Home = ({ data, lastUpdated }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Alert Level 3
+                Alert Level 4
               </Alert>
               <Logo>
                 <img className="logo" src="/logo.svg" />
