@@ -9,7 +9,7 @@ const probableCases = 16;
 // const totalCases = 205;
 const totalCases = confirmedCases + probableCases;
 const recoveredCases = 22;
-const toBeLocated = 50;
+const toBeLocated = 0;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
