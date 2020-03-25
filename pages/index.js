@@ -1,21 +1,24 @@
 import Head from "next/head";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
-import scraper from "../scraper";
-
-const confirmedCases = 189;
-const probableCases = 16;
-// const totalCases = 205;
-const totalCases = confirmedCases + probableCases;
-const recoveredCases = 22;
-const toBeLocated = 0;
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
 });
 
-const Home = ({ data, lastUpdated }) => {
+const Home = ({ data }) => {
+  const {
+    confirmedCases,
+    probableCases,
+    recoveredCases,
+    toBeLocated,
+    alertLevel
+  } = data.staticData;
+  const totalCases = confirmedCases + probableCases;
+
+  const { lastUpdated, cases } = data;
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
 
@@ -24,7 +27,7 @@ const Home = ({ data, lastUpdated }) => {
   const [termsOpened, setTermsOpened] = useState(false);
 
   const showLocation = location => {
-    const loc = data.find(x => location === x.location);
+    const loc = cases.find(x => location === x.location);
     if (loc) {
       setLocation(loc);
       setView("details");
@@ -41,7 +44,7 @@ const Home = ({ data, lastUpdated }) => {
           <Map
             center={center}
             zoom={zoom}
-            markers={data}
+            markers={cases}
             onMarkerClick={showLocation}
             currentView={view}
           />
@@ -85,7 +88,7 @@ const Home = ({ data, lastUpdated }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Alert Level 4
+                Alert Level {alertLevel}
               </Alert>
               <Logo>
                 <img className="logo" src="/logo.svg" />
@@ -108,6 +111,10 @@ const Home = ({ data, lastUpdated }) => {
                   </a>
                 </small>
               </div>
+
+              {/* <Link href="/stats">Stats</Link> */}
+              <StatsLink href="/stats">View Covid-19 Stats</StatsLink>
+
               <div className="total">
                 <h2 className="split">
                   Total number of cases <span>{totalCases}</span>
@@ -142,7 +149,7 @@ const Home = ({ data, lastUpdated }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item, i) => (
+                  {cases.map((item, i) => (
                     <tr
                       key={i}
                       type="button"
@@ -158,8 +165,8 @@ const Home = ({ data, lastUpdated }) => {
               </SummaryTable>
               <p>
                 <small>
-                  We can only work with the official data that has been released
-                  by the{" "}
+                  We can only work with the official cases that has been
+                  released by the{" "}
                   <a
                     href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
                     target="_blank"
@@ -174,7 +181,7 @@ const Home = ({ data, lastUpdated }) => {
               </p>
               <p>
                 <small>
-                  Should the Ministry make their data a bit more specific going
+                  Should the Ministry make their cases a bit more specific going
                   forward we will definitely ensure the map is updated at the
                   same time to better reflect the affected areas.
                 </small>
@@ -206,7 +213,7 @@ const Home = ({ data, lastUpdated }) => {
                 <div>
                   <p>
                     <small>
-                      Covid-19 Map NZ sources its data directly from the
+                      Covid-19 Map NZ sources its cases directly from the
                       official{" "}
                       <a
                         href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
@@ -263,17 +270,6 @@ const Home = ({ data, lastUpdated }) => {
 };
 
 export default Home;
-
-export async function getStaticProps() {
-  const { data, lastUpdated, totalCases } = await scraper();
-  return {
-    props: {
-      data,
-      lastUpdated,
-      totalCases
-    }
-  };
-}
 
 const Wrap = styled.div`
   ${({ theme }) => css`
@@ -533,5 +529,23 @@ const LinkButton = styled.button`
     padding: 0;
     text-decoration: underline;
     color: ${theme.dark};
+  `}
+`;
+
+const StatsLink = styled.a`
+  ${({ theme }) => css`
+    display: block;
+    /* display: flex;
+    justify-content: space-between; */
+    font-size: 14px;
+    background: ${theme.teal};
+    color: white !important;
+    padding: 7px 15px;
+    margin-bottom: 0.8em;
+    color: white;
+    border-radius: 3px;
+    @media (min-width: ${theme.md}) {
+      font-size: 20px;
+    }
   `}
 `;

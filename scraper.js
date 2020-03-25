@@ -1,11 +1,10 @@
 import cheerio from "cheerio";
-import locations from "./constants/locations";
-// import mohHtml from "./moh-html";
-
+import locations from "./data/locations";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
+// import mohHtml from "./moh-html";
+import staticData from "./data/static";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
-
 const scraper = async () => {
   const response = await fetch(URL);
   const html = await response.text();
@@ -18,12 +17,12 @@ const scraper = async () => {
     .first()
     .text();
 
-  let cases = [];
+  let rawCases = [];
   $(".table-style-two")
     .eq(0)
     .find("tbody tr")
     .each((i, elem) => {
-      cases.push({
+      rawCases.push({
         caseId: $(elem)
           .find("td:nth-child(1)")
           .text()
@@ -52,7 +51,7 @@ const scraper = async () => {
     .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
-      cases.push({
+      rawCases.push({
         caseId: $(elem)
           .find("td:nth-child(1)")
           .text()
@@ -77,9 +76,14 @@ const scraper = async () => {
       });
     });
 
-  let data = [];
+  let cases = [];
   let totalCases = 0;
-  cases.forEach(item => {
+  let countMale = 0;
+  let countFemale = 0;
+  let countOther = 0;
+  let ages = [];
+
+  rawCases.forEach(item => {
     if (item.location) {
       totalCases++;
 
@@ -105,14 +109,47 @@ const scraper = async () => {
         item.gender = "";
       }
 
-      const n = data.find(x => item.location === x.location);
+      if (item.gender === "Male") {
+        countMale++;
+      } else if (item.gender === "Female") {
+        countFemale++;
+      } else {
+        countOther++;
+      }
+
+      // normalize ages
+      const age = parseInt(item.age);
+      if (!isNaN(age)) {
+        item.age = `${Math.round(age / 10) * 10}s`;
+      }
+
+      let sortKey;
+      if (item.age === "Child") {
+        sortKey = 0;
+      } else if (item.age === "Teens") {
+        sortKey = 1;
+      } else if (item.age === "") {
+        sortKey = 100;
+        item.age = "TBC";
+      } else {
+        sortKey = parseInt(item.age);
+      }
+
+      const a = ages.find(x => item.age === x.title);
+      if (a) {
+        a.numCases++;
+      } else {
+        ages.push({ title: item.age, numCases: 1, sortKey });
+      }
+
+      const n = cases.find(x => item.location === x.location);
       if (n) {
         n.numCases++;
         n.cases.push(item);
       } else {
         const loc = locations.find(x => item.location === x.location);
         if (loc) {
-          data.push({
+          cases.push({
             location: item.location,
             numCases: 1,
             latlng: loc.latlng,
@@ -128,14 +165,27 @@ const scraper = async () => {
     }
   });
 
-  data.sort((a, b) => {
+  ages.sort((a, b) => {
+    return a.sortKey < b.sortKey ? -1 : 1;
+  });
+
+  cases.sort((a, b) => {
     if (a.numCases === b.numCases) {
       return a.location > b.location ? 1 : -1;
     }
     return a.numCases > b.numCases ? -1 : 1;
   });
 
-  return { data, lastUpdated, totalCases };
+  return {
+    staticData,
+    cases,
+    lastUpdated,
+    totalCases,
+    countMale,
+    countFemale,
+    countOther,
+    ages
+  };
 };
 
 export default scraper;
