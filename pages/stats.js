@@ -463,6 +463,9 @@ const Cases = styled.div`
     font-size: 2.8em;
     color: ${theme.dark};
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     :before {
       content: "";
@@ -497,7 +500,7 @@ const Recovered = styled.div`
     justify-content: space-between;
     padding: 0.5em 1em;
     @media (min-width: ${theme.sm}) {
-      margin: 0 1em;
+      margin: 0 0 0 1em;
     }
     > div:first-child {
       border-right: solid ${theme.dark} 0.1em;
@@ -587,6 +590,7 @@ const Person = styled.div`
 
 const Deaths = styled.div`
   ${({ theme }) => css`
+    display: none;
     padding: 0.5em 1em;
     background: ${theme.green};
     font-size: 2.2em;
