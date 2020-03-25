@@ -1,11 +1,16 @@
 import cheerio from "cheerio";
 import locations from "./constants/locations";
+const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 // import mohHtml from "./moh-html";
 
-const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
+const staticData = {
+  confirmedCases: 189,
+  probableCases: 16,
+  recoveredCases: 22,
+  toBeLocated: 50
+};
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
-
 const scraper = async () => {
   const response = await fetch(URL);
   const html = await response.text();
@@ -18,12 +23,12 @@ const scraper = async () => {
     .first()
     .text();
 
-  let cases = [];
+  let rawCases = [];
   $(".table-style-two")
     .eq(0)
     .find("tbody tr")
     .each((i, elem) => {
-      cases.push({
+      rawCases.push({
         caseId: $(elem)
           .find("td:nth-child(1)")
           .text()
@@ -52,7 +57,7 @@ const scraper = async () => {
     .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
-      cases.push({
+      rawCases.push({
         caseId: $(elem)
           .find("td:nth-child(1)")
           .text()
@@ -77,9 +82,9 @@ const scraper = async () => {
       });
     });
 
-  let data = [];
+  let cases = [];
   let totalCases = 0;
-  cases.forEach(item => {
+  rawCases.forEach(item => {
     if (item.location) {
       totalCases++;
 
@@ -105,14 +110,14 @@ const scraper = async () => {
         item.gender = "";
       }
 
-      const n = data.find(x => item.location === x.location);
+      const n = cases.find(x => item.location === x.location);
       if (n) {
         n.numCases++;
         n.cases.push(item);
       } else {
         const loc = locations.find(x => item.location === x.location);
         if (loc) {
-          data.push({
+          cases.push({
             location: item.location,
             numCases: 1,
             latlng: loc.latlng,
@@ -128,14 +133,14 @@ const scraper = async () => {
     }
   });
 
-  data.sort((a, b) => {
+  cases.sort((a, b) => {
     if (a.numCases === b.numCases) {
       return a.location > b.location ? 1 : -1;
     }
     return a.numCases > b.numCases ? -1 : 1;
   });
 
-  return { data, lastUpdated, totalCases };
+  return { staticData, cases, lastUpdated, totalCases };
 };
 
 export default scraper;
