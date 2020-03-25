@@ -42,23 +42,6 @@ MyApp.getInitialProps = async appContext => {
   };
 };
 
-export async function getStaticProps() {
-  console.log("111");
-  // const { data, lastUpdated, totalCases } = await scraper();
-  // return {
-  //   props: {
-  //     data,
-  //     lastUpdated,
-  //     totalCases
-  //   }
-  // };
-  return {
-    props: {
-      test: "test"
-    }
-  };
-}
-
 export default MyApp;
 
 const Styles = createGlobalStyle`

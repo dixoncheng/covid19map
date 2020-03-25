@@ -1,24 +1,16 @@
 import { useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
 import styled, { css } from "styled-components";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import dailyCases from "../data/dailyCases";
 
 const Stats = ({ data }) => {
-  console.log(data);
-
   const {
     confirmedCases,
     probableCases,
     recoveredCases,
-    alertlevel,
+    alertLevel,
     deaths,
     comTrans,
     countriesAffected,
@@ -52,7 +44,13 @@ const Stats = ({ data }) => {
         <title>Covid-19 Map NZ - Stats</title>
       </Head>
       <Infographic>
-        <Header>{lastUpdated}</Header>
+        <Header>
+          <a className="view-map" href="/">
+            <img src="/infographic/backtomap.svg" />
+            View Live Map
+          </a>
+          <div className="date">{lastUpdated}</div>
+        </Header>
         <Row>
           <Total>
             <h1>
@@ -72,7 +70,7 @@ const Stats = ({ data }) => {
             <Alert>
               <div className="head" />
               <div className="body">
-                Alert level<div>{alertlevel}</div>
+                Alert level<div>{alertLevel}</div>
               </div>
             </Alert>
           </div>
@@ -259,7 +257,7 @@ const Stats = ({ data }) => {
                 <br /> areas
               </div>
               {top5inNZ.map((item, i) => (
-                <div className="location">
+                <div key={i} className="location">
                   <div className="count">{item.numCases}</div> {item.location}
                 </div>
               ))}
@@ -283,6 +281,10 @@ const Stats = ({ data }) => {
           >
             Worldometers.info
           </a>
+          <a href="/" className="view-map">
+            <img src="/infographic/backtomap.svg" /> View <br />
+            Live Map
+          </a>
           <img src="/infographic/sth.svg" />
         </Footer>
       </Infographic>
@@ -304,13 +306,38 @@ const Infographic = styled.div`
 
 const Header = styled.div`
   ${({ theme }) => css`
-    font-size: 1.2em;
     color: white;
     padding: 0 2.5em;
     height: 2.5em;
     display: flex;
     align-items: center;
     background: ${theme.navy};
+    position: relative;
+    .view-map {
+      position: absolute;
+      top: 0;
+      left: 1.7em;
+      display: block;
+      color: white;
+      background: ${theme.yellow};
+      padding: 0.5em 0.8em;
+      font-size: 1.5em;
+      border-radius: 0 0 0.25em 0.25em;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      img {
+        width: 1.1em;
+        margin-right: 0.5em;
+        vertical-align: center;
+      }
+    }
+    .date {
+      font-size: 1.2em;
+      width: 30em;
+      text-align: right;
+      margin-left: 30em;
+    }
   `}
 `;
 
@@ -985,6 +1012,25 @@ const Footer = styled.div`
       right: 2.5em;
       bottom: 0;
       width: 16em;
+    }
+    .view-map {
+      position: absolute;
+      right: 14em;
+      bottom: 0;
+      display: block;
+      color: white;
+      background: ${theme.yellow};
+      padding: 0.7em 1.2em;
+      font-size: 1.5em;
+      border-radius: 0.25em 0.25em 0 0;
+      line-height: 1.2;
+      text-align: center;
+      img {
+        position: static;
+        display: block;
+        margin: 0 auto 0.2em;
+        width: 2.1em;
+      }
     }
   `}
 `;

@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
@@ -12,7 +13,8 @@ const Home = ({ data }) => {
     confirmedCases,
     probableCases,
     recoveredCases,
-    toBeLocated
+    toBeLocated,
+    alertLevel
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -86,7 +88,7 @@ const Home = ({ data }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Alert Level 3
+                Alert Level {alertLevel}
               </Alert>
               <Logo>
                 <img className="logo" src="/logo.svg" />
@@ -109,6 +111,10 @@ const Home = ({ data }) => {
                   </a>
                 </small>
               </div>
+
+              {/* <Link href="/stats">Stats</Link> */}
+              <StatsLink href="/stats">View Covid-19 Stats</StatsLink>
+
               <div className="total">
                 <h2 className="split">
                   Total number of cases <span>{totalCases}</span>
@@ -523,5 +529,23 @@ const LinkButton = styled.button`
     padding: 0;
     text-decoration: underline;
     color: ${theme.dark};
+  `}
+`;
+
+const StatsLink = styled.a`
+  ${({ theme }) => css`
+    display: block;
+    /* display: flex;
+    justify-content: space-between; */
+    font-size: 14px;
+    background: ${theme.teal};
+    color: white !important;
+    padding: 7px 15px;
+    margin-bottom: 0.8em;
+    color: white;
+    border-radius: 3px;
+    @media (min-width: ${theme.md}) {
+      font-size: 20px;
+    }
   `}
 `;
