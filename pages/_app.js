@@ -56,5 +56,16 @@ const Styles = createGlobalStyle`
     button {
       cursor: pointer;
     }
+    .inline-icon {
+      display: inline-block;
+      margin-left: 17px;
+      height: 10px;
+      width: 10px;
+      svg {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
   `}
 `;

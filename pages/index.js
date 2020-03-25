@@ -113,7 +113,15 @@ const Home = ({ data }) => {
               </div>
 
               {/* <Link href="/stats">Stats</Link> */}
-              <StatsLink href="/stats">View Covid-19 Stats</StatsLink>
+              <StatsLink href="/stats">
+                View Covid-19 Stats
+                <div
+                  className="inline-icon"
+                  dangerouslySetInnerHTML={{
+                    __html: require(`../public/arrow.svg?include`)
+                  }}
+                />
+              </StatsLink>
 
               <div className="total">
                 <h2 className="split">
@@ -144,6 +152,7 @@ const Home = ({ data }) => {
                   <tr>
                     <th>Location</th>
                     <th>Case/s</th>
+
                     {/* <th>Recovered</th>
                     <th>Deaths</th> */}
                   </tr>
@@ -156,7 +165,16 @@ const Home = ({ data }) => {
                       onClick={() => showLocation(item.location)}
                     >
                       <td>{item.location}</td>
-                      <td>{item.numCases}</td>
+                      <td>
+                        {item.numCases}
+                        <div
+                          className="inline-icon"
+                          dangerouslySetInnerHTML={{
+                            __html: require(`../public/arrow.svg?include`)
+                          }}
+                        />
+                      </td>
+
                       {/* <td>0</td>
                       <td>0</td> */}
                     </tr>
@@ -413,9 +431,12 @@ const SummaryTable = styled.table`
     }
     td {
       cursor: pointer;
-      text-decoration: underline;
+      /* text-decoration: underline; */
       background: white;
       border-top: solid ${theme.light} 4px;
+    }
+    .inline-icon {
+      opacity: 0.3;
     }
   `}
 `;
@@ -534,10 +555,11 @@ const LinkButton = styled.button`
 
 const StatsLink = styled.a`
   ${({ theme }) => css`
-    display: block;
-    /* display: flex;
-    justify-content: space-between; */
-    font-size: 14px;
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
     background: ${theme.teal};
     color: white !important;
     padding: 7px 15px;
