@@ -374,7 +374,7 @@ const Total = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    font-size: 1em;
+    font-size: 0.99em;
     padding-top: 14em;
     @media (min-width: ${theme.sm}) {
       padding-top: 0;
