@@ -29,8 +29,6 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   const normalize = val => (val - 0) / (1.5 - 0);
 
   const getIcon = numCases => {
-    console.log(normalize(numCases));
-
     const iconSize = 24 + normalize(numCases);
     return L.divIcon({
       className: "icon",
