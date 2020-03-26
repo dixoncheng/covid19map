@@ -3,6 +3,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
+import scraper from "../scraper";
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false
@@ -237,6 +238,15 @@ const Home = ({ data }) => {
     </div>
   );
 };
+
+export async function getStaticProps(context) {
+  const data = await scraper();
+  return {
+    props: {
+      data
+    }
+  };
+}
 
 export default Home;
 
