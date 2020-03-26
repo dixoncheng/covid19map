@@ -210,7 +210,7 @@ const Stats = ({ data }) => {
                     onMouseOver={() => setcurrentAgeIndex(i)}
                   >
                     {item.title}
-                    <strong>{percent}%</strong>
+                    <strong>{percent || 1}%</strong>
                   </Age>
                 );
               })}
