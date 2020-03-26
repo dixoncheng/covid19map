@@ -28,19 +28,19 @@ function MyApp({ Component, pageProps, ...props }) {
 // perform automatic static optimization, causing every page in your app to
 // be server-side rendered.
 //
-MyApp.getInitialProps = async appContext => {
-  //   // calls page's `getInitialProps` and fills `appProps.pageProps`
-  //   const appProps = await App.getInitialProps(appContext);
-  //
-  //   return { ...appProps }
+// MyApp.getInitialProps = async appContext => {
+//   //   // calls page's `getInitialProps` and fills `appProps.pageProps`
+//   //   const appProps = await App.getInitialProps(appContext);
+//   //
+//   //   return { ...appProps }
 
-  const data = await scraper();
-  return {
-    pageProps: {
-      data
-    }
-  };
-};
+//   const data = await scraper();
+//   return {
+//     pageProps: {
+//       data
+//     }
+//   };
+// };
 
 export default MyApp;
 

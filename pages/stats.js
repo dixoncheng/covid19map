@@ -4,18 +4,20 @@ import Link from "next/link";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
+import scraper from "../scraper";
+import api from "../api.js";
 
-const Stats = ({ data }) => {
+const Stats = ({ data, casesPer1M }) => {
   const {
     confirmedCases,
     probableCases,
     recoveredCases,
     alertLevel,
     deaths,
-    comTrans,
+    // comTrans,
     countriesAffected,
-    casesPer1M,
-    totalCasesPublished
+    // totalCasesPublished,
+    inHospital
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -25,21 +27,21 @@ const Stats = ({ data }) => {
 
   const {
     lastUpdated,
-    locations,
-    countMale,
-    countFemale,
-    countOther,
-    ages: ageData
+    locations
+    // countMale,
+    // countFemale,
+    // countOther,
+    // ages: ageData
   } = data;
 
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
-  const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
-  const percentMen = Math.round((countMale / totalCasesPublished) * 100);
+  // const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
+  // const percentMen = Math.round((countMale / totalCasesPublished) * 100);
 
   const top5inNZ = locations.slice(0, 5);
 
-  const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
+  // const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (
     <div className="container">
       <Head>
@@ -157,7 +159,7 @@ const Stats = ({ data }) => {
               </Soap>
             </div>
             <Hospital>
-              <strong>7</strong>
+              <strong>{inHospital}</strong>
               <span>Cases in hospital</span>
               <img src="/infographic/hospital.svg" />
             </Hospital>
@@ -299,6 +301,17 @@ const Stats = ({ data }) => {
     </div>
   );
 };
+
+export async function getStaticProps(context) {
+  const data = await scraper();
+  const casesPer1M = await api();
+  return {
+    props: {
+      data,
+      casesPer1M
+    }
+  };
+}
 
 export default Stats;
 
