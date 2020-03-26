@@ -14,10 +14,10 @@ const Stats = ({ data }) => {
     deaths,
     comTrans,
     countriesAffected,
-    casesPer1M
+    casesPer1M,
+    totalCasesPublished
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
-  const historicTotalCases = 205;
 
   const newCases =
     dailyCases[dailyCases.length - 1].cases -
@@ -25,18 +25,19 @@ const Stats = ({ data }) => {
 
   const {
     lastUpdated,
-    cases,
+    locations,
     countMale,
     countFemale,
     countOther,
     ages: ageData
   } = data;
 
-  const recoveryRate = Math.round((recoveredCases / historicTotalCases) * 100);
-  const percentWomen = Math.round((countFemale / historicTotalCases) * 100);
-  const percentMen = Math.round((countMale / historicTotalCases) * 100);
+  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
-  const top5inNZ = cases.slice(0, 5);
+  const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
+  const percentMen = Math.round((countMale / totalCasesPublished) * 100);
+
+  const top5inNZ = locations.slice(0, 5);
 
   const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (
@@ -107,23 +108,23 @@ const Stats = ({ data }) => {
         <Row>
           <div className="flex-mobile">
             <NewCases>
-              <strong>+{newCases}</strong> New
+              <strong>+{newCases}</strong> New cases
               <br />
-              cases
+              over the last
               <br />
-              <br />
+              24 hours
               <img src="/infographic/nznewcases.svg" />
             </NewCases>
-            <Transmissions>
+            {/* <Transmissions>
               <strong>{comTrans}</strong>
               Cases of <br />
               community <br />
               transmission
               <img src="/infographic/commtrans.svg" />
-            </Transmissions>
+            </Transmissions> */}
           </div>
           <div className="flex-mobile">
-            <Genders>
+            {/* <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
                 <div className="female">
@@ -139,7 +140,7 @@ const Stats = ({ data }) => {
                   <img src="/infographic/male.svg" />
                 </div>
               </div>
-              {/* <div className="foot">
+              <div className="foot">
                 {countMale !== countFemale && (
                   <>
                     More{" "}
@@ -149,8 +150,8 @@ const Stats = ({ data }) => {
                     have been infected
                   </>
                 )}
-              </div> */}
-            </Genders>
+              </div>
+            </Genders> */}
             <Soap>
               <img src="/infographic/Washhands.svg" />
             </Soap>
@@ -195,13 +196,13 @@ const Stats = ({ data }) => {
             </div>
           </Chart>
         </Row>
-        <Row>
+        {/* <Row>
           <Ages>
             <div className="head">Age Groups</div>
             <div className="chart">
               {ageData.map((item, i) => {
                 const percent = Math.round(
-                  (item.numCases / historicTotalCases) * 100
+                  (item.numCases / totalCasesPublished) * 100
                 );
                 return (
                   <Age
@@ -226,7 +227,7 @@ const Stats = ({ data }) => {
               &nbsp;
             </div>
           </Ages>
-        </Row>
+        </Row> */}
         <Row>
           <Globe>
             <div className="globe">
@@ -259,7 +260,7 @@ const Stats = ({ data }) => {
               </div>
               {top5inNZ.map((item, i) => (
                 <div key={i} className="location">
-                  <div className="count">{item.numCases}</div> {item.location}
+                  <div className="count">{item.totalCases}</div> {item.location}
                 </div>
               ))}
             </div>
@@ -601,7 +602,7 @@ const Deaths = styled.div`
 const NewCases = styled.div`
   ${({ theme }) => css`
     font-family: ${theme.fontFancy};
-    font-size: 1.9em;
+    font-size: 1.4em;
     text-transform: uppercase;
     color: ${theme.dark};
     line-height: 1.1;
@@ -616,7 +617,7 @@ const NewCases = styled.div`
       width: 6em;
       position: absolute;
       top: 0em;
-      left: 5.4em;
+      left: 9em;
     }
   `}
 `;
@@ -746,7 +747,7 @@ const Chart = styled.div`
       line-height: 1.1;
     }
     .chart-wrap {
-      width: 40em;
+      width: 45em;
       height: 25em;
     }
   `}

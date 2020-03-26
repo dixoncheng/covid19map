@@ -18,21 +18,13 @@ const Home = ({ data }) => {
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
-  const { lastUpdated, cases } = data;
+  const { lastUpdated, locations } = data;
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
 
   const [view, setView] = useState("");
   const [location, setLocation] = useState();
   const [termsOpened, setTermsOpened] = useState(false);
-
-  const showLocation = location => {
-    const loc = cases.find(x => location === x.location);
-    if (loc) {
-      setLocation(loc);
-      setView("details");
-    }
-  };
 
   return (
     <div className="container">
@@ -44,243 +36,191 @@ const Home = ({ data }) => {
           <Map
             center={center}
             zoom={zoom}
-            markers={cases}
-            onMarkerClick={showLocation}
+            markers={locations}
             currentView={view}
           />
         </Main>
         <Info>
-          {view === "details" ? (
-            <Details>
-              <BackButton type="button" onClick={() => setView("")}>
-                &lt; Back to summary
-              </BackButton>
+          <Summary>
+            <Alert
+              href="https://covid19.govt.nz/assets/COVID_Alert-levels_v2.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Alert Level {alertLevel}
+            </Alert>
+            <Logo>
+              <img className="logo" src="/logo.svg" />
+              <div>
+                <h1>Covid-19 Map</h1>
+                <h2>Current Cases in New Zealand</h2>
+              </div>
+            </Logo>
+            <div className="meta">
+              <small>{lastUpdated}</small>
+              <br />
+              <small>
+                Source:{" "}
+                <a
+                  href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ministry of Health
+                </a>
+              </small>
+            </div>
 
-              <Bar>
-                {location.location}
-                <span>
-                  {location.numCases}{" "}
-                  {location.numCases === 1 ? "Case" : "Cases"}
-                </span>
-              </Bar>
+            {/* <Link href="/stats">Stats</Link> */}
+            {/* <StatsLink href="/stats">
+              View Covid-19 Stats
+              <div
+                className="inline-icon"
+                dangerouslySetInnerHTML={{
+                  __html: require(`../public/arrow.svg?include`)
+                }}
+              />
+            </StatsLink> */}
 
-              {location?.cases.map((item, i) => (
-                <Case key={i} status={item.status}>
-                  <h3>
-                    {item.status} case {item.caseId}
-                  </h3>
-                  <div className="details">
-                    <div className="age">
-                      {item.age}
-                      {item.age && item.gender ? ", " : ""} {item.gender}
-                    </div>
-                    {item.details.split(/\r?\n/).map((item, i) => (
-                      <div key={i}>{item}</div>
-                    ))}
-                  </div>
-                </Case>
-              ))}
-            </Details>
-          ) : (
-            <Summary>
-              <Alert
-                href="https://covid19.govt.nz/assets/COVID_Alert-levels_v2.pdf"
+            <div className="total">
+              <h2 className="split">
+                Total number of cases <span>{totalCases}</span>
+              </h2>
+
+              {/* <div className="cases-breakdown">
+                Confirmed cases <span>{confirmedCases}</span>
+              </div>
+              <div className="cases-breakdown">
+                Probable cases <span>{probableCases}</span>
+              </div> */}
+
+              <h2 className="split">
+                Recovered <span>{recoveredCases}</span>
+              </h2>
+
+              {/* {toBeLocated > 0 && (
+                <div>
+                  <small>
+                    Information on {toBeLocated} new cases yet to be released
+                  </small>
+                </div>
+              )} */}
+            </div>
+            <SummaryTable cols={2}>
+              <thead>
+                <tr>
+                  <th>Location</th>
+                  <th>Case/s</th>
+
+                  {/* <th>Recovered</th>
+                    <th>Deaths</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {locations.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.location}</td>
+                    <td>{item.totalCases}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </SummaryTable>
+            <p>
+              <small>
+                We can only work with the official cases that have been released
+                by the{" "}
+                <a
+                  href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ministry of Health
+                </a>
+                . As confirmed cases are sometimes listed by the region rather
+                than by the town, this can affect how accurate the map is able
+                to pinpoint the exact locations.
+              </small>
+            </p>
+            <p>
+              <small>
+                Should the Ministry make their cases a bit more specific going
+                forward we will definitely ensure the map is updated at the same
+                time to better reflect the affected areas.
+              </small>
+            </p>
+            <p>
+              <small>
+                Any feedback, ideas, or if you'd like to help, please contact{" "}
+                <a href="mailto:contact@covid19map.nz">contact@covid19map.nz</a>{" "}
+                |{" "}
+                <a
+                  href="https://github.com/dixoncheng/covid19map"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Github
+                </a>
+                <br />
+                <LinkButton
+                  type="button"
+                  onClick={() => setTermsOpened(!termsOpened)}
+                >
+                  Disclaimer and Terms of use
+                </LinkButton>
+              </small>
+            </p>
+            {termsOpened && (
+              <div>
+                <p>
+                  <small>
+                    Covid-19 Map NZ sources its cases directly from the official{" "}
+                    <a
+                      href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Ministry of Health page
+                    </a>
+                    . We are in no way responsible for the accuracy of this
+                    information.
+                  </small>
+                </p>
+                <p>
+                  <small>
+                    Covid-19 Map NZ disclaims and excludes all liability for any
+                    claim, loss, demand or damages of any kind whatsoever
+                    (including for negligence) arising out of or in connection
+                    with the use of either this website or the information,
+                    content or materials included on this site or on any website
+                    we link to.
+                  </small>
+                </p>
+                <p>
+                  <small>
+                    By viewing and using the site, you will be deemed to agree
+                    to these Terms of use.
+                  </small>
+                </p>
+              </div>
+            )}
+            <p className="made-by">
+              <small>Made by</small>{" "}
+              <a
+                href="https://www.linkedin.com/in/emilywongnz/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Alert Level {alertLevel}
-              </Alert>
-              <Logo>
-                <img className="logo" src="/logo.svg" />
-                <div>
-                  <h1>Covid-19 Map</h1>
-                  <h2>Current Cases in New Zealand</h2>
-                </div>
-              </Logo>
-              <div className="meta">
-                <small>{lastUpdated}</small>
-                <br />
-                <small>
-                  Source:{" "}
-                  <a
-                    href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ministry of Health
-                  </a>
-                </small>
-              </div>
-
-              {/* <Link href="/stats">Stats</Link> */}
-              <StatsLink href="/stats">
-                View Covid-19 Stats
-                <div
-                  className="inline-icon"
-                  dangerouslySetInnerHTML={{
-                    __html: require(`../public/arrow.svg?include`)
-                  }}
-                />
-              </StatsLink>
-
-              <div className="total">
-                <h2 className="split">
-                  Total number of cases <span>{totalCases}</span>
-                </h2>
-
-                <div className="cases-breakdown">
-                  Confirmed cases <span>{confirmedCases}</span>
-                </div>
-                <div className="cases-breakdown">
-                  Probable cases <span>{probableCases}</span>
-                </div>
-
-                <h2 className="split">
-                  Recovered <span>{recoveredCases}</span>
-                </h2>
-
-                {toBeLocated > 0 && (
-                  <div>
-                    <small>
-                      Information on {toBeLocated} new cases yet to be released
-                    </small>
-                  </div>
-                )}
-              </div>
-              <SummaryTable cols={2}>
-                <thead>
-                  <tr>
-                    <th>Location</th>
-                    <th>Case/s</th>
-
-                    {/* <th>Recovered</th>
-                    <th>Deaths</th> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {cases.map((item, i) => (
-                    <tr
-                      key={i}
-                      type="button"
-                      onClick={() => showLocation(item.location)}
-                    >
-                      <td>{item.location}</td>
-                      <td>
-                        {item.numCases}
-                        <div
-                          className="inline-icon"
-                          dangerouslySetInnerHTML={{
-                            __html: require(`../public/arrow.svg?include`)
-                          }}
-                        />
-                      </td>
-
-                      {/* <td>0</td>
-                      <td>0</td> */}
-                    </tr>
-                  ))}
-                </tbody>
-              </SummaryTable>
-              <p>
-                <small>
-                  We can only work with the official cases that have been
-                  released by the{" "}
-                  <a
-                    href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ministry of Health
-                  </a>
-                  . As confirmed cases are sometimes listed by the region rather
-                  than by the town, this can affect how accurate the map is able
-                  to pinpoint the exact locations.
-                </small>
-              </p>
-              <p>
-                <small>
-                  Should the Ministry make their cases a bit more specific going
-                  forward we will definitely ensure the map is updated at the
-                  same time to better reflect the affected areas.
-                </small>
-              </p>
-              <p>
-                <small>
-                  Any feedback, ideas, or if you'd like to help, please contact{" "}
-                  <a href="mailto:contact@covid19map.nz">
-                    contact@covid19map.nz
-                  </a>{" "}
-                  |{" "}
-                  <a
-                    href="https://github.com/dixoncheng/covid19map"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Github
-                  </a>
-                  <br />
-                  <LinkButton
-                    type="button"
-                    onClick={() => setTermsOpened(!termsOpened)}
-                  >
-                    Disclaimer and Terms of use
-                  </LinkButton>
-                </small>
-              </p>
-              {termsOpened && (
-                <div>
-                  <p>
-                    <small>
-                      Covid-19 Map NZ sources its cases directly from the
-                      official{" "}
-                      <a
-                        href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Ministry of Health page
-                      </a>
-                      . We are in no way responsible for the accuracy of this
-                      information.
-                    </small>
-                  </p>
-                  <p>
-                    <small>
-                      Covid-19 Map NZ disclaims and excludes all liability for
-                      any claim, loss, demand or damages of any kind whatsoever
-                      (including for negligence) arising out of or in connection
-                      with the use of either this website or the information,
-                      content or materials included on this site or on any
-                      website we link to.
-                    </small>
-                  </p>
-                  <p>
-                    <small>
-                      By viewing and using the site, you will be deemed to agree
-                      to these Terms of use.
-                    </small>
-                  </p>
-                </div>
-              )}
-              <p className="made-by">
-                <small>Made by</small>{" "}
-                <a
-                  href="https://www.linkedin.com/in/emilywongnz/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/linkedin.svg" />
-                </a>{" "}
-                <a
-                  href="https://www.linkedin.com/in/dixon-cheng/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src="/linkedin.svg" />
-                </a>
-              </p>
-            </Summary>
-          )}
+                <img src="/linkedin.svg" />
+              </a>{" "}
+              <a
+                href="https://www.linkedin.com/in/dixon-cheng/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/linkedin.svg" />
+              </a>
+            </p>
+          </Summary>
         </Info>
       </Wrap>
     </div>
@@ -402,10 +342,10 @@ const SummaryTable = styled.table`
     width: 100%;
     border-collapse: collapse;
 
-    tr:hover td {
+    /* tr:hover td {
       transition: 0.3s ease;
       background: #bee1dd;
-    }
+    } */
     td,
     th {
       line-height: 1.2;
