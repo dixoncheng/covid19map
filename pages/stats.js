@@ -288,11 +288,11 @@ const Stats = ({ data, casesPer1M }) => {
           </a>
           <br />
           <a
-            href="https://www.worldometers.info/coronavirus/"
+            href="https://github.com/CSSEGISandData/COVID-19"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Worldometers.info
+            Johns Hopkins University CSSE
           </a>
           <a href="/" className="view-map">
             <img src="/infographic/backtomap.svg" /> View <br />
@@ -1035,8 +1035,11 @@ const Footer = styled.div`
   ${({ theme }) => css`
     position: relative;
     background: ${theme.dark};
-    padding: 2em 2.5em 3em;
+    padding: 2em 31em 3em 2.5em;
     line-height: 1.5;
+    @media (min-width: ${theme.sm}) {
+      padding-right: 2.5em;
+    }
     .head {
       font-size: 1.5em;
       color: ${theme.green};
