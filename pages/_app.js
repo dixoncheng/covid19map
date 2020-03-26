@@ -53,6 +53,12 @@ const Styles = createGlobalStyle`
       font-family: "Nunito", sans-serif;
       background: ${theme.light};
     }
+    a {
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      opacity: 0.7;
+    }
     button {
       cursor: pointer;
     }

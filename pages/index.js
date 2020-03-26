@@ -71,6 +71,24 @@ const Home = ({ data }) => {
               </small>
             </div>
 
+            <Share>
+              <small>Share:</small>
+              <a
+                href="https://www.facebook.com/sharer/sharer.php?u=https://covid19map.nz/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/fb.svg" />
+              </a>
+              <a
+                href="http://www.twitter.com/share?url=https://covid19map.nz/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/tw.svg" />
+              </a>
+            </Share>
+
             {/* <Link href="/stats">Stats</Link> */}
             <StatsLink href="/stats">
               View Covid-19 Stats
@@ -279,7 +297,7 @@ const Summary = styled.div`
       justify-content: space-between;
     }
     .meta {
-      margin: 1em 0;
+      margin: 0.5em 0;
     }
     .made-by {
       small {
@@ -501,4 +519,15 @@ const StatsLink = styled.a`
       font-size: 20px;
     }
   `}
+`;
+
+const Share = styled.div`
+  margin-bottom: 0.8em;
+  img {
+    height: 20px;
+    vertical-align: middle;
+    margin: 0 3px;
+    position: relative;
+    top: -1px;
+  }
 `;
