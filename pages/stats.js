@@ -268,7 +268,10 @@ const Stats = ({ data, casesPer1M }) => {
               </div>
               {top5inNZ.map((item, i) => (
                 <div key={i} className="location">
-                  <div className="count">{item.totalCases}</div> {item.location}
+                  <div>
+                    <div className="count">{item.totalCases}</div>
+                  </div>{" "}
+                  {item.location}
                 </div>
               ))}
             </div>
