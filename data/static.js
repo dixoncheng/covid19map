@@ -1,6 +1,6 @@
 const staticData = {
-  confirmedCases: 189,
-  probableCases: 16,
+  confirmedCases: 262,
+  probableCases: 21,
   recoveredCases: 22,
   toBeLocated: 0,
   deaths: 0,

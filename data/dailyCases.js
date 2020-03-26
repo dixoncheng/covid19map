@@ -102,6 +102,10 @@ const dailyCases = [
   {
     days: "26",
     cases: 205
+  },
+  {
+    days: "27",
+    cases: 283
   }
 ];
 
