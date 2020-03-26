@@ -28,14 +28,12 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
 
   const normalize = val => (val - 0) / (1.5 - 0);
 
-  const getIcon = numCases => {
-    console.log(normalize(numCases));
-
-    const iconSize = 24 + normalize(numCases);
+  const getIcon = totalCases => {
+    const iconSize = 24 + normalize(totalCases);
     return L.divIcon({
       className: "icon",
       iconSize: [iconSize, iconSize],
-      html: `<div>${numCases}</div>`
+      html: `<div>${totalCases}</div>`
     });
   };
 
@@ -57,17 +55,17 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         easeLinearity={0.35}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        {markers.map(({ latlng, numCases, location }, i) => (
+        {markers.map(({ latlng, totalCases, location }, i) => (
           <Marker
             key={i}
             position={latlng}
-            icon={getIcon(numCases)}
-            onClick={() => onMarkerClick(location)}
+            icon={getIcon(totalCases)}
+            // onClick={() => onMarkerClick(location)}
           >
             <Popup>
               <StyledPopup>
                 <div className="location">{location}</div>
-                <div className="cases">Number of cases: {numCases}</div>
+                <div className="cases">Number of cases: {totalCases}</div>
               </StyledPopup>
             </Popup>
           </Marker>

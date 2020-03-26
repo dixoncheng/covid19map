@@ -1,7 +1,7 @@
-define("./workbox-405e5a8a.js",['exports'], function (exports) { 'use strict';
+define("./workbox-1a4a986e.js",['exports'], function (exports) { 'use strict';
 
     try {
-      self['workbox:core:5.1.1'] && _();
+      self['workbox:core:5.1.2'] && _();
     } catch (e) {}
 
     /*
@@ -1213,7 +1213,7 @@ define("./workbox-405e5a8a.js",['exports'], function (exports) { 'use strict';
     }
 
     try {
-      self['workbox:precaching:5.1.1'] && _();
+      self['workbox:precaching:5.1.2'] && _();
     } catch (e) {}
 
     /*
@@ -2272,4 +2272,4 @@ define("./workbox-405e5a8a.js",['exports'], function (exports) { 'use strict';
     exports.skipWaiting = skipWaiting;
 
 });
-//# sourceMappingURL=workbox-405e5a8a.js.map
+//# sourceMappingURL=workbox-1a4a986e.js.map

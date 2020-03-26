@@ -60,9 +60,9 @@ export default class MyDocument extends Document {
 
           <link rel="icon" href="/favicon.ico" />
           <link
-            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Bowlby+One&display=swap"
             rel="stylesheet"
-          ></link>
+          />
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"
@@ -93,7 +93,7 @@ export default class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="https://covid19map.nz/C19-FBshare.png"
+            content="https://covid19map.nz/C19-FBshare2.png"
           />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
