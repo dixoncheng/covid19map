@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import dailyCases from "../data/dailyCases";
+import { dailyCases } from "../data/static";
 
 const Stats = ({ data }) => {
   const {

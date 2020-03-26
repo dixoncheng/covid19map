@@ -2,7 +2,7 @@ import cheerio from "cheerio";
 import locations from "./data/locations";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 // import mohHtml from "./moh-html";
-import staticData from "./data/static";
+import { staticData } from "./data/static";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
 const scraper = async () => {

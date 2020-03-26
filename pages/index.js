@@ -89,7 +89,9 @@ const Home = ({ data }) => {
               </a>
             </Share>
 
-            {/* <Link href="/stats">Stats</Link> */}
+            {/* <Link href="/stats">
+              <a>Stats</a>
+            </Link> */}
             <StatsLink href="/stats">
               View Covid-19 Stats
               <div
