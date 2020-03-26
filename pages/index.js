@@ -127,8 +127,7 @@ const Home = ({ data }) => {
             </SummaryTable>
             <p>
               <small>
-                We can only work with the official cases that have been released
-                by the{" "}
+                We are working with the official information released by the{" "}
                 <a
                   href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
                   target="_blank"
@@ -136,18 +135,10 @@ const Home = ({ data }) => {
                 >
                   Ministry of Health
                 </a>
-                . As confirmed cases are sometimes listed by the region rather
-                than by the town, this can affect how accurate the map is able
-                to pinpoint the exact locations.
+                . Confirmed cases are listed by District Health Board regions.
               </small>
             </p>
-            <p>
-              <small>
-                Should the Ministry make their cases a bit more specific going
-                forward we will definitely ensure the map is updated at the same
-                time to better reflect the affected areas.
-              </small>
-            </p>
+
             <p>
               <small>
                 Any feedback, ideas, or if you'd like to help, please contact{" "}
@@ -370,7 +361,7 @@ const SummaryTable = styled.table`
       color: white;
     }
     td {
-      cursor: pointer;
+      /* cursor: pointer; */
       /* text-decoration: underline; */
       background: white;
       border-top: solid ${theme.light} 4px;
