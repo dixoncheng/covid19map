@@ -65,7 +65,7 @@ export default class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="https://covid19map.nz/C19-FBshare.png"
+            content="https://covid19map.nz/C19-FBshare2.png"
           />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
