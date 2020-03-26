@@ -72,7 +72,7 @@ const Home = ({ data }) => {
             </div>
 
             {/* <Link href="/stats">Stats</Link> */}
-            {/* <StatsLink href="/stats">
+            <StatsLink href="/stats">
               View Covid-19 Stats
               <div
                 className="inline-icon"
@@ -80,7 +80,7 @@ const Home = ({ data }) => {
                   __html: require(`../public/arrow.svg?include`)
                 }}
               />
-            </StatsLink> */}
+            </StatsLink>
 
             <div className="total">
               <h2 className="split">

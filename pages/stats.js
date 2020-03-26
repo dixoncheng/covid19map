@@ -106,25 +106,25 @@ const Stats = ({ data }) => {
           </Deaths>
         </Row>
         <Row>
-          <div className="flex-mobile">
-            <NewCases>
-              <strong>+{newCases}</strong> New cases
-              <br />
-              over the last
-              <br />
-              24 hours
-              <img src="/infographic/nznewcases.svg" />
-            </NewCases>
-            {/* <Transmissions>
+          <div className="flex-1">
+            <div className="sub-row">
+              <NewCases>
+                <strong>+{newCases}</strong> New cases
+                <br />
+                over the last
+                <br />
+                24 hours
+                <img src="/infographic/nznewcases.svg" />
+              </NewCases>
+              {/* <Transmissions>
               <strong>{comTrans}</strong>
               Cases of <br />
               community <br />
               transmission
               <img src="/infographic/commtrans.svg" />
             </Transmissions> */}
-          </div>
-          <div className="flex-mobile">
-            {/* <Genders>
+
+              {/* <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
                 <div className="female">
@@ -152,9 +152,15 @@ const Stats = ({ data }) => {
                 )}
               </div>
             </Genders> */}
-            <Soap>
-              <img src="/infographic/Washhands.svg" />
-            </Soap>
+              <Soap>
+                <img src="/infographic/Washhands.svg" />
+              </Soap>
+            </div>
+            <Hospital>
+              <strong>7</strong>
+              <span>Cases in hospital</span>
+              <img src="/infographic/hospital.svg" />
+            </Hospital>
           </div>
 
           <Chart>
@@ -302,6 +308,21 @@ const Infographic = styled.div`
     background: #d9f4f3;
     @media (min-width: ${theme.sm}) {
       font-size: 1vw;
+    }
+
+    .sub-row {
+      display: flex;
+      margin-top: 2em;
+      margin-bottom: 2em;
+      @media (min-width: ${theme.sm}) {
+        margin-bottom: 0;
+      }
+    }
+    .flex-1 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   `}
 `;
@@ -602,7 +623,7 @@ const Deaths = styled.div`
 const NewCases = styled.div`
   ${({ theme }) => css`
     font-family: ${theme.fontFancy};
-    font-size: 1.4em;
+    font-size: 1.7em;
     text-transform: uppercase;
     color: ${theme.dark};
     line-height: 1.1;
@@ -617,7 +638,7 @@ const NewCases = styled.div`
       width: 6em;
       position: absolute;
       top: 0em;
-      left: 9em;
+      left: 8em;
     }
   `}
 `;
@@ -721,13 +742,14 @@ const Genders = styled.div`
 
 const Soap = styled.div`
   ${({ theme }) => css`
+    margin-left: auto;
     text-align: right;
     /* position: relative; */
     /* left: 2em; */
     /* @media (min-width: ${theme.sm}) {
     } */
     img {
-      width: 25em;
+      width: 23em;
     }
   `}
 `;
@@ -898,6 +920,7 @@ const Globe = styled.div`
 
 const Ranking = styled.div`
   ${({ theme }) => css`
+    padding-bottom: 2em;
     .head {
       color: ${theme.dark};
       font-size: 2em;
@@ -933,7 +956,8 @@ const Ranking = styled.div`
 
 const Clipboard = styled.div`
   ${({ theme }) => css`
-    margin: 3em auto 0 !important;
+    margin: 3em auto 3em !important;
+    line-height: 1.1;
     @media (min-width: ${theme.sm}) {
       width: 30em;
       margin: 0 !important;
@@ -943,11 +967,11 @@ const Clipboard = styled.div`
       background: #a6e5e3;
       border-radius: 0.5em;
       position: relative;
-      margin-top: 5em;
+      margin-top: 3em;
       padding: 2.5em 2em 2em;
-      @media (min-width: ${theme.sm}) {
+      /* @media (min-width: ${theme.sm}) {
         margin-top: 3em;
-      }
+      } */
     }
     img {
       position: absolute;
@@ -1029,6 +1053,38 @@ const Footer = styled.div`
         margin: 0 auto 0.2em;
         width: 2.1em;
       }
+    }
+  `}
+`;
+
+const Hospital = styled.div`
+  ${({ theme }) => css`
+    background: white;
+    border-radius: 0.5em;
+    padding: 2em;
+    color: ${theme.dark};
+    font-family: ${theme.fontFancy};
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 2em;
+    @media (min-width: ${theme.sm}) {
+      margin-right: 3em;
+      margin-bottom: 0;
+    }
+    strong {
+      font-size: 9em;
+      color: ${theme.yellow};
+      margin-right: 0.1em;
+    }
+    span {
+      font-size: 2.2em;
+    }
+    img {
+      width: 13em;
     }
   `}
 `;
