@@ -16,7 +16,8 @@ const Stats = ({ data }) => {
     countriesAffected,
     casesPer1M
   } = data.staticData;
-  const totalCases = confirmedCases + probableCases;
+  // const totalCases = confirmedCases + probableCases;
+  const totalCases = 205;
 
   const newCases =
     dailyCases[dailyCases.length - 1].cases -
@@ -199,9 +200,7 @@ const Stats = ({ data }) => {
             <div className="head">Age Groups</div>
             <div className="chart">
               {ageData.map((item, i) => {
-                const percent = Math.round(
-                  (item.numCases / confirmedCases) * 100
-                );
+                const percent = Math.round((item.numCases / totalCases) * 100);
                 return (
                   <Age
                     key={i}
@@ -382,6 +381,7 @@ const Total = styled.div`
       font-size: 1.45em;
     }
     h1 {
+      white-space: nowrap;
       font-weight: normal;
       margin: 0 1em 0 0;
       font-size: 3em;
