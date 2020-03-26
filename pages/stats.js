@@ -16,8 +16,8 @@ const Stats = ({ data }) => {
     countriesAffected,
     casesPer1M
   } = data.staticData;
-  // const totalCases = confirmedCases + probableCases;
-  const totalCases = 205;
+  const totalCases = confirmedCases + probableCases;
+  const historicTotalCases = 205;
 
   const newCases =
     dailyCases[dailyCases.length - 1].cases -
@@ -32,9 +32,9 @@ const Stats = ({ data }) => {
     ages: ageData
   } = data;
 
-  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
-  const percentWomen = Math.round((countFemale / totalCases) * 100);
-  const percentMen = Math.round((countMale / totalCases) * 100);
+  const recoveryRate = Math.round((recoveredCases / historicTotalCases) * 100);
+  const percentWomen = Math.round((countFemale / historicTotalCases) * 100);
+  const percentMen = Math.round((countMale / historicTotalCases) * 100);
 
   const top5inNZ = cases.slice(0, 5);
 
@@ -200,7 +200,9 @@ const Stats = ({ data }) => {
             <div className="head">Age Groups</div>
             <div className="chart">
               {ageData.map((item, i) => {
-                const percent = Math.round((item.numCases / totalCases) * 100);
+                const percent = Math.round(
+                  (item.numCases / historicTotalCases) * 100
+                );
                 return (
                   <Age
                     key={i}
