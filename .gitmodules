@@ -1,0 +1,3 @@
+[submodule "covid19map-support"]
+	path = covid19map-support
+	url = https://dixoncheng@bitbucket.org/dixoncheng/covid19map-support.git
