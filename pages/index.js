@@ -15,7 +15,6 @@ const Home = ({ data, caseDetails }) => {
     confirmedCases,
     probableCases,
     recoveredCases,
-    toBeLocated,
     alertLevel
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
@@ -34,10 +33,8 @@ const Home = ({ data, caseDetails }) => {
     const loc = cases.find(x => location === x.location);
     if (!loc) {
       const l = locations.find(x => location === x.location);
-      console.log(l);
       setLocation({ location, numCases: l.totalCases });
     } else {
-      console.log(loc);
       setLocation(loc);
     }
     setView("details");

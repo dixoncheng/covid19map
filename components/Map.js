@@ -9,18 +9,8 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
-import Wkt from "wicket/wicket-leaflet";
-
-import lakes from "../data/regions/lakes";
-import hutt from "../data/regions/hutt";
-
-const regions = [{ wkt: lakes }, { wkt: hutt }];
-
-regions.forEach(item => {
-  const wicket = new Wkt.Wkt();
-  wicket.read(item.wkt);
-  item.latlng = wicket.toObject().getLatLngs();
-});
+import getRegions from "../regions";
+const regions = getRegions();
 
 const mapBounds = [
   [-32.90178557, 164.67596054],
@@ -33,6 +23,15 @@ const nzBounds = [
 ];
 
 const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
+  // merge regions and markers
+  markers.forEach(marker => {
+    const region = regions.find(x => x.location === marker.location);
+    if (region) {
+      Object.assign(region, marker);
+    }
+  });
+  // console.log(regions);
+
   const mapRef = useRef();
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
@@ -47,7 +46,8 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   const normalize = val => (val - 0) / (1.5 - 0);
 
   const getIcon = totalCases => {
-    const iconSize = 24 + normalize(totalCases);
+    // const iconSize = 24 + normalize(totalCases);
+    const iconSize = 28;
     return L.divIcon({
       className: "icon",
       iconSize: [iconSize, iconSize],
@@ -63,7 +63,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         center={center}
         zoom={zoom}
         maxZoom={10}
-        // minZoom={5}
+        minZoom={4}
         attributionControl={true}
         zoomControl={true}
         doubleClickZoom={true}
@@ -74,10 +74,37 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
 
-        {regions.map((item, i) => (
-          <FeatureGroup key={i} color="#204e61">
-            <Popup>Popup in FeatureGroup</Popup>
-            <Polygon positions={item.latlng} />
+        {regions.map(({ location, latlng, boundary, totalCases }, i) => (
+          <FeatureGroup key={i}>
+            {boundary && (
+              <>
+                {totalCases && (
+                  <>
+                    <Marker position={latlng} icon={getIcon(totalCases)} />
+                    <Popup>
+                      <StyledPopup>
+                        <div className="location">{location}</div>
+                        <div className="cases">
+                          Number of cases: {totalCases}
+                        </div>
+                      </StyledPopup>
+                    </Popup>
+                  </>
+                )}
+                <Polygon
+                  color="black"
+                  opacity="0.2"
+                  fillColor="#51b6b0"
+                  // fillOpacity={0.8}
+                  fillOpacity={((totalCases || 0) - 0) / (58 - 0)}
+                  // stroke={false}
+                  weight={1}
+                  positions={boundary}
+                  // smoothFactor={10}
+                  // onClick={() => onMarkerClick(location)}
+                />
+              </>
+            )}
           </FeatureGroup>
         ))}
 
@@ -126,14 +153,16 @@ const Styles = createGlobalStyle`
     }
   }
   .icon {
-    background: #51b6b0;
-    color: white;
+    /* background: #51b6b0; */
+    background: white;
+    color: #204e61;
+    text-shadow: 1px 1px 10px white;
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid white 1px;
+    border: solid #51b6b0 1px;
   }
 `;

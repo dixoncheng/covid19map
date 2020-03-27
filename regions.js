@@ -1,16 +1,16 @@
-// import L from "leaflet";
 import Wkt from "wicket/wicket-leaflet";
-import lakes from "./data/regions/lakes";
-import hutt from "./data/regions/hutt";
+import locations from "./data/locations";
 
-const regions = () => {
-  const regionList = [{ wkt: lakes }, { wkt: hutt }];
-  regionList.forEach(item => {
-    const wicket = new Wkt.Wkt();
-    wicket.read(item.wkt);
-    item.latlng = wicket.toObject().getLatLngs();
+const getRegions = () => {
+  locations.forEach(item => {
+    if (item.wkt) {
+      const wicket = new Wkt.Wkt();
+      wicket.read(item.wkt);
+      item.boundary = wicket.toObject().getLatLngs();
+      item.wkt = null;
+    }
   });
-  return regionList;
+  return locations;
 };
 
-export default regions;
+export default getRegions;
