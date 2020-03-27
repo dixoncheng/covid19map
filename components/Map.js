@@ -9,8 +9,29 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
-import getRegions from "../regions";
-const regions = getRegions();
+import regions from "../data/dhbs.json";
+
+// const test =
+
+regions.map(region => {
+  return region.boundary[0].map(item => {
+    // item = item.reverse();
+    // console.log(item);
+    // return "test";
+    return item.reverse();
+  });
+});
+console.log(JSON.stringify(regions));
+
+// const r = regions[0].boundary[0].map(item => {
+//   return item.reverse();
+// });
+// console.log(r);
+
+// console.log(regions);
+
+// import getRegions from "../regions";
+// const regions = getRegions();
 
 const mapBounds = [
   [-32.90178557, 164.67596054],
@@ -25,7 +46,7 @@ const nzBounds = [
 const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   // merge regions and markers
   markers.forEach(marker => {
-    const region = regions.find(x => x.location === marker.location);
+    const region = regions.find(x => x.name === marker.location);
     if (region) {
       Object.assign(region, marker);
     }
@@ -76,35 +97,33 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
 
         {regions.map(({ location, latlng, boundary, totalCases }, i) => (
           <FeatureGroup key={i}>
-            {boundary && (
-              <>
-                {totalCases && (
-                  <>
-                    <Marker position={latlng} icon={getIcon(totalCases)} />
-                    <Popup>
-                      <StyledPopup>
-                        <div className="location">{location}</div>
-                        <div className="cases">
-                          Number of cases: {totalCases}
-                        </div>
-                      </StyledPopup>
-                    </Popup>
-                  </>
-                )}
-                <Polygon
-                  color="black"
-                  opacity="0.2"
-                  fillColor="#51b6b0"
-                  // fillOpacity={0.8}
-                  fillOpacity={((totalCases || 0) - 0) / (58 - 0)}
-                  // stroke={false}
-                  weight={1}
-                  positions={boundary}
-                  // smoothFactor={10}
-                  // onClick={() => onMarkerClick(location)}
-                />
-              </>
-            )}
+            {/* {boundary && ( */}
+            <>
+              {totalCases && (
+                <>
+                  <Marker position={latlng} icon={getIcon(totalCases)} />
+                  <Popup>
+                    <StyledPopup>
+                      <div className="location">{location}</div>
+                      <div className="cases">Number of cases: {totalCases}</div>
+                    </StyledPopup>
+                  </Popup>
+                </>
+              )}
+              <Polygon
+                color="black"
+                opacity="0.2"
+                fillColor="#51b6b0"
+                fillOpacity={0.8}
+                // fillOpacity={((totalCases || 0) - 0) / (58 - 0)}
+                // stroke={false}
+                weight={1}
+                positions={boundary[0]}
+                // smoothFactor={10}
+                // onClick={() => onMarkerClick(location)}
+              />
+            </>
+            {/* )} */}
           </FeatureGroup>
         ))}
 
