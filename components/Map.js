@@ -1,7 +1,14 @@
 import { useEffect, useRef } from "react";
-import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  Map as LeafletMap,
+  Marker,
+  Popup,
+  TileLayer,
+  Polygon
+} from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
+import auckland from "../data/regions/auckland";
 
 const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   const mapRef = useRef();
@@ -41,7 +48,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
     <div>
       <LeafletMap
         ref={mapRef}
-        maxBounds={mapBounds}
+        // maxBounds={mapBounds}
         center={center}
         zoom={zoom}
         maxZoom={10}
@@ -55,12 +62,15 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         easeLinearity={0.35}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
+
+        <Polygon color="purple" positions={auckland} />
+
         {markers.map(({ latlng, totalCases, location }, i) => (
           <Marker
             key={i}
             position={latlng}
             icon={getIcon(totalCases)}
-            onClick={() => onMarkerClick(location)}
+            // onClick={() => onMarkerClick(location)}
           >
             <Popup>
               <StyledPopup>
