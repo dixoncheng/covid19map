@@ -60,7 +60,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
             key={i}
             position={latlng}
             icon={getIcon(totalCases)}
-            // onClick={() => onMarkerClick(location)}
+            onClick={() => onMarkerClick(location)}
           >
             <Popup>
               <StyledPopup>

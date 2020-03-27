@@ -12,7 +12,7 @@ const locations = [
   { location: "Northland", latlng: [-35.3712702, 173.7405337] },
   { location: "South Canterbury", latlng: [-44.64316247, 171.0031414] },
   { location: "Southern", latlng: [-45.55613134, 170.13322592] },
-  { location: "Tairawhiti", latlng: [-38.6636801, 178.028489] },
+  { location: "Tairāwhiti", latlng: [-38.6636801, 178.028489] },
   { location: "Taranaki", latlng: [-39.2711067, 174.154795] },
   { location: "Waikato", latlng: [-37.77922725, 175.20103232] },
   { location: "Wairarapa", latlng: [-41.23617985, 175.21969019] },

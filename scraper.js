@@ -19,7 +19,7 @@ const scraper = async () => {
 
   let rows = [];
   $(".table-style-two")
-    .eq(0)
+    .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
       const location = $(elem)
@@ -29,7 +29,7 @@ const scraper = async () => {
 
       const totalCases = parseInt(
         $(elem)
-          .find("td:nth-child(4)")
+          .find("td:nth-child(2)")
           .text()
           .trim()
       );
@@ -37,7 +37,7 @@ const scraper = async () => {
       if (location && location !== "Total" && totalCases > 0) {
         const latlngItem = locations.find(x => location === x.location);
         if (!latlngItem) {
-          // throw new Error(`No location "${location}" exist`);
+          throw new Error(`No location "${location}" exist`);
         }
 
         const confirmedCases = parseInt(
