@@ -4,28 +4,39 @@ import {
   Marker,
   Popup,
   TileLayer,
-  Polygon
+  Polygon,
+  FeatureGroup
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
-import auckland from "../data/regions/auckland";
+import Wkt from "wicket/wicket-leaflet";
+
+import lakes from "../data/regions/lakes";
+import hutt from "../data/regions/hutt";
+
+const regions = [{ wkt: lakes }, { wkt: hutt }];
+
+regions.forEach(item => {
+  const wicket = new Wkt.Wkt();
+  wicket.read(item.wkt);
+  item.latlng = wicket.toObject().getLatLngs();
+});
+
+const mapBounds = [
+  [-32.90178557, 164.67596054],
+  [-48.57478991, 181.27441406]
+];
+
+const nzBounds = [
+  [-34.76671725, 166.2361908],
+  [-47.30251579, 177.66849518]
+];
 
 const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
   const mapRef = useRef();
-
-  const mapBounds = [
-    [-32.90178557, 164.67596054],
-    [-48.57478991, 181.27441406]
-  ];
-
-  const nzBounds = [
-    [-34.76671725, 166.2361908],
-    [-47.30251579, 177.66849518]
-  ];
-
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
-  }, []);
+  }, [mapRef.current]);
 
   useEffect(() => {
     if (currentView === "") {
@@ -48,7 +59,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
     <div>
       <LeafletMap
         ref={mapRef}
-        // maxBounds={mapBounds}
+        maxBounds={mapBounds}
         center={center}
         zoom={zoom}
         maxZoom={10}
@@ -63,9 +74,14 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
 
-        <Polygon color="purple" positions={auckland} />
+        {regions.map((item, i) => (
+          <FeatureGroup key={i} color="#204e61">
+            <Popup>Popup in FeatureGroup</Popup>
+            <Polygon positions={item.latlng} />
+          </FeatureGroup>
+        ))}
 
-        {markers.map(({ latlng, totalCases, location }, i) => (
+        {/* {markers.map(({ latlng, totalCases, location }, i) => (
           <Marker
             key={i}
             position={latlng}
@@ -79,7 +95,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
               </StyledPopup>
             </Popup>
           </Marker>
-        ))}
+        ))} */}
       </LeafletMap>
       <Styles />
     </div>

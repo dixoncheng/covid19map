@@ -1,6 +1,5 @@
 // import App from 'next/app'
 import { ThemeProvider, createGlobalStyle, css } from "styled-components";
-import scraper from "../scraper";
 
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {

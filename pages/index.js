@@ -11,9 +11,6 @@ const Map = dynamic(() => import("../components/Map"), {
 });
 
 const Home = ({ data, caseDetails }) => {
-  console.log(data);
-  console.log(caseDetails);
-
   const {
     confirmedCases,
     probableCases,
