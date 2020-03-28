@@ -93,9 +93,7 @@ const Map = ({
               color="black"
               opacity="0.2"
               fillColor="#51b6b0"
-              // fillOpacity={0.8}
               fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
-              // stroke={false}
               weight={1}
               positions={boundary[0]}
               // smoothFactor={10}
@@ -136,7 +134,7 @@ const Styles = createGlobalStyle`
     /* background: #51b6b0; */
     background: white;
     color: #204e61;
-    text-shadow: 1px 1px 10px white;
+    /* text-shadow: 1px 1px 10px white; */
     border-radius: 50%;
     font-size: 16px;
     font-weight: bold;
