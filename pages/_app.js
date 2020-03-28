@@ -3,7 +3,7 @@ import { ThemeProvider, createGlobalStyle, css } from "styled-components";
 
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
-    font: '"Nunito", sans- serif',
+    font: '"Nunito", sans-serif',
     teal: "#51b6b0",
     green: "#aacd6e",
     navy: "#025064",
@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps, ...props }) {
     dark: "#204e61",
     sm: "700px",
     md: "800px",
-    fontFancy: "'Bowlby One', cursive"
+    fontFancy: "'Bowlby One', sans-serif"
   };
   return (
     <ThemeProvider theme={theme}>
