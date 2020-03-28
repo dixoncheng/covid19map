@@ -1,6 +1,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
+import Stats from "../components/Stats";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false
@@ -17,7 +18,7 @@ const innerBounds = [
   [-47.30251579, 177.66849518]
 ];
 
-const MapView = ({ data, caseDetails, onViewChange }) => {
+const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
   const {
     confirmedCases,
     probableCases,
@@ -169,17 +170,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               </a>
             </Share>
 
-            <StatsLink type="button" onClick={onViewChange}>
-              <img src="/graph.svg" /> View Covid-19 Stats
-              <div
-                className="inline-icon"
-                dangerouslySetInnerHTML={{
-                  __html: require(`../public/arrow.svg?include`)
-                }}
-              />
-            </StatsLink>
-
-            <div className="total">
+            {/* <div className="total">
               <h2 className="split">
                 Total number of cases <span>{totalCases}</span>
               </h2>
@@ -194,15 +185,15 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               <h2 className="split">
                 Recovered <span>{recoveredCases}</span>
               </h2>
+            </div> */}
 
-              {/* {toBeLocated > 0 && (
-                <div>
-                  <small>
-                    Information on {toBeLocated} new cases yet to be released
-                  </small>
-                </div>
-              )} */}
-            </div>
+            <Stats
+              data={data}
+              caseDetails={caseDetails}
+              casesPer1M={casesPer1M}
+              onViewChange={() => setView("")}
+            />
+
             <SummaryTable cols={2}>
               <thead>
                 <tr>
@@ -536,9 +527,9 @@ const BackButton = styled.button`
 `;
 
 const Alert = styled.a`
-  padding: 5px 20px;
+  padding: 3px 20px;
   color: white !important;
-  font-size: 24px;
+  font-size: 14px;
   background: #ffcd38 url(/alert.svg) 174px 50% no-repeat;
   margin: -20px -20px 20px;
   display: block;
