@@ -1097,13 +1097,14 @@ const Hospital = styled.div`
     strong {
       font-size: 9em;
       color: ${theme.yellow};
-      margin-right: 0.1em;
+      margin-right: 0.35em;
+      letter-spacing: -0.15em;
     }
     span {
       font-size: 2.2em;
     }
     img {
-      width: 13em;
+      width: 12em;
     }
   `}
 `;
