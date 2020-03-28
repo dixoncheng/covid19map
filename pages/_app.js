@@ -1,5 +1,9 @@
 // import App from 'next/app'
+import Router from "next/router";
 import { ThemeProvider, createGlobalStyle, css } from "styled-components";
+import * as gtag from "../lib/gtag";
+
+Router.events.on("routeChangeComplete", url => gtag.pageview(url));
 
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
