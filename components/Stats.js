@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
@@ -21,6 +21,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     dailyCases[dailyCases.length - 2].cases;
 
   const { lastUpdated, locations } = data;
+  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
   const {
     countMale,
@@ -30,14 +31,12 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     totalCasesPublished
   } = caseDetails;
 
-  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
-
-  // const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
-  // const percentMen = Math.round((countMale / totalCasesPublished) * 100);
+  const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
+  const percentMen = Math.round((countMale / totalCasesPublished) * 100);
 
   const top5inNZ = locations.slice(0, 5);
 
-  const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
+  // const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (
     <div className="container">
       <Infographic>
@@ -48,6 +47,16 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
           </button>
           <div className="date">{lastUpdated}</div>
         </Header>
+
+        <Logo>
+          <img className="logo" src="/logo.svg" />
+          <div>
+            <h1>Covid-19 Map</h1>
+            {/* <h2>Current Cases in New Zealand</h2> */}
+          </div>
+        </Logo>
+
+        <div className="date-mobile">{lastUpdated}</div>
         <Row>
           <Total>
             <h1>
@@ -101,25 +110,16 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
           </Deaths>
         </Row>
         <Row>
-          <div className="flex-1">
-            <div className="sub-row">
-              <NewCases>
-                <strong>+{newCases}</strong> New cases
-                <br />
-                in the last
-                <br />
-                24 hours
-                <img src="/infographic/nznewcases.svg" />
-              </NewCases>
-              {/* <Transmissions>
-              <strong>{comTrans}</strong>
-              Cases of <br />
-              community <br />
-              transmission
-              <img src="/infographic/commtrans.svg" />
-            </Transmissions> */}
-
-              {/* <Genders>
+          <div class="grid">
+            <NewCases>
+              <strong>+{newCases}</strong> New cases
+              <br />
+              in the last
+              <br />
+              24 hours
+              <img src="/infographic/nznewcases.svg" />
+            </NewCases>
+            <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
                 <div className="female">
@@ -135,7 +135,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                   <img src="/infographic/male.svg" />
                 </div>
               </div>
-              <div className="foot">
+              {/* <div className="foot">
                 {countMale !== countFemale && (
                   <>
                     More{" "}
@@ -145,17 +145,30 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                     have been infected
                   </>
                 )}
-              </div>
-            </Genders> */}
-              <Soap>
-                <img src="/infographic/Washhands.svg" />
-              </Soap>
-            </div>
+              </div> */}
+            </Genders>
             <Hospital>
-              <strong>{inHospital}</strong>
-              <span>Cases in hospital</span>
+              <div class="head">
+                <strong>{inHospital}</strong>
+                <span>
+                  Cases in
+                  <br /> hospital
+                </span>
+              </div>
               <img src="/infographic/hospital.svg" />
             </Hospital>
+
+            {/* <Transmissions>
+              <strong>{comTrans}</strong>
+              Cases of <br />
+              community <br />
+              transmission
+              <img src="/infographic/commtrans.svg" />
+            </Transmissions> */}
+
+            <Soap>
+              <img src="/infographic/Washhands.svg" />
+            </Soap>
           </div>
 
           <Chart>
@@ -209,7 +222,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                   <Age
                     key={i}
                     percent={percent}
-                    onMouseOver={() => setcurrentAgeIndex(i)}
+                    // onMouseOver={() => setcurrentAgeIndex(i)}
                   >
                     {item.title}
                     <strong>{percent || 1}%</strong>
@@ -309,7 +322,7 @@ const Infographic = styled.div`
       font-size: 1vw;
     }
 
-    .sub-row {
+    /* .sub-row {
       display: flex;
       margin-top: 2em;
       margin-bottom: 2em;
@@ -322,7 +335,27 @@ const Infographic = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+    } */
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      grid-gap: 0em 2em;
+      margin: 2em 0;
+      @media (min-width: ${theme.sm}) {
+        margin: 0;
+        grid-gap: 0;
+      }
     }
+
+    .date-mobile {
+      margin-left: 2.5em;
+      @media (min-width: ${theme.sm}) {
+        display: none;
+      }
+    }
+
   `}
 `;
 
@@ -330,25 +363,30 @@ const Header = styled.div`
   ${({ theme }) => css`
     color: white;
     padding: 0 2.5em;
-    height: 2.5em;
+    /* height: 2.5em; */
     display: flex;
     align-items: center;
     background: ${theme.navy};
     position: relative;
     .view-map {
       border: none;
-      position: absolute;
-      top: 0;
-      left: 1.7em;
-      display: block;
+      /* position: absolute; */
+      /* top: 0;
+      left: 1.7em; */
+      /* display: block; */
       color: white;
-      background: ${theme.yellow};
-      padding: 0.5em 0.8em;
+      background: none;
+      /* background: ${theme.yellow}; */
+      padding: .5em 0;
       font-size: 1.5em;
       border-radius: 0 0 0.25em 0.25em;
       line-height: 1.2;
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      font-size: 2em;
+      @media (min-width: ${theme.sm}) {
+        font-size: 1.5em;
+      }
       :hover {
         opacity: 1;
         background: #ffd951;
@@ -360,10 +398,14 @@ const Header = styled.div`
       }
     }
     .date {
+      display: none;
       font-size: 1.2em;
       width: 30em;
       text-align: right;
-      margin-left: 30em;
+      margin-left: 20em;
+      @media (min-width: ${theme.sm}) {
+        display: block;
+      }
     }
   `}
 `;
@@ -391,7 +433,9 @@ const Row = styled.div`
       align-items: center;
 
       @media (min-width: ${theme.sm}) {
-        display: block;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
       }
     }
   `}
@@ -402,7 +446,7 @@ const Total = styled.div`
     display: flex;
     align-items: center;
     font-size: 0.99em;
-    padding-top: 14em;
+    /* padding-top: 14em; */
     @media (min-width: ${theme.sm}) {
       padding-top: 0;
       margin-right: 16em;
@@ -452,7 +496,12 @@ const Alert = styled.div`
     background: #fff1c1;
     position: absolute;
     top: 0;
-    right: 2.5em;
+    right: 5em;
+    font-size: 0.6em;
+    @media (min-width: ${theme.sm}) {
+      font-size: 1em;
+      right: 2.5em;
+    }
 
     .head {
       height: 3em;
@@ -476,9 +525,6 @@ const Alert = styled.div`
         font-weight: bold;
         font-size: 3em;
       }
-    }
-
-    @media (min-width: ${theme.sm}) {
     }
   `}
 `;
@@ -639,10 +685,10 @@ const NewCases = styled.div`
       margin-bottom: 0.1em;
     }
     img {
-      width: 6em;
+      width: 7em;
       position: absolute;
       top: 0em;
-      left: 8em;
+      left: 6em;
     }
   `}
 `;
@@ -753,6 +799,7 @@ const Soap = styled.div`
     /* @media (min-width: ${theme.sm}) {
     } */
     img {
+      margin-top: 2em;
       width: 23em;
     }
   `}
@@ -773,7 +820,7 @@ const Chart = styled.div`
       line-height: 1.1;
     }
     .chart-wrap {
-      width: 45em;
+      width: 40em;
       height: 25em;
     }
   `}
@@ -1080,27 +1127,54 @@ const Hospital = styled.div`
     color: ${theme.dark};
     font-family: ${theme.fontFancy};
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     text-transform: uppercase;
     line-height: 1.1;
-    margin-bottom: 2em;
-    @media (min-width: ${theme.sm}) {
-      margin-right: 3em;
-      margin-bottom: 0;
+    /* margin-bottom: 2em; */
+    /* @media (min-width: ${theme.sm}) { */
+      /* margin-right: 3em; */
+      /* margin-bottom: 0; */
+    /* } */
+    .head {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2em;
     }
     strong {
-      font-size: 8.5em;
+      font-size: 4.8em;
       color: ${theme.yellow};
       margin-right: 0.25em;
       letter-spacing: 0;
     }
     span {
-      font-size: 2.2em;
+      font-size: 1.8em;
     }
     img {
-      width: 10em;
+      display: block;
+      width: 15em;
+      margin: 0 auto;
+    }
+  `}
+`;
+
+const Logo = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    padding: 1em 2.5em 0.5em;
+
+    @media (min-width: ${theme.sm}) {
+      display: none;
+    }
+
+    img {
+      width: 6em;
+      margin-right: 1em;
+    }
+    h1 {
+      white-space: nowrap;
+      font-size: 3.5em;
+      color: ${theme.teal};
+      margin: 0;
     }
   `}
 `;
