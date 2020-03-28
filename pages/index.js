@@ -19,6 +19,7 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
       {view === "stats" ? (
         <Stats
           data={data}
+          caseDetails={caseDetails}
           casesPer1M={casesPer1M}
           onViewChange={() => setView("")}
         />

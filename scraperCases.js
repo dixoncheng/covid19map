@@ -109,10 +109,15 @@ const scraperCases = async () => {
 
   let maxCases = 0;
   let cases = [];
-  let totalCases = 0;
+  let totalCasesPublished = 0;
+  let countMale = 0;
+  let countFemale = 0;
+  let countOther = 0;
+  let ages = [];
+
   rawCases.forEach(item => {
     if (item.location) {
-      totalCases++;
+      totalCasesPublished++;
 
       // correct typos on MOH site
       if (item.location === "Coramandel") {
@@ -154,6 +159,45 @@ const scraperCases = async () => {
         item.gender = "";
       }
 
+      if (item.gender === "Male") {
+        countMale++;
+      } else if (item.gender === "Female") {
+        countFemale++;
+      } else {
+        countOther++;
+      }
+
+      // normalize ages
+      // const age = parseInt(item.age);
+      // if (!isNaN(age)) {
+      //   item.age = `${Math.round(age / 10) * 10}s`;
+      // }
+      if (item.age === "<1" || item.age === "1 to 4" || item.age === "5 to 9") {
+        item.age = "0-9";
+      }
+
+      let sortKey;
+      if (item.age === "<1") {
+        sortKey = 0;
+        // } else if (item.age === "Teens") {
+        //   sortKey = 1;
+        // }
+        // else if (item.age === "") {
+        //   sortKey = 100;
+        //   item.age = "TBC";
+      } else {
+        sortKey = parseInt(item.age);
+      }
+
+      const a = ages.find(x => item.age === x.title);
+      if (a) {
+        a.numCases++;
+      } else {
+        if (item.age) {
+          ages.push({ title: item.age, numCases: 1, sortKey });
+        }
+      }
+
       const n = cases.find(x => item.location === x.location);
       if (n) {
         n.numCases++;
@@ -178,6 +222,10 @@ const scraperCases = async () => {
     }
   });
 
+  ages.sort((a, b) => {
+    return a.sortKey < b.sortKey ? -1 : 1;
+  });
+
   cases.sort((a, b) => {
     if (a.numCases === b.numCases) {
       return a.location > b.location ? 1 : -1;
@@ -187,7 +235,16 @@ const scraperCases = async () => {
 
   // console.log(cases);
 
-  return { cases, lastUpdated, totalCases, maxCases };
+  return {
+    cases,
+    lastUpdated,
+    totalCasesPublished,
+    maxCases,
+    countMale,
+    countFemale,
+    countOther,
+    ages
+  };
 };
 
 export default scraperCases;

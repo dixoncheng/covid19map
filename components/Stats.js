@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
 
-const Stats = ({ data, casesPer1M, onViewChange }) => {
+const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
   const {
     confirmedCases,
     probableCases,
@@ -12,7 +12,6 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
     deaths,
     // comTrans,
     countriesAffected,
-    // totalCasesPublished,
     inHospital
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
@@ -21,14 +20,15 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
     dailyCases[dailyCases.length - 1].cases -
     dailyCases[dailyCases.length - 2].cases;
 
+  const { lastUpdated, locations } = data;
+
   const {
-    lastUpdated,
-    locations
-    // countMale,
-    // countFemale,
-    // countOther,
-    // ages: ageData
-  } = data;
+    countMale,
+    countFemale,
+    countOther,
+    ages: ageData,
+    totalCasesPublished
+  } = caseDetails;
 
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
@@ -37,7 +37,7 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
 
   const top5inNZ = locations.slice(0, 5);
 
-  // const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
+  const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (
     <div className="container">
       <Infographic>
@@ -106,7 +106,7 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
               <NewCases>
                 <strong>+{newCases}</strong> New cases
                 <br />
-                over the last
+                in the last
                 <br />
                 24 hours
                 <img src="/infographic/nznewcases.svg" />
@@ -197,7 +197,7 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
             </div>
           </Chart>
         </Row>
-        {/* <Row>
+        <Row>
           <Ages>
             <div className="head">Age Groups</div>
             <div className="chart">
@@ -217,7 +217,7 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
                 );
               })}
             </div>
-            <div className="foot">
+            {/* <div className="foot">
               {currentAgeIndex !== null && (
                 <>
                   <strong>{ageData[currentAgeIndex].title}:</strong>{" "}
@@ -226,9 +226,9 @@ const Stats = ({ data, casesPer1M, onViewChange }) => {
                 </>
               )}
               &nbsp;
-            </div>
+            </div> */}
           </Ages>
-        </Row> */}
+        </Row>
         <Row>
           <Globe>
             <div className="globe">
@@ -793,7 +793,7 @@ const Ages = styled.div`
     .chart {
       display: flex;
       flex-direction: column;
-      height: 90em;
+      height: 40em;
       @media (min-width: ${theme.sm}) {
         flex-direction: row;
         height: auto;
@@ -805,6 +805,9 @@ const Ages = styled.div`
       padding: 0.6em 0.8em;
       font-size: 1.6em;
       color: ${theme.dark};
+      @media (min-width: ${theme.sm}) {
+        display: block;
+      }
       strong {
         display: block;
         color: ${theme.green};
@@ -815,8 +818,8 @@ const Ages = styled.div`
 
 const Age = styled.div`
   ${({ theme, percent }) => css`
-    cursor: pointer;
-    font-size: 2em;
+    /* cursor: pointer; */
+    font-size: 1.5em;
     color: white;
     text-align: center;
     height: ${percent}%;
@@ -825,7 +828,7 @@ const Age = styled.div`
     justify-content: center;
 
     line-height: 1.1;
-    min-height: 2.6em;
+    min-height: 1.5em;
     min-width: 2.6em;
     @media (min-width: ${theme.sm}) {
       font-size: 1.2em;
@@ -1088,16 +1091,16 @@ const Hospital = styled.div`
       margin-bottom: 0;
     }
     strong {
-      font-size: 9em;
+      font-size: 8.5em;
       color: ${theme.yellow};
-      margin-right: 0.35em;
-      letter-spacing: -0.15em;
+      margin-right: 0.25em;
+      letter-spacing: 0;
     }
     span {
       font-size: 2.2em;
     }
     img {
-      width: 12em;
+      width: 10em;
     }
   `}
 `;
