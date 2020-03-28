@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import locations from "./data/locations";
+import locations from "./data/regions";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 // import mohHtml from "./moh-html";
 import { staticData } from "./data/static";
@@ -35,7 +35,7 @@ const scraper = async () => {
       );
 
       if (location && location !== "Total" && totalCases > 0) {
-        const latlngItem = locations.find(x => location === x.location);
+        const latlngItem = locations.find(x => location === x.name);
         if (!latlngItem) {
           throw new Error(`No location "${location}" exist`);
         }

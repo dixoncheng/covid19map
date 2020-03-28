@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled, { css } from "styled-components";
@@ -20,7 +19,7 @@ const Home = ({ data, caseDetails }) => {
   const totalCases = confirmedCases + probableCases;
 
   const { lastUpdated, locations } = data;
-  const cases = caseDetails.cases;
+  const { cases, maxCases } = caseDetails;
 
   const center = { lat: -41.0495881, lng: 173.2682669 };
   const zoom = 6;
@@ -31,11 +30,11 @@ const Home = ({ data, caseDetails }) => {
 
   const showLocation = location => {
     const loc = cases.find(x => location === x.location);
+    const l = locations.find(x => location === x.location);
     if (!loc) {
-      const l = locations.find(x => location === x.location);
-      setLocation({ location, numCases: l.totalCases });
+      setLocation({ location, totalCases: l.totalCases });
     } else {
-      setLocation(loc);
+      setLocation({ ...loc, ...l });
     }
     setView("details");
   };
@@ -53,6 +52,7 @@ const Home = ({ data, caseDetails }) => {
             markers={locations}
             currentView={view}
             onMarkerClick={showLocation}
+            maxCases={maxCases}
           />
         </Main>
         <Info>
@@ -65,32 +65,61 @@ const Home = ({ data, caseDetails }) => {
               <Bar>
                 {location.location}
                 <span>
-                  {location.numCases}{" "}
-                  {location.numCases === 1 ? "Case" : "Cases"}
+                  {location.totalCases}{" "}
+                  {location.totalCases === 1 ? "Case" : "Cases"}
                 </span>
               </Bar>
 
-              {location?.cases?.map((item, i) => (
-                <Case key={i} status={item.status}>
-                  <h3>
-                    {item.status} case {item.caseId}
-                  </h3>
-                  <div className="details">
-                    <div className="age">
-                      {item.age}
-                      {item.age && item.gender ? ", " : ""} {item.gender}
+              {location?.cases?.map(
+                (
+                  {
+                    status,
+                    date,
+                    age,
+                    gender,
+                    cityBefore,
+                    flightNo,
+                    dateArrive
+                  },
+                  i
+                ) => (
+                  <Case key={i} status={status}>
+                    <h3>
+                      {status}: {date}
+                    </h3>
+                    <div className="details">
+                      <div className="age">
+                        {age && <>Age {age}</>}
+                        {age && gender ? ", " : ""} {gender}
+                      </div>
+                      {(dateArrive || cityBefore || flightNo) && (
+                        <>
+                          Arrived {dateArrive && <>on {dateArrive}</>}{" "}
+                          {cityBefore && <>from {cityBefore}</>}{" "}
+                          {flightNo && <>({flightNo})</>}
+                        </>
+                      )}
+                      {/* {details.split(/\r?\n/).map((item, i) => (
+                        <div key={i}>{item}</div>
+                      ))} */}
                     </div>
-                    {item.details.split(/\r?\n/).map((item, i) => (
-                      <div key={i}>{item}</div>
-                    ))}
-                  </div>
-                </Case>
-              ))}
+                  </Case>
+                )
+              )}
 
               {!location.cases && (
-                <Case>
-                  <div className="details">Details yet to be released</div>
-                </Case>
+                <p style={{ textAlign: "center" }}>
+                  <small>Details yet to be released</small>
+                </p>
+              )}
+
+              {location.numCases < location.totalCases && (
+                <p style={{ textAlign: "center" }}>
+                  <small>
+                    Details of {location.totalCases - location.numCases} cases
+                    yet to be released
+                  </small>
+                </p>
               )}
             </Details>
           ) : (

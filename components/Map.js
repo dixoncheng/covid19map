@@ -9,29 +9,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
-import regions from "../data/dhbs.json";
-
-// const test =
-
-regions.map(region => {
-  return region.boundary[0].map(item => {
-    // item = item.reverse();
-    // console.log(item);
-    // return "test";
-    return item.reverse();
-  });
-});
-console.log(JSON.stringify(regions));
-
-// const r = regions[0].boundary[0].map(item => {
-//   return item.reverse();
-// });
-// console.log(r);
-
-// console.log(regions);
-
-// import getRegions from "../regions";
-// const regions = getRegions();
+// import regions from "../data/regions.json";
 
 const mapBounds = [
   [-32.90178557, 164.67596054],
@@ -43,16 +21,14 @@ const nzBounds = [
   [-47.30251579, 177.66849518]
 ];
 
-const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
-  // merge regions and markers
-  markers.forEach(marker => {
-    const region = regions.find(x => x.name === marker.location);
-    if (region) {
-      Object.assign(region, marker);
-    }
-  });
-  // console.log(regions);
-
+const Map = ({
+  center,
+  zoom,
+  markers,
+  onMarkerClick,
+  currentView,
+  maxCases
+}) => {
   const mapRef = useRef();
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
@@ -64,7 +40,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
     }
   }, [currentView]);
 
-  const normalize = val => (val - 0) / (1.5 - 0);
+  // const normalize = val => (val - 0) / (1.5 - 0);
 
   const getIcon = totalCases => {
     // const iconSize = 24 + normalize(totalCases);
@@ -92,56 +68,41 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         dragging={true}
         animate={true}
         easeLinearity={0.35}
+        attributionControl={false}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
 
-        {regions.map(({ location, latlng, boundary, totalCases }, i) => (
+        {markers.map(({ location, latlng, boundary, totalCases }, i) => (
           <FeatureGroup key={i}>
-            {/* {boundary && ( */}
-            <>
-              {totalCases && (
-                <>
-                  <Marker position={latlng} icon={getIcon(totalCases)} />
-                  <Popup>
-                    <StyledPopup>
-                      <div className="location">{location}</div>
-                      <div className="cases">Number of cases: {totalCases}</div>
-                    </StyledPopup>
-                  </Popup>
-                </>
-              )}
-              <Polygon
-                color="black"
-                opacity="0.2"
-                fillColor="#51b6b0"
-                fillOpacity={0.8}
-                // fillOpacity={((totalCases || 0) - 0) / (58 - 0)}
-                // stroke={false}
-                weight={1}
-                positions={boundary[0]}
-                // smoothFactor={10}
-                // onClick={() => onMarkerClick(location)}
-              />
-            </>
-            {/* )} */}
+            {totalCases && (
+              <>
+                <Marker
+                  position={latlng}
+                  icon={getIcon(totalCases)}
+                  onClick={() => onMarkerClick(location)}
+                />
+                <Popup>
+                  <StyledPopup>
+                    <div className="location">{location}</div>
+                    <div className="cases">Number of cases: {totalCases}</div>
+                  </StyledPopup>
+                </Popup>
+              </>
+            )}
+            <Polygon
+              color="black"
+              opacity="0.2"
+              fillColor="#51b6b0"
+              // fillOpacity={0.8}
+              fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
+              // stroke={false}
+              weight={1}
+              positions={boundary[0]}
+              // smoothFactor={10}
+              onClick={() => onMarkerClick(location)}
+            />
           </FeatureGroup>
         ))}
-
-        {/* {markers.map(({ latlng, totalCases, location }, i) => (
-          <Marker
-            key={i}
-            position={latlng}
-            icon={getIcon(totalCases)}
-            // onClick={() => onMarkerClick(location)}
-          >
-            <Popup>
-              <StyledPopup>
-                <div className="location">{location}</div>
-                <div className="cases">Number of cases: {totalCases}</div>
-              </StyledPopup>
-            </Popup>
-          </Marker>
-        ))} */}
       </LeafletMap>
       <Styles />
     </div>
