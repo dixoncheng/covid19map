@@ -1,8 +1,8 @@
 export const staticData = {
-  confirmedCases: 338,
-  probableCases: 30,
-  recoveredCases: 37,
-  inHospital: 8,
+  confirmedCases: 416,
+  probableCases: 35,
+  recoveredCases: 50,
+  inHospital: 12,
   deaths: 0,
   //  comTrans: 4,
   // toBeLocated: 78,
@@ -130,5 +130,9 @@ export const dailyCases = [
   {
     days: "27",
     cases: 368
+  },
+  {
+    days: "28",
+    cases: 451
   }
 ];
