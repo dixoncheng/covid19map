@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Map as LeafletMap,
   Marker,
@@ -30,6 +30,7 @@ const Map = ({
   maxCases
 }) => {
   const mapRef = useRef();
+  const [currentLocation, setCurrentLocation] = useState();
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
   }, [mapRef.current]);
@@ -52,6 +53,11 @@ const Map = ({
     });
   };
 
+  const onLocationClick = location => {
+    setCurrentLocation(location);
+    onMarkerClick(location);
+  };
+
   return (
     <div>
       <LeafletMap
@@ -69,6 +75,7 @@ const Map = ({
         animate={true}
         easeLinearity={0.35}
         attributionControl={false}
+        onClick={() => onLocationClick("")}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
 
@@ -79,7 +86,7 @@ const Map = ({
                 <Marker
                   position={latlng}
                   icon={getIcon(totalCases)}
-                  onClick={() => onMarkerClick(location)}
+                  onClick={() => onLocationClick(location)}
                 />
                 <Popup>
                   <StyledPopup>
@@ -90,14 +97,14 @@ const Map = ({
               </>
             )}
             <Polygon
-              color="black"
-              opacity="0.2"
+              color={currentLocation === location ? "white" : "black"}
+              opacity={currentLocation === location ? 1 : 0.2}
+              weight={currentLocation === location ? 3 : 1}
               fillColor="#51b6b0"
               fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
-              weight={1}
               positions={boundary[0]}
               // smoothFactor={10}
-              onClick={() => onMarkerClick(location)}
+              onClick={() => onLocationClick(location)}
             />
           </FeatureGroup>
         ))}

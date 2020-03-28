@@ -29,14 +29,18 @@ const Home = ({ data, caseDetails }) => {
   const [termsOpened, setTermsOpened] = useState(false);
 
   const showLocation = location => {
-    const loc = cases.find(x => location === x.location);
-    const l = locations.find(x => location === x.location);
-    if (!loc) {
-      setLocation({ location, totalCases: l.totalCases });
+    if (location) {
+      const loc = cases.find(x => location === x.location);
+      const l = locations.find(x => location === x.location);
+      if (!loc) {
+        setLocation({ location, totalCases: l.totalCases });
+      } else {
+        setLocation({ ...loc, ...l });
+      }
+      setView("details");
     } else {
-      setLocation({ ...loc, ...l });
+      setView("");
     }
-    setView("details");
   };
 
   return (
@@ -505,7 +509,7 @@ const Bar = styled.div`
     color: white;
     padding: 7px 15px;
     @media (min-width: ${theme.md}) {
-      font-size: 24px;
+      font-size: 20px;
     }
     span {
       text-align: right;
