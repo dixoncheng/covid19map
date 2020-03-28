@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
@@ -365,6 +364,10 @@ const Header = styled.div`
       line-height: 1.2;
       display: flex;
       align-items: center;
+      :hover {
+        opacity: 1;
+        background: #ffd951;
+      }
       img {
         width: 1.1em;
         margin-right: 0.5em;
@@ -1066,6 +1069,10 @@ const Footer = styled.div`
       border-radius: 0.25em 0.25em 0 0;
       line-height: 1.2;
       text-align: center;
+      :hover {
+        opacity: 1;
+        background: #ffd951;
+      }
       img {
         position: static;
         display: block;

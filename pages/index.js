@@ -176,7 +176,7 @@ const Home = ({ data, caseDetails }) => {
               </Share>
 
               <StatsLink href="/stats">
-                View Covid-19 Stats
+                <img src="/graph.svg" /> View Covid-19 Stats
                 <div
                   className="inline-icon"
                   dangerouslySetInnerHTML={{
@@ -592,6 +592,13 @@ const StatsLink = styled.a`
     border-radius: 3px;
     @media (min-width: ${theme.md}) {
       font-size: 20px;
+    }
+    > div {
+      margin-left: auto;
+    }
+    img {
+      height: 16px;
+      margin-right: 6px;
     }
   `}
 `;
