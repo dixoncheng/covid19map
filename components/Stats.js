@@ -387,10 +387,7 @@ const Header = styled.div`
       @media (min-width: ${theme.sm}) {
         font-size: 1.5em;
       }
-      :hover {
-        opacity: 1;
-        background: #ffd951;
-      }
+      
       img {
         width: 1.1em;
         margin-right: 0.5em;
