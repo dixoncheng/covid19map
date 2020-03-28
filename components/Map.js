@@ -1,24 +1,38 @@
 import { useEffect, useRef } from "react";
-import { Map as LeafletMap, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  Map as LeafletMap,
+  Marker,
+  Popup,
+  TileLayer,
+  Polygon,
+  FeatureGroup
+} from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
+// import regions from "../data/regions.json";
 
-const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
+const mapBounds = [
+  [-32.90178557, 164.67596054],
+  [-48.57478991, 181.27441406]
+];
+
+const nzBounds = [
+  [-34.76671725, 166.2361908],
+  [-47.30251579, 177.66849518]
+];
+
+const Map = ({
+  center,
+  zoom,
+  markers,
+  onMarkerClick,
+  currentView,
+  maxCases
+}) => {
   const mapRef = useRef();
-
-  const mapBounds = [
-    [-32.90178557, 164.67596054],
-    [-48.57478991, 181.27441406]
-  ];
-
-  const nzBounds = [
-    [-34.76671725, 166.2361908],
-    [-47.30251579, 177.66849518]
-  ];
-
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(nzBounds);
-  }, []);
+  }, [mapRef.current]);
 
   useEffect(() => {
     if (currentView === "") {
@@ -26,10 +40,11 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
     }
   }, [currentView]);
 
-  const normalize = val => (val - 0) / (1.5 - 0);
+  // const normalize = val => (val - 0) / (1.5 - 0);
 
   const getIcon = totalCases => {
-    const iconSize = 24 + normalize(totalCases);
+    // const iconSize = 24 + normalize(totalCases);
+    const iconSize = 28;
     return L.divIcon({
       className: "icon",
       iconSize: [iconSize, iconSize],
@@ -45,7 +60,7 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         center={center}
         zoom={zoom}
         maxZoom={10}
-        // minZoom={5}
+        minZoom={4}
         attributionControl={true}
         zoomControl={true}
         doubleClickZoom={true}
@@ -53,22 +68,38 @@ const Map = ({ center, zoom, markers, onMarkerClick, currentView }) => {
         dragging={true}
         animate={true}
         easeLinearity={0.35}
+        attributionControl={false}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        {markers.map(({ latlng, totalCases, location }, i) => (
-          <Marker
-            key={i}
-            position={latlng}
-            icon={getIcon(totalCases)}
-            onClick={() => onMarkerClick(location)}
-          >
-            <Popup>
-              <StyledPopup>
-                <div className="location">{location}</div>
-                <div className="cases">Number of cases: {totalCases}</div>
-              </StyledPopup>
-            </Popup>
-          </Marker>
+
+        {markers.map(({ location, latlng, boundary, totalCases }, i) => (
+          <FeatureGroup key={i}>
+            {totalCases && (
+              <>
+                <Marker
+                  position={latlng}
+                  icon={getIcon(totalCases)}
+                  onClick={() => onMarkerClick(location)}
+                />
+                <Popup>
+                  <StyledPopup>
+                    <div className="location">{location}</div>
+                    <div className="cases">Number of cases: {totalCases}</div>
+                  </StyledPopup>
+                </Popup>
+              </>
+            )}
+            <Polygon
+              color="black"
+              opacity="0.2"
+              fillColor="#51b6b0"
+              fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
+              weight={1}
+              positions={boundary[0]}
+              // smoothFactor={10}
+              onClick={() => onMarkerClick(location)}
+            />
+          </FeatureGroup>
         ))}
       </LeafletMap>
       <Styles />
@@ -100,14 +131,16 @@ const Styles = createGlobalStyle`
     }
   }
   .icon {
-    background: #51b6b0;
-    color: white;
+    /* background: #51b6b0; */
+    background: white;
+    color: #204e61;
+    /* text-shadow: 1px 1px 10px white; */
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid white 1px;
+    border: solid #51b6b0 1px;
   }
 `;

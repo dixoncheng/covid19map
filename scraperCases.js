@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import locations from "./data/locations";
+import locations from "./data/regions";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
 // import mohHtml from "./moh-html";
 
@@ -22,12 +22,12 @@ const scraperCases = async () => {
     .find("tbody tr")
     .each((i, elem) => {
       rawCases.push({
-        caseId: $(elem)
+        date: $(elem)
           .find("td:nth-child(1)")
           .text()
           .trim(),
         location: $(elem)
-          .find("td:nth-child(2)")
+          .find("td:nth-child(4)")
           .text()
           .trim(),
         age: $(elem)
@@ -35,11 +35,27 @@ const scraperCases = async () => {
           .text()
           .trim(),
         gender: $(elem)
-          .find("td:nth-child(4)")
+          .find("td:nth-child(2)")
           .text()
           .trim(),
-        details: $(elem)
+        overseas: $(elem)
           .find("td:nth-child(5)")
+          .text()
+          .trim(),
+        cityBefore: $(elem)
+          .find("td:nth-child(6)")
+          .text()
+          .trim(),
+        flightNo: $(elem)
+          .find("td:nth-child(7)")
+          .text()
+          .trim(),
+        dateDepart: $(elem)
+          .find("td:nth-child(8)")
+          .text()
+          .trim(),
+        dateArrive: $(elem)
+          .find("td:nth-child(9)")
           .text()
           .trim(),
         status: "Confirmed"
@@ -51,12 +67,12 @@ const scraperCases = async () => {
     .find("tbody tr")
     .each((i, elem) => {
       rawCases.push({
-        caseId: $(elem)
+        date: $(elem)
           .find("td:nth-child(1)")
           .text()
           .trim(),
         location: $(elem)
-          .find("td:nth-child(2)")
+          .find("td:nth-child(4)")
           .text()
           .trim(),
         age: $(elem)
@@ -64,17 +80,34 @@ const scraperCases = async () => {
           .text()
           .trim(),
         gender: $(elem)
-          .find("td:nth-child(4)")
+          .find("td:nth-child(2)")
           .text()
           .trim(),
-        details: $(elem)
+        overseas: $(elem)
           .find("td:nth-child(5)")
+          .text()
+          .trim(),
+        cityBefore: $(elem)
+          .find("td:nth-child(6)")
+          .text()
+          .trim(),
+        flightNo: $(elem)
+          .find("td:nth-child(7)")
+          .text()
+          .trim(),
+        dateDepart: $(elem)
+          .find("td:nth-child(8)")
+          .text()
+          .trim(),
+        dateArrive: $(elem)
+          .find("td:nth-child(9)")
           .text()
           .trim(),
         status: "Probable"
       });
     });
 
+  let maxCases = 0;
   let cases = [];
   let totalCases = 0;
   rawCases.forEach(item => {
@@ -106,6 +139,9 @@ const scraperCases = async () => {
       if (item.location === "Southern DHB") {
         item.location = "Southern";
       }
+      if (item.location === "Tairawhiti") {
+        item.location = "Tairāwhiti";
+      }
 
       // normalize genders
       if (item.gender === "M") {
@@ -122,13 +158,14 @@ const scraperCases = async () => {
       if (n) {
         n.numCases++;
         n.cases.push(item);
+        maxCases = Math.max(maxCases, n.numCases);
       } else {
-        const loc = locations.find(x => item.location === x.location);
+        const loc = locations.find(x => item.location === x.name);
         if (loc) {
           cases.push({
             location: item.location,
             numCases: 1,
-            latlng: loc.latlng,
+            // latlng: loc.latlng,
             cases: [item]
           });
         } else {
@@ -148,9 +185,9 @@ const scraperCases = async () => {
     return a.numCases > b.numCases ? -1 : 1;
   });
 
-  console.log(cases);
+  // console.log(cases);
 
-  return { cases, lastUpdated, totalCases };
+  return { cases, lastUpdated, totalCases, maxCases };
 };
 
 export default scraperCases;
