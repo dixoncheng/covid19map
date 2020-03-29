@@ -4,18 +4,7 @@ export const staticData = {
   recoveredCases: 56,
   inHospital: 9,
   deaths: 0 + 1,
-  //  comTrans: 4,
-  // toBeLocated: 78,
-  // casesPer1M: [
-  //   { title: "New Zealand", numCases: 43 },
-  //   { title: "Australia", numCases: 95 },
-  //   { title: "China", numCases: 56 },
-  //   { title: "Italy", numCases: 1230 },
-  //   { title: "United Kingdom", numCases: 122 },
-  //   { title: "United States", numCases: 191 }
-  // ],
   alertLevel: 4
-  // countriesAffected: 194
 };
 
 export const dailyCases = [

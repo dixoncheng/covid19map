@@ -29,6 +29,7 @@ const Map = ({
   useEffect(() => {
     if (currentView === "") {
       mapRef.current.leafletElement.closePopup();
+      setCurrentLocation("");
     }
   }, [currentView]);
 
@@ -56,7 +57,7 @@ const Map = ({
         maxBounds={outerBounds}
         center={center}
         zoom={zoom}
-        maxZoom={10}
+        maxZoom={8}
         minZoom={4}
         attributionControl={true}
         zoomControl={true}

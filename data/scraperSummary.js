@@ -1,14 +1,11 @@
 import cheerio from "cheerio";
-import locations from "./data/regions";
+import locations from "./regions";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
-// import mohHtml from "./moh-html";
-import { staticData } from "./data/static";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
 const scraper = async () => {
   const response = await fetch(URL);
   const html = await response.text();
-  // const html = mohHtml;
 
   const $ = await cheerio.load(html);
 
@@ -64,18 +61,7 @@ const scraper = async () => {
       }
     });
 
-  rows.sort((a, b) => {
-    if (a.totalCases === b.totalCases) {
-      return a.location > b.location ? 1 : -1;
-    }
-    return a.totalCases > b.totalCases ? -1 : 1;
-  });
-
-  return {
-    staticData,
-    locations: rows,
-    lastUpdated
-  };
+  return { rows, lastUpdated };
 };
 
 export default scraper;

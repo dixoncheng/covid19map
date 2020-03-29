@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
 import Stats from "../components/Stats";
@@ -27,6 +27,7 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     deaths
   } = data.staticData;
   const infoRef = useRef();
+  const detailsRef = useRef();
   const totalCases = confirmedCases + probableCases;
 
   const { lastUpdated, locations } = data;
@@ -49,8 +50,16 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     } else {
       setView("");
     }
-    infoRef.current.scrollTo(0, 0);
+
+    infoRef.current.scrollTop = 0;
+    // window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    if (detailsRef.current) {
+      window.scrollTo(0, detailsRef.current.offsetTop - 20);
+    }
+  }, [view]);
 
   return (
     <Wrap>
@@ -68,7 +77,7 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
       </Main>
       <Info ref={infoRef}>
         {view === "details" ? (
-          <Details>
+          <Details ref={detailsRef}>
             <BackButton
               type="button"
               onClick={() => {
