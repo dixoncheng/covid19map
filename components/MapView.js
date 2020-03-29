@@ -22,7 +22,8 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
     confirmedCases,
     probableCases,
     recoveredCases,
-    alertLevel
+    alertLevel,
+    deaths
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -189,6 +190,9 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               </div>
               <div className="cases-breakdown">
                 Probable cases <span>{probableCases}</span>
+              </div>
+              <div className="cases-breakdown">
+                Deaths <span>{deaths}</span>
               </div>
 
               <h2 className="split">
