@@ -14,8 +14,8 @@ export const staticData = {
   //   { title: "United Kingdom", numCases: 122 },
   //   { title: "United States", numCases: 191 }
   // ],
-  alertLevel: 4,
-  countriesAffected: 194
+  alertLevel: 4
+  // countriesAffected: 194
 };
 
 export const dailyCases = [

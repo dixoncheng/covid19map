@@ -218,7 +218,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
             </div>
           </Chart>
         </Row>
-
+        <Row>{children}</Row>
         <Row>
           <Ages>
             <div className="head">Age Groups</div>
@@ -251,7 +251,6 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
             </div> */}
           </Ages>
         </Row>
-        <Row>{children}</Row>
         <Row>
           {/* <Globe>
             <div className="globe">
@@ -795,8 +794,9 @@ const Genders = styled.div`
         }
       `}
     .head {
+      white-space: nowrap;
       font-family: ${theme.fontFancy};
-      font-size: 2.1em;
+      font-size: 2em;
       text-transform: uppercase;
       margin-bottom: 0.3em;
     }
@@ -1237,8 +1237,9 @@ const Hospital = styled.div`
     /* } */
     .head {
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 2em;
+      margin-bottom: 1.5em;
     }
     strong {
       font-size: 4.8em;
@@ -1251,7 +1252,7 @@ const Hospital = styled.div`
     }
     img {
       display: block;
-      width: 15em;
+      width: 17em;
       margin: 0 auto;
     }
   `}

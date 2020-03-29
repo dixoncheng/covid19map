@@ -108,7 +108,7 @@ const scraperCases = async () => {
     });
 
   let maxCases = 0;
-  let cases = [];
+  // let cases = [];
   let totalCasesPublished = 0;
   let countMale = 0;
   let countFemale = 0;
@@ -117,8 +117,6 @@ const scraperCases = async () => {
 
   rawCases.forEach(item => {
     if (item.location) {
-      totalCasesPublished++;
-
       // correct typos on MOH site
       if (item.location === "Coramandel") {
         item.location = "Coromandel";
@@ -148,75 +146,104 @@ const scraperCases = async () => {
         item.location = "Tairāwhiti";
       }
 
-      // normalize genders
-      if (item.gender === "M") {
-        item.gender = "Male";
-      }
-      if (item.gender === "F") {
-        item.gender = "Female";
-      }
-      if (item.gender === "Not provided") {
-        item.gender = "";
-      }
+      const loc = locations.find(x => item.location === x.name);
+      if (loc) {
+        totalCasesPublished++;
 
-      if (item.gender === "Male") {
-        countMale++;
-      } else if (item.gender === "Female") {
-        countFemale++;
-      } else {
-        countOther++;
-      }
-
-      // normalize ages
-      // const age = parseInt(item.age);
-      // if (!isNaN(age)) {
-      //   item.age = `${Math.round(age / 10) * 10}s`;
-      // }
-      if (item.age === "<1" || item.age === "1 to 4" || item.age === "5 to 9") {
-        item.age = "0-9";
-      }
-
-      let sortKey;
-      if (item.age === "<1") {
-        sortKey = 0;
-        // } else if (item.age === "Teens") {
-        //   sortKey = 1;
-        // }
-        // else if (item.age === "") {
-        //   sortKey = 100;
-        //   item.age = "TBC";
-      } else {
-        sortKey = parseInt(item.age);
-      }
-
-      const a = ages.find(x => item.age === x.title);
-      if (a) {
-        a.numCases++;
-      } else {
-        if (item.age) {
-          ages.push({ title: item.age, numCases: 1, sortKey });
+        // normalize genders
+        if (item.gender === "M") {
+          item.gender = "Male";
         }
-      }
+        if (item.gender === "F") {
+          item.gender = "Female";
+        }
+        if (item.gender === "Not provided") {
+          item.gender = "";
+        }
 
-      const n = cases.find(x => item.location === x.location);
-      if (n) {
-        n.numCases++;
-        n.cases.push(item);
-        maxCases = Math.max(maxCases, n.numCases);
-      } else {
-        const loc = locations.find(x => item.location === x.name);
-        if (loc) {
-          cases.push({
-            location: item.location,
-            numCases: 1,
-            // latlng: loc.latlng,
-            cases: [item]
-          });
+        if (item.gender === "Male") {
+          countMale++;
+        } else if (item.gender === "Female") {
+          countFemale++;
         } else {
-          if (item.location !== "TBC") {
-            // region doesn't exist in constants
-            throw new Error(`No location "${item.location}" exist`);
+          countOther++;
+        }
+
+        // normalize ages
+        // const age = parseInt(item.age);
+        // if (!isNaN(age)) {
+        //   item.age = `${Math.round(age / 10) * 10}s`;
+        // }
+        if (
+          item.age === "<1" ||
+          item.age === "1 to 4" ||
+          item.age === "5 to 9"
+        ) {
+          item.age = "0-9";
+        }
+
+        let sortKey;
+        if (item.age === "<1") {
+          sortKey = 0;
+          // } else if (item.age === "Teens") {
+          //   sortKey = 1;
+          // }
+          // else if (item.age === "") {
+          //   sortKey = 100;
+          //   item.age = "TBC";
+        } else {
+          sortKey = parseInt(item.age);
+        }
+
+        const a = ages.find(x => item.age === x.title);
+        if (a) {
+          a.numCases++;
+        } else {
+          if (item.age) {
+            ages.push({
+              title: item.age,
+              numCases: 1,
+              sortKey
+            });
           }
+        }
+
+        // cases in last 24 hours
+        // convert item.date to real date
+        const dateArray = item.date.split("/");
+        const itemDate = new Date(
+          `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`
+        );
+
+        const now = new Date();
+
+        if (!loc.newCases) {
+          loc.newCases = 0;
+        }
+        now.setHours(0);
+        now.setMinutes(0);
+        now.setSeconds(0, 0);
+        itemDate.setHours(0);
+
+        // check if date < 24 hours
+        if (now.getTime() - itemDate.getTime() <= 86400000) {
+          loc.newCases++;
+        }
+
+        if (!loc.numCases) {
+          loc.numCases = 0;
+        }
+        loc.numCases++;
+
+        if (!loc.cases) {
+          loc.cases = [];
+        }
+        loc.cases.push(item);
+        maxCases = Math.max(maxCases, loc.numCases);
+      } else {
+        if (item.loc !== "TBC") {
+          // region doesn't exist in constants
+          throw new Error(`No location "${item.location}" exist`);
         }
       }
     }
@@ -226,7 +253,7 @@ const scraperCases = async () => {
     return a.sortKey < b.sortKey ? -1 : 1;
   });
 
-  cases.sort((a, b) => {
+  locations.sort((a, b) => {
     if (a.numCases === b.numCases) {
       return a.location > b.location ? 1 : -1;
     }
@@ -234,7 +261,7 @@ const scraperCases = async () => {
   });
 
   return {
-    cases,
+    cases: locations,
     lastUpdated,
     totalCasesPublished,
     maxCases,

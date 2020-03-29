@@ -26,9 +26,14 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
 };
 
 export async function getStaticProps(context) {
-  const data = await scraper();
-  const caseDetails = await scraperCases();
+  let data = await scraper();
+  let caseDetails = await scraperCases();
   const casesPer1M = await api();
+
+  data.locations = data.locations.map((item, i) => {
+    return { ...item, ...caseDetails.cases[i] };
+  });
+  caseDetails.cases = null;
 
   return {
     props: {

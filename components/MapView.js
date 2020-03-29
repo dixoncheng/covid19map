@@ -19,9 +19,6 @@ const innerBounds = [
 ];
 
 const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
-  // console.log(data);
-  // console.log(caseDetails);
-
   const {
     confirmedCases,
     probableCases,
@@ -33,20 +30,21 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
   const totalCases = confirmedCases + probableCases;
 
   const { lastUpdated, locations } = data;
-  const { cases, maxCases } = caseDetails;
+  const { maxCases } = caseDetails;
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
 
   const showLocation = location => {
     if (location) {
-      const loc = cases.find(x => location === x.location);
-      const l = locations.find(x => location === x.location);
-      if (!loc) {
-        setLocation({ location, totalCases: l.totalCases });
-      } else {
-        setLocation({ ...loc, ...l });
-      }
+      const loc = locations.find(x => location === x.name);
+      // const l = locations.find(x => location === x.name);
+      // if (!loc) {
+      //   setLocation({ location, totalCases: l.totalCases });
+      // } else {
+      // setLocation({ ...loc, ...l });
+      // }
+      setLocation(loc);
       setView("details");
     } else {
       setView("");
@@ -145,7 +143,7 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             <Logo>
               <img className="logo" src="/logo.svg" />
               <div>
-                <h1>Covid-19 Map</h1>
+                <h1>Covid19map.nz</h1>
                 <h2>Current Cases in New Zealand</h2>
               </div>
             </Logo>
@@ -228,6 +226,7 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                     >
                       <td>{item.location}</td>
                       <td>
+                        {item.newCases > 0 && <small>+{item.newCases}</small>}
                         {item.totalCases}
                         <div
                           className="inline-icon"
@@ -481,9 +480,16 @@ const SummaryTable = styled.table`
       cursor: pointer;
       background: white;
       border-top: solid ${theme.light} 4px;
+      small {
+        color: ${theme.green};
+        margin-right: 1em;
+      }
     }
     .inline-icon {
       opacity: 0.3;
+    }
+    small {
+      font-weight: bold;
     }
   `}
 `;
@@ -551,7 +557,7 @@ const Alert = styled.a`
   padding: 3px 20px;
   color: white !important;
   font-size: 14px;
-  background: #ffcd38 url(/alert.svg) 174px 50% no-repeat;
+  background: #ffcd38 url(/alert.svg) 100% 50% no-repeat;
   margin: -20px -20px 10px;
   display: block;
 `;
@@ -598,7 +604,7 @@ const StatsLink = styled.button`
 const Share = styled.div`
   margin-bottom: 0.8em;
   img {
-    height: 20px;
+    height: 22px;
     vertical-align: middle;
     margin: 0 3px;
     position: relative;
