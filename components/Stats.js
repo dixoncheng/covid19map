@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
 
-const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
+const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   const {
     confirmedCases,
     probableCases,
@@ -89,6 +89,24 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <strong>{probableCases}</strong> Probable Cases
             </div>
           </Cases>
+        </Row>
+        <Row>
+          <div className="grid">
+            <NewCases>
+              <strong>+{newCases}</strong> New cases
+              <br />
+              in the last
+              <br />
+              24 hours
+              <img src="/infographic/nznewcases.svg" />
+            </NewCases>
+            <Deaths count={deaths}>
+              <strong>{deaths}</strong>
+              <span>Deaths</span>
+            </Deaths>
+          </div>
+        </Row>
+        <Row>
           <Recovered>
             <div>
               <strong>{recoveredCases}</strong> Recovered
@@ -104,20 +122,20 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <People percent={recoveryRate} />
             </div>
           </Recovered>
-          <Deaths>
-            <strong>{deaths}</strong>Deaths
-          </Deaths>
         </Row>
         <Row>
-          <div class="grid">
-            <NewCases>
-              <strong>+{newCases}</strong> New cases
-              <br />
-              in the last
-              <br />
-              24 hours
-              <img src="/infographic/nznewcases.svg" />
-            </NewCases>
+          <div className="grid">
+            <Hospital>
+              <div className="head">
+                <strong>{inHospital}</strong>
+                <span>
+                  Cases in
+                  <br /> hospital
+                </span>
+              </div>
+              <img src="/infographic/hospital.svg" />
+            </Hospital>
+
             <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
@@ -146,16 +164,6 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                 )}
               </div> */}
             </Genders>
-            <Hospital>
-              <div class="head">
-                <strong>{inHospital}</strong>
-                <span>
-                  Cases in
-                  <br /> hospital
-                </span>
-              </div>
-              <img src="/infographic/hospital.svg" />
-            </Hospital>
 
             {/* <Transmissions>
               <strong>{comTrans}</strong>
@@ -165,9 +173,9 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <img src="/infographic/commtrans.svg" />
             </Transmissions> */}
 
-            <Soap>
+            {/* <Soap>
               <img src="/infographic/Washhands.svg" />
-            </Soap>
+            </Soap> */}
           </div>
 
           <Chart>
@@ -176,11 +184,12 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <ResponsiveContainer>
                 <LineChart
                   data={dailyCases}
-                  margin={{ left: -30, right: 0, bottom: 10 }}
+                  margin={{ left: -30, right: 10, bottom: 20 }}
                 >
                   <XAxis
                     dataKey="days"
                     label={{
+                      fontSize: 12,
                       value: "Days since first case detected",
                       position: "bottom"
                     }}
@@ -209,6 +218,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             </div>
           </Chart>
         </Row>
+
         <Row>
           <Ages>
             <div className="head">Age Groups</div>
@@ -241,6 +251,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             </div> */}
           </Ages>
         </Row>
+        <Row>{children}</Row>
         <Row>
           {/* <Globe>
             <div className="globe">
@@ -254,6 +265,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             </div>
             <img className="mag" src="/infographic/magnifyingglass.svg" />
           </Globe> */}
+
           <Ranking>
             <div className="head">Total cases per 1m population</div>
             {casesPer1M.map((item, i) => (
@@ -351,7 +363,7 @@ const Infographic = styled.div`
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      /* grid-template-rows: 1fr 1fr; */
       grid-gap: 0em 2em;
       margin: 2em 0;
       ${props.wide &&
@@ -471,6 +483,7 @@ const Total = styled.div`
   ${({ theme, ...props }) => css`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 0.99em;
     /* padding-top: 14em; */
     ${props.wide &&
@@ -498,7 +511,7 @@ const TotalNumber = styled.div`
   ${({ theme, num, ...props }) => css`
     display: flex;
     color: ${theme.green};
-    font-size: 5em;
+    font-size: 5.3em;
     ${num > 999 &&
       css`
         font-size: 4.5em;
@@ -568,7 +581,7 @@ const Cases = styled.div`
   ${({ theme, ...props }) => css`
     background: #a6e5e3;
     border-radius: 0.3em;
-    padding: 0.5em 1em 0.5em 3em;
+    padding: 0.5em 1em 0.5em 4.4em;
     font-size: 2.8em;
     color: ${theme.dark};
     position: relative;
@@ -580,7 +593,7 @@ const Cases = styled.div`
       content: "";
       position: absolute;
       top: 50%;
-      left: -0.5em;
+      left: 0.7em;
       width: 3em;
       height: 3em;
       background: url(/infographic/cases.svg) center center no-repeat;
@@ -693,17 +706,25 @@ const Person = styled.div`
 
 const Deaths = styled.div`
   ${({ theme, ...props }) => css`
-    display: none;
-    padding: 0.5em 1em;
-    background: ${theme.green};
-    font-size: 2.2em;
-    border-radius: 0.3em;
-    color: ${theme.dark};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.dark};
+    height: 13em;
+    width: 13em;
+    border-radius: 50%;
+    margin: 2em 0 0 8em;
+    line-height: 1;
     strong {
+      font-size: 6em;
       display: block;
-      line-height: 1;
-      font-size: 2.3em;
       color: white;
+      ${props.count > 99 && css``}
+    }
+    span {
+      color: ${theme.green};
+      font-size: 2em;
     }
   `}
 `;
@@ -711,7 +732,7 @@ const Deaths = styled.div`
 const NewCases = styled.div`
   ${({ theme, ...props }) => css`
     font-family: ${theme.fontFancy};
-    font-size: 1.7em;
+    font-size: 2.4em;
     text-transform: uppercase;
     color: ${theme.dark};
     line-height: 1.1;
@@ -723,10 +744,10 @@ const NewCases = styled.div`
       margin-bottom: 0.1em;
     }
     img {
-      width: 7em;
+      width: 5em;
       position: absolute;
-      top: 0em;
-      left: 6em;
+      top: 0.5em;
+      left: 7em;
     }
   `}
 `;
