@@ -1,7 +1,6 @@
 // import { useState } from "react";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import { dailyCases } from "../data/static";
 
 const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   const {
@@ -16,6 +15,15 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
+  const {
+    countMale,
+    countFemale,
+    countOther,
+    ages: ageData,
+    totalCasesPublished,
+    dailyCases
+  } = caseDetails;
+
   const newCases =
     dailyCases[dailyCases.length - 1].cases -
     dailyCases[dailyCases.length - 2].cases;
@@ -23,18 +31,10 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   const { lastUpdated, locations } = data;
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
-  const {
-    countMale,
-    countFemale,
-    countOther,
-    ages: ageData,
-    totalCasesPublished
-  } = caseDetails;
-
   const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
   const percentMen = Math.round((countMale / totalCasesPublished) * 100);
 
-  const top5inNZ = locations.slice(0, 5);
+  // const top5inNZ = locations.slice(0, 5);
 
   // const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (

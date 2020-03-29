@@ -1,59 +1,28 @@
 import locations from "./regions";
 
+const dateFirstCase = new Date("2020-02-26");
+dateFirstCase.setHours(0);
+dateFirstCase.setMinutes(0);
+dateFirstCase.setSeconds(0, 0);
+
 const processCases = rawCases => {
   let maxCases = 0;
-  // let cases = [];
   let totalCasesPublished = 0;
   let countMale = 0;
   let countFemale = 0;
   let countOther = 0;
   let ages = [];
+  let dailyCases = [];
 
   rawCases.forEach(item => {
     if (item.location) {
-      // correct typos on MOH site
-      if (item.location === "Coramandel") {
-        item.location = "Coromandel";
-      }
-      if (item.location === "Dundedin") {
-        item.location = "Dunedin";
-      }
-      if (item.location === "Hawkes Bay") {
-        item.location = "Hawke's Bay";
-      }
-      if (item.location === "Hawke’s Bay") {
-        item.location = "Hawke's Bay";
-      }
-      if (item.location === "Hawkes’s Bay") {
-        item.location = "Hawke's Bay";
-      }
-      if (item.location === "Capital & Coast") {
-        item.location = "Capital and Coast";
-      }
-      if (item.location === "Nelson-Marlborough") {
-        item.location = "Nelson Marlborough";
-      }
-      if (item.location === "Southern DHB") {
-        item.location = "Southern";
-      }
-      if (item.location === "Tairawhiti") {
-        item.location = "Tairāwhiti";
-      }
+      item.location = fixTypos(item.location);
 
       const loc = locations.find(x => item.location === x.name);
       if (loc) {
         totalCasesPublished++;
 
-        // normalize genders
-        if (item.gender === "M") {
-          item.gender = "Male";
-        }
-        if (item.gender === "F") {
-          item.gender = "Female";
-        }
-        if (item.gender === "Not provided") {
-          item.gender = "";
-        }
+        item.gender = normalizeGenders(item.gender);
 
         if (item.gender === "Male") {
           countMale++;
@@ -63,19 +32,7 @@ const processCases = rawCases => {
           countOther++;
         }
 
-        // normalize ages
-        // const age = parseInt(item.age);
-        // if (!isNaN(age)) {
-        //   item.age = `${Math.round(age / 10) * 10}s`;
-        // }
-        if (
-          item.age === "<1" ||
-          item.age === "1 to 4" ||
-          item.age === "5 to 9"
-        ) {
-          item.age = "0-9";
-        }
-
+        item.age = normalizeAges(item.age);
         let sortKey;
         if (item.age === "<1") {
           sortKey = 0;
@@ -134,6 +91,18 @@ const processCases = rawCases => {
         }
         loc.cases.push(item);
         maxCases = Math.max(maxCases, loc.numCases);
+
+        // get daily cases
+
+        const daysDiff = Math.round(
+          (itemDate - dateFirstCase) / (1000 * 60 * 60 * 24)
+        );
+        const day = dailyCases.find(x => x.days === daysDiff);
+        if (day) {
+          day.cases++;
+        } else {
+          dailyCases.push({ days: daysDiff, cases: 1 });
+        }
       } else {
         if (item.loc !== "TBC") {
           // region doesn't exist in constants
@@ -154,6 +123,25 @@ const processCases = rawCases => {
     return a.numCases > b.numCases ? -1 : 1;
   });
 
+  dailyCases.sort((a, b) => {
+    return a.days < b.days ? -1 : 1;
+  });
+
+  let dailyCasesAggregate = [];
+  // dailyCasesAggregate = dailyCases.map((item, i) => {
+  //   return {
+  //     days: item.days,
+  //     cases: i > 0 ? item.cases + dailyCasesAggregate[i - 1].cases : item.cases
+  //   };
+  // });
+
+  dailyCases.forEach((item, i) => {
+    dailyCasesAggregate.push({
+      days: item.days,
+      cases: i > 0 ? item.cases + dailyCasesAggregate[i - 1].cases : item.cases
+    });
+  });
+
   return {
     cases: locations,
     // lastUpdated,
@@ -162,7 +150,66 @@ const processCases = rawCases => {
     countMale,
     countFemale,
     countOther,
-    ages
+    ages,
+    dailyCases: dailyCasesAggregate
   };
 };
 export default processCases;
+
+const fixTypos = location => {
+  // correct typos on MOH site
+  if (location === "Coramandel") {
+    return "Coromandel";
+  }
+  if (location === "Dundedin") {
+    return "Dunedin";
+  }
+  if (location === "Hawkes Bay") {
+    return "Hawke's Bay";
+  }
+  if (location === "Hawke’s Bay") {
+    return "Hawke's Bay";
+  }
+  if (location === "Hawkes’s Bay") {
+    return "Hawke's Bay";
+  }
+  if (location === "Capital & Coast") {
+    return "Capital and Coast";
+  }
+  if (location === "Nelson-Marlborough") {
+    return "Nelson Marlborough";
+  }
+  if (location === "Southern DHB") {
+    return "Southern";
+  }
+  if (location === "Tairawhiti") {
+    return "Tairāwhiti";
+  }
+  return location;
+};
+
+const normalizeGenders = gender => {
+  // normalize genders
+  if (gender === "M") {
+    return "Male";
+  }
+  if (gender === "F") {
+    return "Female";
+  }
+  if (gender === "Not provided") {
+    return "";
+  }
+  return gender;
+};
+
+const normalizeAges = age => {
+  // normalize ages
+  // const age = parseInt(item.age);
+  // if (!isNaN(age)) {
+  //   item.age = `${Math.round(age / 10) * 10}s`;
+  // }
+  if (age === "<1" || age === "1 to 4" || age === "5 to 9") {
+    return "0-9";
+  }
+  return age;
+};
