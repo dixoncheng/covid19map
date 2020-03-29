@@ -17,9 +17,9 @@ const scraperCases = async () => {
     .text();
 
   let rawCases = [];
-  $(".table-style-two")
+  $("tbody")
     .eq(0)
-    .find("tbody tr")
+    .find("tr")
     .each((i, elem) => {
       rawCases.push({
         date: $(elem)
@@ -62,9 +62,9 @@ const scraperCases = async () => {
       });
     });
 
-  $(".table-style-two")
+  $("tbody")
     .eq(1)
-    .find("tbody tr")
+    .find("tr")
     .each((i, elem) => {
       rawCases.push({
         date: $(elem)
@@ -232,8 +232,6 @@ const scraperCases = async () => {
     }
     return a.numCases > b.numCases ? -1 : 1;
   });
-
-  // console.log(cases);
 
   return {
     cases,

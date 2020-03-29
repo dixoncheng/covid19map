@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
+import Stats from "../components/Stats";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false
@@ -17,7 +18,10 @@ const innerBounds = [
   [-47.30251579, 177.66849518]
 ];
 
-const MapView = ({ data, caseDetails, onViewChange }) => {
+const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
+  // console.log(data);
+  // console.log(caseDetails);
+
   const {
     confirmedCases,
     probableCases,
@@ -25,6 +29,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
     alertLevel,
     deaths
   } = data.staticData;
+  const infoRef = useRef();
   const totalCases = confirmedCases + probableCases;
 
   const { lastUpdated, locations } = data;
@@ -46,6 +51,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
     } else {
       setView("");
     }
+    infoRef.current.scrollTo(0, 0);
   };
 
   return (
@@ -62,10 +68,16 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
           innerBounds={innerBounds}
         />
       </Main>
-      <Info>
+      <Info ref={infoRef}>
         {view === "details" ? (
           <Details>
-            <BackButton type="button" onClick={() => setView("")}>
+            <BackButton
+              type="button"
+              onClick={() => {
+                setView("");
+                infoRef.current.scrollTo(0, 0);
+              }}
+            >
               &lt; Back to summary
             </BackButton>
 
@@ -170,17 +182,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               </a>
             </Share>
 
-            <StatsLink type="button" onClick={onViewChange}>
-              <img src="/graph.svg" /> View Covid-19 Stats
-              <div
-                className="inline-icon"
-                dangerouslySetInnerHTML={{
-                  __html: require(`../public/arrow.svg?include`)
-                }}
-              />
-            </StatsLink>
-
-            <div className="total">
+            {/* <div className="total">
               <h2 className="split">
                 Total number of cases <span>{totalCases}</span>
               </h2>
@@ -198,42 +200,48 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               <h2 className="split">
                 Recovered <span>{recoveredCases}</span>
               </h2>
+            </div> */}
 
-              {/* {toBeLocated > 0 && (
-                <div>
-                  <small>
-                    Information on {toBeLocated} new cases yet to be released
-                  </small>
-                </div>
-              )} */}
-            </div>
-            <SummaryTable cols={2}>
-              <thead>
-                <tr>
-                  <th>Location</th>
-                  <th>Case/s</th>
+            <Stats
+              data={data}
+              caseDetails={caseDetails}
+              casesPer1M={casesPer1M}
+              onViewChange={() => setView("")}
+            >
+              <SummaryTable cols={2}>
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Case/s</th>
 
-                  {/* <th>Recovered</th>
+                    {/* <th>Recovered</th>
                     <th>Deaths</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {locations.map((item, i) => (
-                  <tr key={i} onClick={() => showLocation(item.location)}>
-                    <td>{item.location}</td>
-                    <td>
-                      {item.totalCases}
-                      <div
-                        className="inline-icon"
-                        dangerouslySetInnerHTML={{
-                          __html: require(`../public/arrow.svg?include`)
-                        }}
-                      />
-                    </td>
                   </tr>
-                ))}
-              </tbody>
-            </SummaryTable>
+                </thead>
+                <tbody>
+                  {locations.map((item, i) => (
+                    <tr
+                      key={i}
+                      onClick={() => {
+                        showLocation(item.location);
+                      }}
+                    >
+                      <td>{item.location}</td>
+                      <td>
+                        {item.totalCases}
+                        <div
+                          className="inline-icon"
+                          dangerouslySetInnerHTML={{
+                            __html: require(`../public/arrow.svg?include`)
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </SummaryTable>
+            </Stats>
+
             <p>
               <small>
                 We are working with the official information released by the{" "}
@@ -420,9 +428,9 @@ const Logo = styled.div`
       font-size: 34px;
       color: ${theme.teal};
       margin: 0;
-      @media (min-width: ${theme.md}) {
-        font-size: 38px;
-      }
+      /* @media (min-width: ${theme.md}) {
+        font-size: 36px;
+      } */
     }
     h2 {
       white-space: nowrap;
@@ -430,9 +438,9 @@ const Logo = styled.div`
       color: ${theme.teal};
       margin: 0;
       line-height: 1.1;
-      @media (min-width: ${theme.md}) {
+      /* @media (min-width: ${theme.md}) {
         font-size: 18px;
-      }
+      } */
     }
   `}
 `;
@@ -458,7 +466,7 @@ const SummaryTable = styled.table`
       }
       ${cols === 2 &&
         css`
-          font-size: 20px;
+          /* font-size: 20px; */
           &:last-child {
             text-align: right;
             padding-right: 15px;
@@ -540,11 +548,11 @@ const BackButton = styled.button`
 `;
 
 const Alert = styled.a`
-  padding: 5px 20px;
+  padding: 3px 20px;
   color: white !important;
-  font-size: 24px;
+  font-size: 14px;
   background: #ffcd38 url(/alert.svg) 174px 50% no-repeat;
-  margin: -20px -20px 20px;
+  margin: -20px -20px 10px;
   display: block;
 `;
 

@@ -5,7 +5,6 @@ import scraper from "../scraper";
 import scraperCases from "../scraperCases";
 import api from "../api.js";
 import MapView from "../components/MapView";
-import Stats from "../components/Stats";
 
 const Home = ({ data, caseDetails, casesPer1M }) => {
   const router = useRouter();
@@ -16,20 +15,12 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
       <Head>
         <title>Covid-19 Map NZ</title>
       </Head>
-      {view === "stats" ? (
-        <Stats
-          data={data}
-          caseDetails={caseDetails}
-          casesPer1M={casesPer1M}
-          onViewChange={() => setView("")}
-        />
-      ) : (
-        <MapView
-          data={data}
-          caseDetails={caseDetails}
-          onViewChange={() => setView("stats")}
-        />
-      )}
+      <MapView
+        data={data}
+        caseDetails={caseDetails}
+        casesPer1M={casesPer1M}
+        onViewChange={() => setView("stats")}
+      />
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import { useState } from "react";
+// import { useState } from "react";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { dailyCases } from "../data/static";
 
-const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
+const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   const {
     confirmedCases,
     probableCases,
@@ -21,6 +21,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     dailyCases[dailyCases.length - 2].cases;
 
   const { lastUpdated, locations } = data;
+  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
   const {
     countMale,
@@ -30,24 +31,31 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
     totalCasesPublished
   } = caseDetails;
 
-  const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
-
-  // const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
-  // const percentMen = Math.round((countMale / totalCasesPublished) * 100);
+  const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
+  const percentMen = Math.round((countMale / totalCasesPublished) * 100);
 
   const top5inNZ = locations.slice(0, 5);
 
-  const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
+  // const [currentAgeIndex, setcurrentAgeIndex] = useState(0);
   return (
     <div className="container">
       <Infographic>
-        <Header>
+        {/* <Header>
           <button type="button" className="view-map" onClick={onViewChange}>
             <img src="/infographic/backtomap.svg" />
             View Live Map
           </button>
           <div className="date">{lastUpdated}</div>
         </Header>
+
+        <Logo>
+          <img className="logo" src="/logo.svg" />
+          <div>
+            <h1>Covid-19 Map</h1>
+          </div>
+        </Logo>
+
+        <div className="date-mobile">{lastUpdated}</div> */}
         <Row>
           <Total>
             <h1>
@@ -63,14 +71,14 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                 ))}
             </TotalNumber>
           </Total>
-          <div>
+          {/* <div>
             <Alert>
               <div className="head" />
               <div className="body">
                 Alert level<div>{alertLevel}</div>
               </div>
             </Alert>
-          </div>
+          </div> */}
         </Row>
         <Row>
           <Cases>
@@ -81,6 +89,24 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <strong>{probableCases}</strong> Probable Cases
             </div>
           </Cases>
+        </Row>
+        <Row>
+          <div className="grid">
+            <NewCases>
+              <strong>+{newCases}</strong> New cases
+              <br />
+              in the last
+              <br />
+              24 hours
+              <img src="/infographic/nznewcases.svg" />
+            </NewCases>
+            <Deaths count={deaths}>
+              <strong>{deaths}</strong>
+              <span>Deaths</span>
+            </Deaths>
+          </div>
+        </Row>
+        <Row>
           <Recovered>
             <div>
               <strong>{recoveredCases}</strong> Recovered
@@ -96,30 +122,21 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <People percent={recoveryRate} />
             </div>
           </Recovered>
-          <Deaths>
-            <strong>{deaths}</strong>Deaths
-          </Deaths>
         </Row>
         <Row>
-          <div className="flex-1">
-            <div className="sub-row">
-              <NewCases>
-                <strong>+{newCases}</strong> New cases
-                <br />
-                in the last
-                <br />
-                24 hours
-                <img src="/infographic/nznewcases.svg" />
-              </NewCases>
-              {/* <Transmissions>
-              <strong>{comTrans}</strong>
-              Cases of <br />
-              community <br />
-              transmission
-              <img src="/infographic/commtrans.svg" />
-            </Transmissions> */}
+          <div className="grid">
+            <Hospital>
+              <div className="head">
+                <strong>{inHospital}</strong>
+                <span>
+                  Cases in
+                  <br /> hospital
+                </span>
+              </div>
+              <img src="/infographic/hospital.svg" />
+            </Hospital>
 
-              {/* <Genders>
+            <Genders>
               <div className="head">Patient genders</div>
               <div className="genders">
                 <div className="female">
@@ -135,7 +152,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                   <img src="/infographic/male.svg" />
                 </div>
               </div>
-              <div className="foot">
+              {/* <div className="foot">
                 {countMale !== countFemale && (
                   <>
                     More{" "}
@@ -145,17 +162,20 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                     have been infected
                   </>
                 )}
-              </div>
-            </Genders> */}
-              <Soap>
-                <img src="/infographic/Washhands.svg" />
-              </Soap>
-            </div>
-            <Hospital>
-              <strong>{inHospital}</strong>
-              <span>Cases in hospital</span>
-              <img src="/infographic/hospital.svg" />
-            </Hospital>
+              </div> */}
+            </Genders>
+
+            {/* <Transmissions>
+              <strong>{comTrans}</strong>
+              Cases of <br />
+              community <br />
+              transmission
+              <img src="/infographic/commtrans.svg" />
+            </Transmissions> */}
+
+            {/* <Soap>
+              <img src="/infographic/Washhands.svg" />
+            </Soap> */}
           </div>
 
           <Chart>
@@ -164,22 +184,23 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               <ResponsiveContainer>
                 <LineChart
                   data={dailyCases}
-                  margin={{ left: 10, right: 30, bottom: 20 }}
+                  margin={{ left: -30, right: 10, bottom: 20 }}
                 >
                   <XAxis
                     dataKey="days"
                     label={{
+                      fontSize: 12,
                       value: "Days since first case detected",
                       position: "bottom"
                     }}
                   />
                   <YAxis
-                    label={{
-                      value: "Cases",
-                      position: "left",
-                      offset: -10,
-                      angle: -90
-                    }}
+                  // label={{
+                  //   value: "Cases",
+                  //   position: "left",
+                  //   offset: -10,
+                  //   angle: -90
+                  // }}
                   />
                   {/* <Tooltip /> */}
                   {/* <Legend /> */}
@@ -197,6 +218,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             </div>
           </Chart>
         </Row>
+
         <Row>
           <Ages>
             <div className="head">Age Groups</div>
@@ -209,7 +231,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                   <Age
                     key={i}
                     percent={percent}
-                    onMouseOver={() => setcurrentAgeIndex(i)}
+                    // onMouseOver={() => setcurrentAgeIndex(i)}
                   >
                     {item.title}
                     <strong>{percent || 1}%</strong>
@@ -229,8 +251,9 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             </div> */}
           </Ages>
         </Row>
+        <Row>{children}</Row>
         <Row>
-          <Globe>
+          {/* <Globe>
             <div className="globe">
               <img src="/infographic/world.svg" />
               <div className="text">
@@ -241,7 +264,8 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               </div>
             </div>
             <img className="mag" src="/infographic/magnifyingglass.svg" />
-          </Globe>
+          </Globe> */}
+
           <Ranking>
             <div className="head">Total cases per 1m population</div>
             {casesPer1M.map((item, i) => (
@@ -251,7 +275,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
               </div>
             ))}
           </Ranking>
-          <Clipboard>
+          {/* <Clipboard>
             <div>
               <img src="/infographic/clipboard.svg" />
               <div className="head">
@@ -268,9 +292,9 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
                 </div>
               ))}
             </div>
-          </Clipboard>
+          </Clipboard> */}
         </Row>
-        <Footer>
+        {/* <Footer>
           <div className="head">Sources:</div>
           <a
             href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
@@ -293,7 +317,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             Live Map
           </button>
           <img src="/infographic/sth.svg" />
-        </Footer>
+        </Footer> */}
       </Infographic>
     </div>
   );
@@ -302,57 +326,100 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange }) => {
 export default Stats;
 
 const Infographic = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     font-size: 2vw;
-    background: #d9f4f3;
-    @media (min-width: ${theme.sm}) {
-      font-size: 1vw;
-    }
+    
 
-    .sub-row {
+    /* background: #d9f4f3; */
+@media (min-width: ${theme.sm}) {
+  font-size: .45em;
+}
+
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          font-size: 1vw;
+        }
+      `}
+
+    /* .sub-row {
       display: flex;
       margin-top: 2em;
       margin-bottom: 2em;
-      @media (min-width: ${theme.sm}) {
-        margin-bottom: 0;
-      }
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            margin-bottom: 0;
+          }
+        `}
     }
     .flex-1 {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+    } */
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      /* grid-template-rows: 1fr 1fr; */
+      grid-gap: 0em 2em;
+      margin: 2em 0;
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            margin: 0;
+            grid-gap: 0;
+          }
+        `}
     }
+
+    .date-mobile {
+      margin-left: 2.5em;
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: none;
+          }
+        `}
+    }
+
   `}
 `;
 
 const Header = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     color: white;
     padding: 0 2.5em;
-    height: 2.5em;
+    /* height: 2.5em; */
     display: flex;
     align-items: center;
     background: ${theme.navy};
     position: relative;
     .view-map {
       border: none;
-      position: absolute;
-      top: 0;
-      left: 1.7em;
-      display: block;
+      /* position: absolute; */
+      /* top: 0;
+      left: 1.7em; */
+      /* display: block; */
       color: white;
-      background: ${theme.yellow};
-      padding: 0.5em 0.8em;
+      background: none;
+      /* background: ${theme.yellow}; */
+      padding: .5em 0;
       font-size: 1.5em;
       border-radius: 0 0 0.25em 0.25em;
       line-height: 1.2;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      :hover {
-        opacity: 1;
-        background: #ffd951;
-      }
+      font-size: 2em;
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            font-size: 1.5em;
+          }
+        `}
+      
       img {
         width: 1.1em;
         margin-right: 0.5em;
@@ -360,54 +427,73 @@ const Header = styled.div`
       }
     }
     .date {
+      display: none;
       font-size: 1.2em;
       width: 30em;
       text-align: right;
-      margin-left: 30em;
+      margin-left: 20em;
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: block;
+          }
+        `}
     }
   `}
 `;
 
 const Row = styled.div`
-  ${({ theme }) => css`
-    padding: 0 2em;
+  ${({ theme, ...props }) => css`
+    /* padding: 0 2em; */
     margin: 2em 0 0;
     justify-content: space-between;
     > div {
       margin-top: 0.7em;
       margin-bottom: 0.7em;
     }
-    @media (min-width: ${theme.sm}) {
-      display: flex;
-      padding: 0 2.5em;
-      > div {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          display: flex;
+          padding: 0 2.5em;
+          > div {
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+      `}
     .flex-mobile {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      @media (min-width: ${theme.sm}) {
-        display: block;
-      }
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+          }
+        `}
     }
   `}
 `;
 
 const Total = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 0.99em;
-    padding-top: 14em;
-    @media (min-width: ${theme.sm}) {
-      padding-top: 0;
-      margin-right: 16em;
-      font-size: 1.45em;
-    }
+    /* padding-top: 14em; */
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          padding-top: 0;
+          margin-right: 16em;
+          font-size: 1.45em;
+        }
+      `}
     h1 {
       white-space: nowrap;
       font-weight: normal;
@@ -422,10 +508,10 @@ const Total = styled.div`
 `;
 
 const TotalNumber = styled.div`
-  ${({ theme, num }) => css`
+  ${({ theme, num, ...props }) => css`
     display: flex;
     color: ${theme.green};
-    font-size: 5em;
+    font-size: 5.3em;
     ${num > 999 &&
       css`
         font-size: 4.5em;
@@ -440,19 +526,30 @@ const TotalNumber = styled.div`
       font-weight: bold;
       line-height: 1;
     }
-    @media (min-width: ${theme.sm}) {
-      font-size: 6em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          font-size: 6em;
+        }
+      `}
   `}
 `;
 
 const Alert = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     width: 21em;
     background: #fff1c1;
     position: absolute;
     top: 0;
-    right: 2.5em;
+    right: 5em;
+    font-size: 0.6em;
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          font-size: 1em;
+          right: 2.5em;
+        }
+      `}
 
     .head {
       height: 3em;
@@ -477,17 +574,14 @@ const Alert = styled.div`
         font-size: 3em;
       }
     }
-
-    @media (min-width: ${theme.sm}) {
-    }
   `}
 `;
 
 const Cases = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     background: #a6e5e3;
     border-radius: 0.3em;
-    padding: 0.5em 1em 0.5em 3em;
+    padding: 0.5em 1em 0.5em 4.4em;
     font-size: 2.8em;
     color: ${theme.dark};
     position: relative;
@@ -499,7 +593,7 @@ const Cases = styled.div`
       content: "";
       position: absolute;
       top: 50%;
-      left: -0.5em;
+      left: 0.7em;
       width: 3em;
       height: 3em;
       background: url(/infographic/cases.svg) center center no-repeat;
@@ -515,7 +609,7 @@ const Cases = styled.div`
 `;
 
 const Recovered = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     flex: 1;
     background: ${theme.green};
     font-size: 2.2em;
@@ -527,9 +621,12 @@ const Recovered = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0.5em 1em;
-    @media (min-width: ${theme.sm}) {
-      margin: 0 0 0 1em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          margin: 0 0 0 1em;
+        }
+      `}
     > div:first-child {
       border-right: solid ${theme.dark} 0.1em;
       padding-right: 0.6em;
@@ -608,26 +705,34 @@ const Person = styled.div`
 `;
 
 const Deaths = styled.div`
-  ${({ theme }) => css`
-    display: none;
-    padding: 0.5em 1em;
-    background: ${theme.green};
-    font-size: 2.2em;
-    border-radius: 0.3em;
-    color: ${theme.dark};
+  ${({ theme, ...props }) => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: ${theme.dark};
+    height: 13em;
+    width: 13em;
+    border-radius: 50%;
+    margin: 2em 0 0 8em;
+    line-height: 1;
     strong {
+      font-size: 6em;
       display: block;
-      line-height: 1;
-      font-size: 2.3em;
       color: white;
+      ${props.count > 99 && css``}
+    }
+    span {
+      color: ${theme.green};
+      font-size: 2em;
     }
   `}
 `;
 
 const NewCases = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     font-family: ${theme.fontFancy};
-    font-size: 1.7em;
+    font-size: 2.4em;
     text-transform: uppercase;
     color: ${theme.dark};
     line-height: 1.1;
@@ -639,16 +744,16 @@ const NewCases = styled.div`
       margin-bottom: 0.1em;
     }
     img {
-      width: 6em;
+      width: 5em;
       position: absolute;
-      top: 0em;
-      left: 8em;
+      top: 0.5em;
+      left: 7em;
     }
   `}
 `;
 
 const Transmissions = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     padding: 2em 1.3em 1.3em;
     background: white;
     border-radius: 0.4em;
@@ -658,9 +763,12 @@ const Transmissions = styled.div`
     color: ${theme.dark};
     line-height: 1.1;
     position: relative;
-    @media (min-width: ${theme.sm}) {
-      margin-top: 2em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          margin-top: 2em;
+        }
+      `}
     strong {
       display: block;
       font-size: 3em;
@@ -677,12 +785,15 @@ const Transmissions = styled.div`
 `;
 
 const Genders = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     color: ${theme.dark};
-    @media (min-width: ${theme.sm}) {
-      /* font-size: 6em; */
-      margin: 0 3.5em 1.2em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          /* font-size: 6em; */
+          margin: 0 3.5em 1.2em;
+        }
+      `}
     .head {
       font-family: ${theme.fontFancy};
       font-size: 2.1em;
@@ -745,21 +856,24 @@ const Genders = styled.div`
 `;
 
 const Soap = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     margin-left: auto;
     text-align: right;
     /* position: relative; */
     /* left: 2em; */
-    /* @media (min-width: ${theme.sm}) {
-    } */
+    /* 
+    @media (min-width: ${theme.sm}) {
+    } 
+    */
     img {
+      margin-top: 2em;
       width: 23em;
     }
   `}
 `;
 
 const Chart = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     background: white;
     border-radius: 0.5em;
     padding: 2.5em 2em;
@@ -773,14 +887,19 @@ const Chart = styled.div`
       line-height: 1.1;
     }
     .chart-wrap {
-      width: 45em;
       height: 25em;
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            width: 40em;
+          }
+        `}
     }
   `}
 `;
 
 const Ages = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     width: 100%;
     .head {
       color: ${theme.dark};
@@ -794,10 +913,13 @@ const Ages = styled.div`
       display: flex;
       flex-direction: column;
       height: 40em;
-      @media (min-width: ${theme.sm}) {
-        flex-direction: row;
-        height: auto;
-      }
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            flex-direction: row;
+            height: auto;
+          }
+        `}
     }
     .foot {
       display: none;
@@ -805,9 +927,12 @@ const Ages = styled.div`
       padding: 0.6em 0.8em;
       font-size: 1.6em;
       color: ${theme.dark};
-      @media (min-width: ${theme.sm}) {
-        display: block;
-      }
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: block;
+          }
+        `}
       strong {
         display: block;
         color: ${theme.green};
@@ -817,7 +942,7 @@ const Ages = styled.div`
 `;
 
 const Age = styled.div`
-  ${({ theme, percent }) => css`
+  ${({ theme, percent, ...props }) => css`
     /* cursor: pointer; */
     font-size: 1.5em;
     color: white;
@@ -830,12 +955,15 @@ const Age = styled.div`
     line-height: 1.1;
     min-height: 1.5em;
     min-width: 2.6em;
-    @media (min-width: ${theme.sm}) {
-      font-size: 1.2em;
-      width: ${percent}%;
-      height: 9em;
-      flex-direction: column;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          font-size: 1.2em;
+          width: ${percent}%;
+          height: 9em;
+          flex-direction: column;
+        }
+      `}
     strong {
       font-weight: normal;
       opacity: 0.9;
@@ -843,9 +971,12 @@ const Age = styled.div`
       :before {
         content: " - ";
         margin-left: 0.4em;
-        @media (min-width: ${theme.sm}) {
-          display: none;
-        }
+        ${props.wide &&
+          css`
+            @media (min-width: ${theme.sm}) {
+              display: none;
+            }
+          `}
       }
     }
     :nth-child(1) {
@@ -882,13 +1013,16 @@ const Age = styled.div`
 `;
 
 const Globe = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     position: relative;
 
     font-size: 1.3em;
-    @media (min-width: ${theme.sm}) {
-      font-size: 1em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          font-size: 1em;
+        }
+      `}
 
     .globe {
       position: relative;
@@ -903,9 +1037,12 @@ const Globe = styled.div`
       bottom: 0;
       left: -2.5em;
       display: none;
-      @media (min-width: ${theme.sm}) {
-        display: block;
-      }
+      ${props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: block;
+          }
+        `}
     }
     .text {
       position: absolute;
@@ -926,7 +1063,7 @@ const Globe = styled.div`
 `;
 
 const Ranking = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     padding-bottom: 2em;
     .head {
       color: ${theme.dark};
@@ -962,21 +1099,25 @@ const Ranking = styled.div`
 `;
 
 const Clipboard = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     margin: 3em auto 3em !important;
     line-height: 1.1;
-    @media (min-width: ${theme.sm}) {
-      width: 30em;
-      margin: 0 !important;
-      width: 20em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          width: 30em;
+          margin: 0 !important;
+          width: 20em;
+        }
+      `}
     > div {
       background: #a6e5e3;
       border-radius: 0.5em;
       position: relative;
       margin-top: 3em;
       padding: 2.5em 2em 2em;
-      /* @media (min-width: ${theme.sm}) {
+      /* 
+      @media (min-width: ${theme.sm}) {
         margin-top: 3em;
       } */
     }
@@ -996,9 +1137,12 @@ const Clipboard = styled.div`
       margin-bottom: 0.6em;
       br {
         display: none;
-        @media (min-width: ${theme.sm}) {
-          display: block;
-        }
+        ${props.wide &&
+          css`
+            @media (min-width: ${theme.sm}) {
+              display: block;
+            }
+          `}
       }
     }
     .location {
@@ -1023,14 +1167,17 @@ const Clipboard = styled.div`
 `;
 
 const Footer = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     position: relative;
     background: ${theme.dark};
     padding: 2em 31em 3em 2.5em;
     line-height: 1.5;
-    @media (min-width: ${theme.sm}) {
-      padding-right: 2.5em;
-    }
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          padding-right: 2.5em;
+        }
+      `}
     .head {
       font-size: 1.5em;
       color: ${theme.green};
@@ -1073,34 +1220,65 @@ const Footer = styled.div`
 `;
 
 const Hospital = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, ...props }) => css`
     background: white;
     border-radius: 0.5em;
     padding: 2em;
     color: ${theme.dark};
     font-family: ${theme.fontFancy};
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     text-transform: uppercase;
     line-height: 1.1;
-    margin-bottom: 2em;
-    @media (min-width: ${theme.sm}) {
-      margin-right: 3em;
-      margin-bottom: 0;
+    /* margin-bottom: 2em; */
+    /* 
+    @media (min-width: ${theme.sm}) { */
+      /* margin-right: 3em; */
+      /* margin-bottom: 0; */
+    /* } */
+    .head {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2em;
     }
     strong {
-      font-size: 8.5em;
+      font-size: 4.8em;
       color: ${theme.yellow};
       margin-right: 0.25em;
       letter-spacing: 0;
     }
     span {
-      font-size: 2.2em;
+      font-size: 1.8em;
     }
     img {
-      width: 10em;
+      display: block;
+      width: 15em;
+      margin: 0 auto;
+    }
+  `}
+`;
+
+const Logo = styled.div`
+  ${({ theme, ...props }) => css`
+    display: flex;
+    align-items: center;
+    padding: 1em 2.5em 0.5em;
+
+    ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          display: none;
+        }
+      `}
+
+    img {
+      width: 6em;
+      margin-right: 1em;
+    }
+    h1 {
+      white-space: nowrap;
+      font-size: 3.5em;
+      color: ${theme.teal};
+      margin: 0;
     }
   `}
 `;
