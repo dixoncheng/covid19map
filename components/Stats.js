@@ -11,7 +11,8 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
     deaths,
     // comTrans,
     countriesAffected,
-    inHospital
+    inHospital,
+    newCases
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -24,9 +25,9 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
     dailyCases
   } = caseDetails;
 
-  const newCases =
-    dailyCases[dailyCases.length - 1].cases -
-    dailyCases[dailyCases.length - 2].cases;
+  // const newCases =
+  //   dailyCases[dailyCases.length - 1].cases -
+  //   dailyCases[dailyCases.length - 2].cases;
 
   const { lastUpdated, locations } = data;
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
