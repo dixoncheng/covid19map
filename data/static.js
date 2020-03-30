@@ -1,9 +1,9 @@
 export const staticData = {
-  confirmedCases: 476,
-  probableCases: 38,
-  recoveredCases: 56,
-  inHospital: 9,
-  newCases: 63,
+  confirmedCases: 476 + 76,
+  probableCases: 38 - 1,
+  recoveredCases: 63,
+  inHospital: 12,
+  newCases: 75,
   deaths: 0 + 1,
   alertLevel: 4
 };
