@@ -39,7 +39,7 @@ export async function getStaticProps(context) {
   summary.locations = summary.locations.map((item, i) => {
     const loc = caseDetails.cases.find(x => x.name === item.name);
     if (loc) {
-      return { ...item, ...loc.cases };
+      return { ...item, cases: loc.cases };
     }
   });
   caseDetails.cases = null;
