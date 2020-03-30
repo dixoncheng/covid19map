@@ -93,15 +93,18 @@ const processCases = rawCases => {
         maxCases = Math.max(maxCases, loc.numCases);
 
         // get daily cases
-
-        const daysDiff = Math.round(
+        const daysDiff = Math.floor(
           (itemDate - dateFirstCase) / (1000 * 60 * 60 * 24)
         );
-        const day = dailyCases.find(x => x.days === daysDiff);
-        if (day) {
-          day.cases++;
-        } else {
-          dailyCases.push({ days: daysDiff, cases: 1 });
+
+        // ignore today because MOH may not have updated the page
+        if (itemDate.getTime() !== now.getTime()) {
+          const day = dailyCases.find(x => x.days === daysDiff);
+          if (day) {
+            day.cases++;
+          } else {
+            dailyCases.push({ days: daysDiff, cases: 1 });
+          }
         }
       } else {
         if (item.loc !== "TBC") {
@@ -126,6 +129,7 @@ const processCases = rawCases => {
   dailyCases.sort((a, b) => {
     return a.days < b.days ? -1 : 1;
   });
+  // console.log(dailyCases);
 
   let dailyCasesAggregate = [];
   // dailyCasesAggregate = dailyCases.map((item, i) => {

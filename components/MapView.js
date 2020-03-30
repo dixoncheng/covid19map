@@ -19,6 +19,8 @@ const innerBounds = [
 ];
 
 const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
+  // console.log(data);
+  // console.log(caseDetails);
   const {
     confirmedCases,
     probableCases,
