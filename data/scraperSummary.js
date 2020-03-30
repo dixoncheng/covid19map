@@ -6,13 +6,58 @@ const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-1
 const scraper = async () => {
   const response = await fetch(URL);
   const html = await response.text();
-
   const $ = await cheerio.load(html);
 
   // const lastUpdated = $(".page_updated .date").text();
   const lastUpdated = $(".field-name-body .georgia-italic")
     .first()
     .text();
+
+  const asAt = $(".table-style-two")
+    .eq(0)
+    .find("caption")
+    .text();
+
+  let summaryData = {};
+  $(".table-style-two")
+    .eq(0)
+    .find("tbody tr")
+    .each((i, elem) => {
+      const totalToDate = $(elem)
+        .find("td:nth-child(2)")
+        .text()
+        .trim();
+      const newIn24h = $(elem)
+        .find("td:nth-child(3)")
+        .text()
+        .trim();
+
+      if (i === 0) {
+        // summaryData.confirmedCases = { totalToDate, newIn24h };
+        summaryData.confirmedCases = totalToDate;
+        summaryData.newCases = newIn24h;
+      }
+      if (i === 1) {
+        // summaryData.probableCases = { totalToDate, newIn24h };
+        summaryData.probableCases = totalToDate;
+      }
+      if (i === 2) {
+        // summaryData.combinedCases = { totalToDate, newIn24h };
+        summaryData.combinedCases = totalToDate;
+      }
+      if (i === 3) {
+        // summaryData.inHospital = { totalToDate, newIn24h };
+        summaryData.inHospital = totalToDate;
+      }
+      if (i === 4) {
+        // summaryData.recoveredCases = { totalToDate, newIn24h };
+        summaryData.recoveredCases = totalToDate;
+      }
+      if (i === 5) {
+        // summaryData.deaths = { totalToDate, newIn24h };
+        summaryData.deaths = totalToDate;
+      }
+    });
 
   let rows = [];
   $(".table-style-two")
@@ -61,7 +106,7 @@ const scraper = async () => {
       }
     });
 
-  return { rows, lastUpdated };
+  return { rows, lastUpdated, asAt, summaryData };
 };
 
 export default scraper;
