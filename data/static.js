@@ -6,5 +6,5 @@ export const staticData = {
   newCases: 75,
   deaths: 0 + 1,
   alertLevel: 4,
-  lastUpdated: "2020-03-31 13:00"
+  lastUpdated: "2020-03-30 13:00"
 };

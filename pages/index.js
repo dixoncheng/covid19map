@@ -29,7 +29,7 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
 };
 
 export async function getStaticProps(context) {
-  const fs = require("fs");
+  // const fs = require("fs");
   require("datejs");
 
   const rawSummary = await scraperSummary();
@@ -44,12 +44,14 @@ export async function getStaticProps(context) {
   const mohAsAtDate = Date.parse(summary.asAt.replace("As at ", ""));
   console.log(mohAsAtDate);
 
-  const lastMod = fs.statSync("data/static.js");
-  console.log(lastMod.mtime);
-  
+  // const lastMod = fs.statSync("data/static.js");
+  // console.log(lastMod.mtime);
+  const staticLastUpdated = Date.parse(staticData.lastUpdated);
+  console.log(staticLastUpdated);
+
   let staticDataCombined = staticData;
   // if MOH date is newer than data/static.js, use MOH summary data
-  if (mohAsAtDate > lastMod.mtime) {
+  if (mohAsAtDate > staticLastUpdated) {
     staticDataCombined = { ...staticData, ...summary.summaryData };
   }
   summary.locations = summary.locations.map((item, i) => {
