@@ -34,28 +34,29 @@ const scraper = async () => {
 
       if (i === 0) {
         // summaryData.confirmedCases = { totalToDate, newIn24h };
-        summaryData.confirmedCases = totalToDate;
-        summaryData.newCases = newIn24h;
+        summaryData.confirmedCases = parseInt(totalToDate);
+        // summaryData.newCases = parseInt(newIn24h);
       }
       if (i === 1) {
         // summaryData.probableCases = { totalToDate, newIn24h };
-        summaryData.probableCases = totalToDate;
+        summaryData.probableCases = parseInt(totalToDate);
       }
       if (i === 2) {
         // summaryData.combinedCases = { totalToDate, newIn24h };
-        summaryData.combinedCases = totalToDate;
+        summaryData.combinedCases = parseInt(totalToDate);
+        summaryData.newCases = parseInt(newIn24h);
       }
       if (i === 3) {
         // summaryData.inHospital = { totalToDate, newIn24h };
-        summaryData.inHospital = totalToDate;
+        summaryData.inHospital = parseInt(totalToDate);
       }
       if (i === 4) {
         // summaryData.recoveredCases = { totalToDate, newIn24h };
-        summaryData.recoveredCases = totalToDate;
+        summaryData.recoveredCases = parseInt(totalToDate);
       }
       if (i === 5) {
         // summaryData.deaths = { totalToDate, newIn24h };
-        summaryData.deaths = totalToDate;
+        summaryData.deaths = parseInt(totalToDate);
       }
     });
 

@@ -5,7 +5,6 @@ export const staticData = {
   inHospital: 12,
   newCases: 75,
   deaths: 0 + 1,
-  alertLevel: 4
-  // todo: summary table scraper, use moh numbers if more recent
-  // lastUpdated: new Date("2020-03-29 13:00")
+  alertLevel: 4,
+  lastUpdated: "2020-03-31 13:00"
 };
