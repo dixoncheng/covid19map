@@ -98,7 +98,7 @@ const processCases = rawCases => {
         );
 
         // ignore today because MOH may not have updated the page
-        if (itemDate.getTime() !== now.getTime()) {
+        if (itemDate.getTime() < now.getTime()) {
           const day = dailyCases.find(x => x.days === daysDiff);
           if (day) {
             day.cases++;

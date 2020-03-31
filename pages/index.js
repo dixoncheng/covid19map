@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import api from "../api.js";
+import getCasesPer1m from "../data/casesPer1m.js";
+// import getTimelines from "../data/timelines.js";
 import scraperSummary from "../data/scraperSummary";
 import scraperCases from "../data/scraperCases";
 import processSummary from "../data/processSummary";
@@ -9,7 +10,7 @@ import processCases from "../data/processCases";
 import { staticData } from "../data/static";
 import MapView from "../components/MapView";
 
-const Home = ({ data, caseDetails, casesPer1M }) => {
+const Home = ({ data, caseDetails, casesPer1m }) => {
   const router = useRouter();
   const [view, setView] = useState(router.route === "/stats" ? "stats" : "");
 
@@ -21,7 +22,7 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
       <MapView
         data={data}
         caseDetails={caseDetails}
-        casesPer1M={casesPer1M}
+        casesPer1m={casesPer1m}
         onViewChange={() => setView("stats")}
       />
     </div>
@@ -29,12 +30,14 @@ const Home = ({ data, caseDetails, casesPer1M }) => {
 };
 
 export async function getStaticProps(context) {
-  // const fs = require("fs");
   require("datejs");
 
   const rawSummary = await scraperSummary();
   const rawCases = await scraperCases();
-  // const casesPer1M = await api();
+
+  const casesPer1m = await getCasesPer1m();
+  // const timelines = await getTimelines();
+  // console.log(timelines);
 
   const summary = processSummary(rawSummary);
   const caseDetails = processCases(rawCases);
@@ -65,9 +68,8 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      data: { ...summary, staticData: staticDataCombined },
-      caseDetails,
-      casesPer1M: []
+      data: { ...summary, staticData: staticDataCombined, casesPer1m },
+      caseDetails
     }
   };
 }

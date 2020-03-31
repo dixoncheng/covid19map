@@ -9,19 +9,19 @@ const getCountry = async country => {
   return json;
 };
 
-const api = async () => {
-  const casesPer1M = [];
+const getCasesPer1m = async () => {
+  const res = [];
   for (const item of countries) {
     const data = await getCountry(item);
     const { confirmed } = data.latest;
     const { country: title, country_population } = data.locations[0];
     const numCases = Math.round(confirmed / (country_population / 1000000));
-    casesPer1M.push({
+    res.push({
       title: title === "US" ? "United States" : title,
       numCases
     });
   }
-  return casesPer1M;
+  return res;
 };
 
-export default api;
+export default getCasesPer1m;

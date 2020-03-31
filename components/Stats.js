@@ -2,7 +2,7 @@
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
-const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
+const Stats = ({ data, caseDetails, onViewChange, children }) => {
   const {
     confirmedCases,
     probableCases,
@@ -29,7 +29,7 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
   //   dailyCases[dailyCases.length - 1].cases -
   //   dailyCases[dailyCases.length - 2].cases;
 
-  const { lastUpdated, locations } = data;
+  const { casesPer1m } = data;
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
   const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
@@ -179,45 +179,47 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
             </Soap> */}
           </div>
 
-          <Chart>
-            <div className="head">COVID-19 cases in New Zealand</div>
-            <div className="chart-wrap">
-              <ResponsiveContainer>
-                <LineChart
-                  data={dailyCases}
-                  margin={{ left: -30, right: 10, bottom: 20 }}
-                >
-                  <XAxis
-                    dataKey="days"
-                    label={{
-                      fontSize: 12,
-                      value: "Days since first case detected",
-                      position: "bottom"
-                    }}
-                  />
-                  <YAxis
-                  // label={{
-                  //   value: "Cases",
-                  //   position: "left",
-                  //   offset: -10,
-                  //   angle: -90
-                  // }}
-                  />
-                  {/* <Tooltip /> */}
-                  {/* <Legend /> */}
-                  <Line
-                    type="monotone"
-                    dataKey="cases"
-                    stroke="#51b6b0"
-                    strokeWidth={4}
-                    dot={false}
-                    // activeDot={{ r: 8 }}
-                  />
-                  {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </Chart>
+          {dailyCases.length > 0 && (
+            <Chart>
+              <div className="head">COVID-19 cases in New Zealand</div>
+              <div className="chart-wrap">
+                <ResponsiveContainer>
+                  <LineChart
+                    data={dailyCases}
+                    margin={{ left: -30, right: 10, bottom: 20 }}
+                  >
+                    <XAxis
+                      dataKey="days"
+                      label={{
+                        fontSize: 12,
+                        value: "Days since first case detected",
+                        position: "bottom"
+                      }}
+                    />
+                    <YAxis
+                    // label={{
+                    //   value: "Cases",
+                    //   position: "left",
+                    //   offset: -10,
+                    //   angle: -90
+                    // }}
+                    />
+                    {/* <Tooltip /> */}
+                    {/* <Legend /> */}
+                    <Line
+                      type="monotone"
+                      dataKey="cases"
+                      stroke="#51b6b0"
+                      strokeWidth={4}
+                      dot={false}
+                      // activeDot={{ r: 8 }}
+                    />
+                    {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Chart>
+          )}
         </Row>
         <Row>{children}</Row>
         <Row>
@@ -266,15 +268,17 @@ const Stats = ({ data, caseDetails, casesPer1M, onViewChange, children }) => {
             <img className="mag" src="/infographic/magnifyingglass.svg" />
           </Globe> */}
 
-          <Ranking>
-            <div className="head">Total cases per 1m population</div>
-            {casesPer1M.map((item, i) => (
-              <div key={i} className="country">
-                <div className="count">{item.numCases}</div>
-                <div className="title">{item.title}</div>
-              </div>
-            ))}
-          </Ranking>
+          {casesPer1m.length > 0 && (
+            <Ranking>
+              <div className="head">Total cases per 1m population</div>
+              {casesPer1m.map((item, i) => (
+                <div key={i} className="country">
+                  <div className="count">{item.numCases}</div>
+                  <div className="title">{item.title}</div>
+                </div>
+              ))}
+            </Ranking>
+          )}
           {/* <Clipboard>
             <div>
               <img src="/infographic/clipboard.svg" />
