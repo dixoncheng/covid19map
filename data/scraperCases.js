@@ -27,10 +27,12 @@ const scraperCases = async () => {
           .find("td:nth-child(4)")
           .text()
           .trim(),
-        age: $(elem)
-          .find("td:nth-child(3)")
-          .text()
-          .trim(),
+        age: clean(
+          $(elem)
+            .find("td:nth-child(3)")
+            .text()
+            .trim()
+        ),
         gender: $(elem)
           .find("td:nth-child(2)")
           .text()
@@ -72,10 +74,12 @@ const scraperCases = async () => {
           .find("td:nth-child(4)")
           .text()
           .trim(),
-        age: $(elem)
-          .find("td:nth-child(3)")
-          .text()
-          .trim(),
+        age: clean(
+          $(elem)
+            .find("td:nth-child(3)")
+            .text()
+            .trim()
+        ),
         gender: $(elem)
           .find("td:nth-child(2)")
           .text()
@@ -108,3 +112,7 @@ const scraperCases = async () => {
 };
 
 export default scraperCases;
+
+const clean = str => {
+  return str.replace(/\u00a0/g, " ");
+};
