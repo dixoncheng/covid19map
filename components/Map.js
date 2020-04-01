@@ -14,12 +14,14 @@ const Map = ({
   center,
   zoom,
   markers,
+  clusters,
   onMarkerClick,
   currentView,
   maxCases,
   outerBounds,
   innerBounds
 }) => {
+  console.log(clusters);
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
   useEffect(() => {
@@ -33,15 +35,15 @@ const Map = ({
     }
   }, [currentView]);
 
-  // const normalize = val => (val - 0) / (1.5 - 0);
-
-  const getIcon = totalCases => {
-    // const iconSize = 24 + normalize(totalCases);
-    const iconSize = 28;
+  const getIcon = (className, totalCases) => {
+    const normalise = totalCases / 100;
+    const iconSize = 24 + normalise * 40;
+    // const iconSize = 28;
     return L.divIcon({
-      className: "icon",
+      className,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`
+      html: `<div style="font-size: ${16 +
+        normalise * 14}px">${totalCases}</div>`
     });
   };
 
@@ -59,7 +61,6 @@ const Map = ({
         zoom={zoom}
         maxZoom={8}
         minZoom={4}
-        attributionControl={true}
         zoomControl={true}
         doubleClickZoom={true}
         scrollWheelZoom={true}
@@ -70,14 +71,13 @@ const Map = ({
         onClick={() => onLocationClick("")}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
-
         {markers.map(({ location, latlng, boundary, totalCases }, i) => (
           <FeatureGroup key={i}>
             {totalCases && (
               <>
                 <Marker
                   position={latlng}
-                  icon={getIcon(totalCases)}
+                  icon={getIcon("region", totalCases)}
                   onClick={() => onLocationClick(location)}
                 />
                 <Popup>
@@ -100,6 +100,24 @@ const Map = ({
             />
           </FeatureGroup>
         ))}
+        {clusters.map(({ latlng, totalCases, clusters: clusterItems }, i) => (
+          <Marker
+            key={i}
+            position={latlng}
+            icon={getIcon("cluster", totalCases)}
+          >
+            <Popup>
+              <StyledPopup>
+                {clusterItems.map(({ name, totalCases }, i) => (
+                  <div className="cluster-desc" key={i}>
+                    <div className="location">{name}</div>
+                    <div className="cases">Number of cases: {totalCases}</div>
+                  </div>
+                ))}
+              </StyledPopup>
+            </Popup>
+          </Marker>
+        ))}
       </LeafletMap>
       <Styles />
     </div>
@@ -116,6 +134,9 @@ const StyledPopup = styled.div`
       font-size: 16px;
       font-family: ${theme.font};
     }
+    .cluster-desc + .cluster-desc {
+      margin-top: 0.5em;
+    }
   `}
 `;
 
@@ -129,7 +150,9 @@ const Styles = createGlobalStyle`
       height: 100vh;
     }
   }
-  .icon {
+  .region,
+  .cluster {
+    font-family: "Nunito", sans-serif;
     /* background: #51b6b0; */
     background: white;
     color: #204e61;
@@ -141,5 +164,11 @@ const Styles = createGlobalStyle`
     justify-content: center;
     align-items: center;
     border: solid #51b6b0 1px;
+  }
+  .cluster {
+    color: #204e61;
+    background: red;
+    border: solid #51b6b0 1px;
+
   }
 `;
