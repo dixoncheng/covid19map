@@ -76,8 +76,8 @@ const processCases = rawCases => {
         now.setSeconds(0, 0);
         itemDate.setHours(0);
 
-        // check if date < 24 hours
         if (now.getTime() - itemDate.getTime() <= 86400000) {
+          // check if date < 24 hours
           loc.newCases++;
         }
 
@@ -98,7 +98,7 @@ const processCases = rawCases => {
         );
 
         // ignore today because MOH may not have updated the page
-        if (itemDate.getTime() !== now.getTime()) {
+        if (itemDate.getTime() < now.getTime()) {
           const day = dailyCases.find(x => x.days === daysDiff);
           if (day) {
             day.cases++;

@@ -18,7 +18,7 @@ const innerBounds = [
   [-47.30251579, 177.66849518]
 ];
 
-const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
+const MapView = ({ data, caseDetails, onViewChange }) => {
   // console.log(data);
   // console.log(caseDetails);
   const {
@@ -214,7 +214,6 @@ const MapView = ({ data, caseDetails, casesPer1M, onViewChange }) => {
             <Stats
               data={data}
               caseDetails={caseDetails}
-              casesPer1M={casesPer1M}
               onViewChange={() => setView("")}
             >
               <SummaryTable cols={2}>
