@@ -31,7 +31,32 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          />
+          <link rel="manifest" href="/manifest.json" />
+
+          <meta name="apple-mobile-web-app-title" content="Covid-19 Map NZ" />
+          <meta name="application-name" content="Covid-19 Map NZ" />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/icons/favicon-16x16.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/icons/favicon-32x32.png"
+          />
+          <link rel="apple-touch-icon" href="/icons/apple-icon.png"></link>
+          <meta name="theme-color" content="#51b6b0" />
           <link rel="icon" href="/favicon.ico" />
+
           <link
             href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Bowlby+One&display=swap"
             rel="stylesheet"
