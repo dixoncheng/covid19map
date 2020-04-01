@@ -21,7 +21,7 @@ const Map = ({
   outerBounds,
   innerBounds
 }) => {
-  console.log(clusters);
+  // console.log(clusters);
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
   useEffect(() => {
@@ -166,9 +166,11 @@ const Styles = createGlobalStyle`
     border: solid #51b6b0 1px;
   }
   .cluster {
+    > div { font-size: 0 !important; }
     color: #204e61;
-    background: red;
-    border: solid #51b6b0 1px;
+    /* background: #ffc906; */
+    background: rgba(255, 201, 6, .7);
+    border: solid white 1px;
 
   }
 `;
