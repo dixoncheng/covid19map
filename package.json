@@ -10,6 +10,7 @@
   "dependencies": {
     "@zeit/fetch-retry": "^5.0.0",
     "cheerio": "^1.0.0-rc.3",
+    "datejs": "^1.0.0-rc3",
     "leaflet": "^1.6.0",
     "next": "9.3.1",
     "next-optimized-images": "^2.5.5",
