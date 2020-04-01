@@ -1,10 +1,10 @@
 export const staticData = {
-  confirmedCases: 476 + 76 + 48,
-  probableCases: 38 - 1 + 10,
-  recoveredCases: 74,
+  confirmedCases: 647,
+  probableCases: 61,
+  recoveredCases: 82,
   inHospital: 14,
-  newCases: 58,
-  deaths: 0 + 1,
+  newCases: 61,
+  deaths: 1,
   alertLevel: 4
 };
-// combined total 647
+// combined total 708
