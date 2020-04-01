@@ -35,7 +35,7 @@ export async function getStaticProps(context) {
   const rawSummary = await scraperSummary();
   const rawCases = await scraperCases();
 
-  const casesPer1m = await getCasesPer1m();
+  const casesPer1m = []; //await getCasesPer1m();
   // const timelines = await getTimelines();
   // console.log(timelines);
 
@@ -45,18 +45,31 @@ export async function getStaticProps(context) {
   // console.log(summary.summaryData);
 
   const mohAsAtDate = Date.parse(summary.asAt.replace("As at ", ""));
-  console.log(mohAsAtDate);
+  // console.log(mohAsAtDate);
 
   // const lastMod = fs.statSync("data/static.js");
   // console.log(lastMod.mtime);
   const staticLastUpdated = Date.parse(staticData.lastUpdated);
-  console.log(staticLastUpdated);
+  // console.log(staticLastUpdated);
 
   let staticDataCombined = staticData;
   // if MOH date is newer than data/static.js, use MOH summary data
   if (mohAsAtDate > staticLastUpdated) {
-    staticDataCombined = { ...staticData, ...summary.summaryData };
+    if (
+      isNaN(summary.confirmedCases) ||
+      isNaN(summary.probableCases) ||
+      isNaN(summary.combinedCases) ||
+      isNaN(summary.newCases) ||
+      isNaN(summary.inHospital) ||
+      isNaN(summary.recoveredCases) ||
+      isNaN(summary.deaths)
+    ) {
+      throw new Error(`Summary data incomplete`);
+    } else {
+      staticDataCombined = { ...staticData, ...summary.summaryData };
+    }
   }
+
   summary.locations = summary.locations.map((item, i) => {
     const loc = caseDetails.cases.find(x => x.name === item.name);
     if (loc) {

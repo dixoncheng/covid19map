@@ -24,7 +24,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     totalCasesPublished,
     dailyCases
   } = caseDetails;
-
+  // console.log(caseDetails);
   // const newCases =
   //   dailyCases[dailyCases.length - 1].cases -
   //   dailyCases[dailyCases.length - 2].cases;

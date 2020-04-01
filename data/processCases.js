@@ -76,8 +76,8 @@ const processCases = rawCases => {
         now.setSeconds(0, 0);
         itemDate.setHours(0);
 
-        // check if date < 24 hours
         if (now.getTime() - itemDate.getTime() <= 86400000) {
+          // check if date < 24 hours
           loc.newCases++;
         }
 
