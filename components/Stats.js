@@ -178,48 +178,6 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
               <img src="/infographic/Washhands.svg" />
             </Soap> */}
           </div>
-
-          {dailyCases.length > 0 && (
-            <Chart>
-              <div className="head">COVID-19 cases in New Zealand</div>
-              <div className="chart-wrap">
-                <ResponsiveContainer>
-                  <LineChart
-                    data={dailyCases}
-                    margin={{ left: -30, right: 10, bottom: 20 }}
-                  >
-                    <XAxis
-                      dataKey="days"
-                      label={{
-                        fontSize: 12,
-                        value: "Days since first case detected",
-                        position: "bottom"
-                      }}
-                    />
-                    <YAxis
-                    // label={{
-                    //   value: "Cases",
-                    //   position: "left",
-                    //   offset: -10,
-                    //   angle: -90
-                    // }}
-                    />
-                    {/* <Tooltip /> */}
-                    {/* <Legend /> */}
-                    <Line
-                      type="monotone"
-                      dataKey="cases"
-                      stroke="#51b6b0"
-                      strokeWidth={4}
-                      dot={false}
-                      // activeDot={{ r: 8 }}
-                    />
-                    {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </Chart>
-          )}
         </Row>
         <Row>{children}</Row>
         <Row>
