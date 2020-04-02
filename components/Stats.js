@@ -179,7 +179,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
             </Soap> */}
           </div>
 
-          {dailyCases.length > 0 && (
+          {false && (
             <Chart>
               <div className="head">COVID-19 cases in New Zealand</div>
               <div className="chart-wrap">

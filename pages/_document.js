@@ -37,6 +37,10 @@ export default class MyDocument extends Document {
             name="viewport"
             content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
           />
+          <meta
+            name="description"
+            content="A visual look at the current Covid-19 cases in New Zealand"
+          />
           <link rel="manifest" href="/manifest.json" />
 
           <meta name="apple-mobile-web-app-title" content="Covid-19 Map NZ" />
