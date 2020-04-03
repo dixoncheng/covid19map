@@ -24,6 +24,8 @@ const Map = ({
   // console.log(clusters);
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
+  const [currentZoom, setCurrentZoom] = useState("100");
+
   useEffect(() => {
     mapRef.current.leafletElement.fitBounds(innerBounds);
   }, [mapRef.current]);
@@ -60,6 +62,10 @@ const Map = ({
     onMarkerClick(location);
   };
 
+  const onZoomend = () => {
+    setCurrentZoom(mapRef?.current?.leafletElement?.getZoom());
+  };
+
   return (
     <div>
       <LeafletMap
@@ -76,6 +82,7 @@ const Map = ({
         dragging={true}
         animate={true}
         easeLinearity={0.35}
+        onZoomend={onZoomend}
         // attributionControl={false}
       >
         {/* <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" /> */}
@@ -132,7 +139,7 @@ const Map = ({
           </Marker>
         ))}
       </LeafletMap>
-      <Styles />
+      <Styles currentZoom={currentZoom} />
     </div>
   );
 };
@@ -154,6 +161,8 @@ const StyledPopup = styled.div`
 `;
 
 const Styles = createGlobalStyle`
+  /* ${({ currentZoom }) => console.log(currentZoom)} */
+  
   .leaflet-container {
     height: 50vh;
     width: 100%;
@@ -165,17 +174,37 @@ const Styles = createGlobalStyle`
   }
   .region,
   .cluster {
+    transition: all .2s;
     font-family: "Nunito", sans-serif;
     /* background: white; */
     color: #204e61;
-    
     border-radius: 50%;
-    font-size: 16px;
+    /* font-size: ${({ currentZoom }) => (currentZoom <= 5 ? 12 : 16)}px; */
+    font-size: 12px;
+
+    ${({ currentZoom }) => css`
+      ${currentZoom >= 6 &&
+        css`
+          font-size: 16px;
+        `}
+      ${currentZoom >= 7 &&
+        css`
+          font-size: 18px;
+        `}
+    `};
+
+
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
     /* border: solid #51b6b0 1px; */
+    /* @media (min-width: 700px) {
+      font-size: 16px;
+    } */
+    /* ${({ currentZoom }) => css`
+      ${currentZoom < 6}
+    `} */
   }
   .region {
     text-shadow: -1px -1px 0 white,  
@@ -189,6 +218,5 @@ const Styles = createGlobalStyle`
     background: rgba(255, 201, 6, .4);
     /* border: solid white 1px; */
     border: solid rgba(255, 201, 6, 1) 1px;
-
   }
 `;
