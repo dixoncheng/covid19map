@@ -19,7 +19,7 @@ const Home = ({ data, caseDetails, casesPer1m }) => {
   return (
     <div className="container">
       <Head>
-        <title>Covid-19 Map NZ</title>
+        <title>Covid 19 Map NZ</title>
       </Head>
       <MapView
         data={data}

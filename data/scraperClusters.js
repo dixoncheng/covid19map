@@ -2,6 +2,7 @@ import cheerio from "cheerio";
 import locations from "./regions";
 import processClusters from "./processClusters";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
+import { fixTypos } from "./utils";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-situation/covid-19-current-cases/covid-19-clusters?${new Date()}`;
 const scraperClusters = async () => {
@@ -19,7 +20,7 @@ const scraperClusters = async () => {
         .text()
         .trim();
 
-      const location = $(elem)
+      let location = $(elem)
         .find("td:nth-child(2)")
         .text()
         .trim();
@@ -37,6 +38,8 @@ const scraperClusters = async () => {
           .text()
           .trim()
       );
+
+      location = fixTypos(location);
 
       const latlngItem = locations.find(x => location === x.name);
       if (!latlngItem) {

@@ -35,15 +35,23 @@ const Map = ({
     }
   }, [currentView]);
 
-  const getIcon = (className, totalCases) => {
+  const getRegionIcon = (className, totalCases) => {
+    const iconSize = 24;
+    return L.divIcon({
+      className,
+      iconSize: [iconSize, iconSize],
+      html: `<div class="label"><span class="fg">${totalCases}</span><span class="bg">${totalCases}</span></div>`
+    });
+  };
+
+  const getClusterIcon = (className, totalCases) => {
     const normalise = totalCases / 100;
     const iconSize = 24 + normalise * 40;
     // const iconSize = 28;
     return L.divIcon({
       className,
       iconSize: [iconSize, iconSize],
-      html: `<div style="font-size: ${16 +
-        normalise * 14}px">${totalCases}</div>`
+      html: `<div></div>`
     });
   };
 
@@ -77,7 +85,7 @@ const Map = ({
               <>
                 <Marker
                   position={latlng}
-                  icon={getIcon("region", totalCases)}
+                  icon={getRegionIcon("region", totalCases)}
                   onClick={() => onLocationClick(location)}
                 />
                 <Popup>
@@ -104,13 +112,13 @@ const Map = ({
           <Marker
             key={i}
             position={latlng}
-            icon={getIcon("cluster", totalCases)}
+            icon={getClusterIcon("cluster", totalCases)}
           >
             <Popup>
               <StyledPopup>
                 {clusterItems.map(({ name, totalCases }, i) => (
                   <div className="cluster-desc" key={i}>
-                    <div className="location">{name}</div>
+                    <div className="location">Cluster: {name}</div>
                     <div className="cases">Number of cases: {totalCases}</div>
                   </div>
                 ))}
@@ -153,24 +161,45 @@ const Styles = createGlobalStyle`
   .region,
   .cluster {
     font-family: "Nunito", sans-serif;
-    /* background: #51b6b0; */
-    background: white;
+    /* background: white; */
     color: #204e61;
-    /* text-shadow: 1px 1px 10px white; */
+    
     border-radius: 50%;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid #51b6b0 1px;
+    /* border: solid #51b6b0 1px; */
+  }
+  .region {
+    .label {
+      position: relative;
+    }
+    span {
+      position: absolute;
+    }
+    .fg {
+      z-index: 3;
+      text-shadow: -1px -1px 0 white,  
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
+    }
+    /* .bg {
+      z-index: 1;
+      color: white;
+      text-shadow: 2px 2px 0px white;
+      transform: translate(-1px, -1px);
+    } */
+    
   }
   .cluster {
     > div { font-size: 0 !important; }
     color: #204e61;
-    /* background: #ffc906; */
-    background: rgba(255, 201, 6, .7);
-    border: solid white 1px;
+    background: rgba(255, 201, 6, .4);
+    /* border: solid white 1px; */
+    border: solid rgba(255, 201, 6, 1) 1px;
 
   }
 `;
