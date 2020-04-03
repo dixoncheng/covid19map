@@ -1,6 +1,6 @@
 export const staticData = {
   confirmedCases: 647 + 76 + 49,
-  probableCases: 61 + 13 + 20,
+  probableCases: 61 + 13 + 22,
   recoveredCases: 103,
   inHospital: 13,
   newCases: 71,

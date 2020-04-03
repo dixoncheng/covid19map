@@ -62,7 +62,7 @@ const scraper = async () => {
 
   let rows = [];
   $(".table-style-two")
-    .eq(1)
+    .eq(2)
     .find("tbody tr")
     .each((i, elem) => {
       const location = $(elem)
