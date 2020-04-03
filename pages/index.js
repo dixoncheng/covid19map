@@ -13,6 +13,9 @@ import { staticData } from "../data/static";
 import MapView from "../components/MapView";
 
 const Home = ({ data, caseDetails, casesPer1m }) => {
+  // console.log(data);
+  // console.log(caseDetails);
+
   const router = useRouter();
   const [view, setView] = useState(router.route === "/stats" ? "stats" : "");
 
@@ -38,7 +41,7 @@ export async function getStaticProps(context) {
   const rawCases = await scraperCases();
   const clusters = await scraperClusters();
 
-  const casesPer1m = []; //await getCasesPer1m();
+  const casesPer1m = await getCasesPer1m();
   // const timelines = await getTimelines();
   // console.log(timelines);
 
@@ -54,6 +57,10 @@ export async function getStaticProps(context) {
   // console.log(lastMod.mtime);
   const staticLastUpdated = Date.parse(staticData.lastUpdated);
   // console.log(staticLastUpdated);
+
+  staticData.dailyTotals = staticData.dailyTotals.map((item, i) => {
+    return { days: i, ...item };
+  });
 
   let staticDataCombined = staticData;
   // if MOH date is newer than data/static.js, use MOH summary data

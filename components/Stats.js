@@ -12,7 +12,8 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     // comTrans,
     countriesAffected,
     inHospital,
-    newCases
+    newCases,
+    dailyTotals
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -103,7 +104,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
             </NewCases>
             <Deaths count={deaths}>
               <strong>{deaths}</strong>
-              <span>Deaths</span>
+              <span>{deaths === 1 ? "Death" : "Deaths"}</span>
             </Deaths>
           </div>
         </Row>
@@ -179,13 +180,13 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
             </Soap> */}
           </div>
 
-          {false && (
+          {dailyTotals && (
             <Chart>
               <div className="head">COVID-19 cases in New Zealand</div>
               <div className="chart-wrap">
                 <ResponsiveContainer>
                   <LineChart
-                    data={dailyCases}
+                    data={dailyTotals}
                     margin={{ left: -30, right: 10, bottom: 20 }}
                   >
                     <XAxis
@@ -208,7 +209,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
                     {/* <Legend /> */}
                     <Line
                       type="monotone"
-                      dataKey="cases"
+                      dataKey="total"
                       stroke="#51b6b0"
                       strokeWidth={4}
                       dot={false}
@@ -832,7 +833,7 @@ const Genders = styled.div`
       }
     }
     .female {
-      margin-right: 2em;
+      margin-right: 1em;
       div {
         top: 1.4em;
         left: 1em;
