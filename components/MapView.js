@@ -10,7 +10,7 @@ const Map = dynamic(() => import("./Map"), {
 const center = { lat: -41.0495881, lng: 173.2682669 };
 const zoom = 6;
 const outerBounds = [
-  [-32.90178557, 160.67596054],
+  [-28.00178557, 160.67596054],
   [-48.57478991, 183.27441406]
 ];
 const innerBounds = [
