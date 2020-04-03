@@ -47,7 +47,7 @@ export async function getStaticProps(context) {
 
   // console.log(summary.summaryData);
 
-  const mohAsAtDate = Date.parse(summary.asAt.replace("As at ", ""));
+  const mohAsAtDate = Date.parse(summary.asAtDate.replace("As at ", ""));
   // console.log(mohAsAtDate);
 
   // const lastMod = fs.statSync("data/static.js");

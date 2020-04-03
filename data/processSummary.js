@@ -26,7 +26,8 @@ const processSummary = data => {
   return {
     locations: rows,
     lastUpdated,
-    asAt: asAtDate,
+    asAt,
+    asAtDate,
     summaryData,
     ...others
   };

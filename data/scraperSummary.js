@@ -77,31 +77,39 @@ const scraper = async () => {
           .trim()
       );
 
+      const newCases = parseInt(
+        $(elem)
+          .find("td:nth-child(3)")
+          .text()
+          .trim()
+      );
+
       if (location && location !== "Total" && totalCases > 0) {
         const latlngItem = locations.find(x => location === x.name);
         if (!latlngItem) {
           throw new Error(`No location "${location}" exist`);
         }
 
-        const confirmedCases = parseInt(
-          $(elem)
-            .find("td:nth-child(2)")
-            .text()
-            .trim()
-        );
+        // const confirmedCases = parseInt(
+        //   $(elem)
+        //     .find("td:nth-child(2)")
+        //     .text()
+        //     .trim()
+        // );
 
-        const probableCases = parseInt(
-          $(elem)
-            .find("td:nth-child(3)")
-            .text()
-            .trim()
-        );
+        // const probableCases = parseInt(
+        //   $(elem)
+        //     .find("td:nth-child(3)")
+        //     .text()
+        //     .trim()
+        // );
 
         rows.push({
           location,
-          confirmedCases,
-          probableCases,
+          // confirmedCases,
+          // probableCases,
           totalCases,
+          newCases,
           ...latlngItem
         });
       }

@@ -161,8 +161,6 @@ const StyledPopup = styled.div`
 `;
 
 const Styles = createGlobalStyle`
-  /* ${({ currentZoom }) => console.log(currentZoom)} */
-  
   .leaflet-container {
     height: 50vh;
     width: 100%;

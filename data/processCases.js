@@ -69,18 +69,18 @@ const processCases = rawCases => {
 
         const now = new Date();
 
-        if (!loc.newCases) {
-          loc.newCases = 0;
-        }
+        // if (!loc.newCases) {
+        //   loc.newCases = 0;
+        // }
         now.setHours(0);
         now.setMinutes(0);
         now.setSeconds(0, 0);
         itemDate.setHours(0);
 
-        if (now.getTime() - itemDate.getTime() <= 86400000) {
-          // check if date < 24 hours
-          loc.newCases++;
-        }
+        // if (now.getTime() - itemDate.getTime() <= 86400000) {
+        //   // check if date < 24 hours
+        //   loc.newCases++;
+        // }
 
         if (!loc.numCases) {
           loc.numCases = 0;
