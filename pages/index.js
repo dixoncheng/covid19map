@@ -4,9 +4,11 @@ import { useState } from "react";
 import getCasesPer1m from "../data/casesPer1m.js";
 // import getTimelines from "../data/timelines.js";
 import scraperSummary from "../data/scraperSummary";
-import scraperCases from "../data/scraperCases";
 import processSummary from "../data/processSummary";
+import scraperCases from "../data/scraperCases";
 import processCases from "../data/processCases";
+import scraperClusters from "../data/scraperClusters";
+import processClusters from "../data/processClusters";
 import { staticData } from "../data/static";
 import MapView from "../components/MapView";
 
@@ -17,7 +19,7 @@ const Home = ({ data, caseDetails, casesPer1m }) => {
   return (
     <div className="container">
       <Head>
-        <title>Covid-19 Map NZ</title>
+        <title>Covid 19 Map NZ</title>
       </Head>
       <MapView
         data={data}
@@ -34,6 +36,7 @@ export async function getStaticProps(context) {
 
   const rawSummary = await scraperSummary();
   const rawCases = await scraperCases();
+  const clusters = await scraperClusters();
 
   const casesPer1m = []; //await getCasesPer1m();
   // const timelines = await getTimelines();
@@ -81,7 +84,12 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      data: { ...summary, staticData: staticDataCombined, casesPer1m },
+      data: {
+        ...summary,
+        staticData: staticDataCombined,
+        casesPer1m,
+        clusters
+      },
       caseDetails
     }
   };

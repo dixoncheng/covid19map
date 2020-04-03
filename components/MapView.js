@@ -10,8 +10,8 @@ const Map = dynamic(() => import("./Map"), {
 const center = { lat: -41.0495881, lng: 173.2682669 };
 const zoom = 6;
 const outerBounds = [
-  [-32.90178557, 164.67596054],
-  [-48.57478991, 181.27441406]
+  [-32.90178557, 160.67596054],
+  [-48.57478991, 183.27441406]
 ];
 const innerBounds = [
   [-34.76671725, 166.2361908],
@@ -32,7 +32,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
   const detailsRef = useRef();
   const totalCases = confirmedCases + probableCases;
 
-  const { lastUpdated, locations } = data;
+  const { lastUpdated, locations, clusters } = data;
   const { maxCases } = caseDetails;
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
@@ -59,7 +59,9 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
 
   useEffect(() => {
     if (detailsRef.current) {
-      window.scrollTo(0, detailsRef.current.offsetTop - 20);
+      if (window.scrollY > detailsRef.current.offsetTop) {
+        window.scrollTo(0, detailsRef.current.offsetTop - 20);
+      }
     }
   }, [view]);
 
@@ -70,6 +72,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
           center={center}
           zoom={zoom}
           markers={locations}
+          clusters={clusters}
           currentView={view}
           onMarkerClick={showLocation}
           maxCases={maxCases}

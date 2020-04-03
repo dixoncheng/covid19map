@@ -14,12 +14,14 @@ const Map = ({
   center,
   zoom,
   markers,
+  clusters,
   onMarkerClick,
   currentView,
   maxCases,
   outerBounds,
   innerBounds
 }) => {
+  // console.log(clusters);
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
   useEffect(() => {
@@ -33,15 +35,23 @@ const Map = ({
     }
   }, [currentView]);
 
-  // const normalize = val => (val - 0) / (1.5 - 0);
-
-  const getIcon = totalCases => {
-    // const iconSize = 24 + normalize(totalCases);
-    const iconSize = 28;
+  const getRegionIcon = (className, totalCases) => {
+    const iconSize = 24;
     return L.divIcon({
-      className: "icon",
+      className,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`
+      html: `<div class="label"><span class="fg">${totalCases}</span><span class="bg">${totalCases}</span></div>`
+    });
+  };
+
+  const getClusterIcon = (className, totalCases) => {
+    const normalise = totalCases / 100;
+    const iconSize = 24 + normalise * 40;
+    // const iconSize = 28;
+    return L.divIcon({
+      className,
+      iconSize: [iconSize, iconSize],
+      html: `<div></div>`
     });
   };
 
@@ -59,7 +69,6 @@ const Map = ({
         zoom={zoom}
         maxZoom={8}
         minZoom={4}
-        attributionControl={true}
         zoomControl={true}
         doubleClickZoom={true}
         scrollWheelZoom={true}
@@ -70,14 +79,13 @@ const Map = ({
         onClick={() => onLocationClick("")}
       >
         <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
-
         {markers.map(({ location, latlng, boundary, totalCases }, i) => (
           <FeatureGroup key={i}>
             {totalCases && (
               <>
                 <Marker
                   position={latlng}
-                  icon={getIcon(totalCases)}
+                  icon={getRegionIcon("region", totalCases)}
                   onClick={() => onLocationClick(location)}
                 />
                 <Popup>
@@ -100,6 +108,24 @@ const Map = ({
             />
           </FeatureGroup>
         ))}
+        {clusters.map(({ latlng, totalCases, clusters: clusterItems }, i) => (
+          <Marker
+            key={i}
+            position={latlng}
+            icon={getClusterIcon("cluster", totalCases)}
+          >
+            <Popup>
+              <StyledPopup>
+                {clusterItems.map(({ name, totalCases }, i) => (
+                  <div className="cluster-desc" key={i}>
+                    <div className="location">Cluster: {name}</div>
+                    <div className="cases">Number of cases: {totalCases}</div>
+                  </div>
+                ))}
+              </StyledPopup>
+            </Popup>
+          </Marker>
+        ))}
       </LeafletMap>
       <Styles />
     </div>
@@ -116,6 +142,9 @@ const StyledPopup = styled.div`
       font-size: 16px;
       font-family: ${theme.font};
     }
+    .cluster-desc + .cluster-desc {
+      margin-top: 0.5em;
+    }
   `}
 `;
 
@@ -129,17 +158,48 @@ const Styles = createGlobalStyle`
       height: 100vh;
     }
   }
-  .icon {
-    /* background: #51b6b0; */
-    background: white;
+  .region,
+  .cluster {
+    font-family: "Nunito", sans-serif;
+    /* background: white; */
     color: #204e61;
-    /* text-shadow: 1px 1px 10px white; */
+    
     border-radius: 50%;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid #51b6b0 1px;
+    /* border: solid #51b6b0 1px; */
+  }
+  .region {
+    .label {
+      position: relative;
+    }
+    span {
+      position: absolute;
+    }
+    .fg {
+      z-index: 3;
+      text-shadow: -1px -1px 0 white,  
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
+    }
+    /* .bg {
+      z-index: 1;
+      color: white;
+      text-shadow: 2px 2px 0px white;
+      transform: translate(-1px, -1px);
+    } */
+    
+  }
+  .cluster {
+    > div { font-size: 0 !important; }
+    color: #204e61;
+    background: rgba(255, 201, 6, .4);
+    /* border: solid white 1px; */
+    border: solid rgba(255, 201, 6, 1) 1px;
+
   }
 `;

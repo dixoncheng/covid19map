@@ -114,5 +114,6 @@ const scraperCases = async () => {
 export default scraperCases;
 
 const clean = str => {
+  // remove &nbsp;
   return str.replace(/\u00a0/g, " ");
 };
