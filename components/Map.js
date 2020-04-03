@@ -40,13 +40,13 @@ const Map = ({
     return L.divIcon({
       className,
       iconSize: [iconSize, iconSize],
-      html: `<div class="label"><span class="fg">${totalCases}</span><span class="bg">${totalCases}</span></div>`
+      html: `<div>${totalCases}</div>`
     });
   };
 
   const getClusterIcon = (className, totalCases) => {
     const normalise = totalCases / 100;
-    const iconSize = 24 + normalise * 40;
+    const iconSize = 24 + normalise * 30;
     // const iconSize = 28;
     return L.divIcon({
       className,
@@ -63,22 +63,26 @@ const Map = ({
   return (
     <div>
       <LeafletMap
+        onClick={() => onLocationClick("")}
         ref={mapRef}
         maxBounds={outerBounds}
         center={center}
         zoom={zoom}
         maxZoom={8}
-        minZoom={4}
+        minZoom={5}
         zoomControl={true}
         doubleClickZoom={true}
         scrollWheelZoom={true}
         dragging={true}
         animate={true}
         easeLinearity={0.35}
-        attributionControl={false}
-        onClick={() => onLocationClick("")}
+        // attributionControl={false}
       >
-        <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        {/* <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" /> */}
+        <TileLayer
+          url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        />
         {markers.map(({ location, latlng, boundary, totalCases }, i) => (
           <FeatureGroup key={i}>
             {totalCases && (
@@ -113,6 +117,7 @@ const Map = ({
             key={i}
             position={latlng}
             icon={getClusterIcon("cluster", totalCases)}
+            zIndexOffset={100}
           >
             <Popup>
               <StyledPopup>
@@ -173,26 +178,10 @@ const Styles = createGlobalStyle`
     /* border: solid #51b6b0 1px; */
   }
   .region {
-    .label {
-      position: relative;
-    }
-    span {
-      position: absolute;
-    }
-    .fg {
-      z-index: 3;
-      text-shadow: -1px -1px 0 white,  
-        1px -1px 0 white,
-        -1px 1px 0 white,
-        1px 1px 0 white;
-    }
-    /* .bg {
-      z-index: 1;
-      color: white;
-      text-shadow: 2px 2px 0px white;
-      transform: translate(-1px, -1px);
-    } */
-    
+    text-shadow: -1px -1px 0 white,  
+      1px -1px 0 white,
+      -1px 1px 0 white,
+      1px 1px 0 white;
   }
   .cluster {
     > div { font-size: 0 !important; }
