@@ -59,7 +59,11 @@ export async function getStaticProps(context) {
   // console.log(staticLastUpdated);
 
   staticData.dailyTotals = staticData.dailyTotals.map((item, i) => {
-    return { days: i, ...item };
+    return {
+      days: i,
+      newCases: i > 0 ? item.total - staticData.dailyTotals[i - 1].total : 0,
+      ...item
+    };
   });
 
   let staticDataCombined = staticData;

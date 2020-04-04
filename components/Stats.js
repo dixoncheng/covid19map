@@ -22,14 +22,10 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     countFemale,
     countOther,
     ages: ageData,
-    totalCasesPublished,
-    dailyCases
+    totalCasesPublished
+    // dailyCases
   } = caseDetails;
-  // console.log(caseDetails);
-  // const newCases =
-  //   dailyCases[dailyCases.length - 1].cases -
-  //   dailyCases[dailyCases.length - 2].cases;
-
+  // console.log(dailyTotals);
   const { casesPer1m } = data;
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
@@ -182,7 +178,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
 
           {dailyTotals && (
             <Chart>
-              <div className="head">COVID-19 cases in New Zealand</div>
+              <div className="head">Total cases</div>
               <div className="chart-wrap">
                 <ResponsiveContainer>
                   <LineChart
@@ -215,7 +211,38 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
                       dot={false}
                       // activeDot={{ r: 8 }}
                     />
-                    {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Chart>
+          )}
+        </Row>
+        <Row>
+          {dailyTotals && (
+            <Chart>
+              <div className="head">Daily cases</div>
+              <div className="chart-wrap">
+                <ResponsiveContainer>
+                  <LineChart
+                    data={dailyTotals}
+                    margin={{ left: -30, right: 10, bottom: 20 }}
+                  >
+                    <XAxis
+                      dataKey="days"
+                      label={{
+                        fontSize: 12,
+                        value: "Days since first case detected",
+                        position: "bottom"
+                      }}
+                    />
+                    <YAxis />
+                    <Line
+                      type="monotone"
+                      dataKey="newCases"
+                      stroke="#ffc906"
+                      strokeWidth={4}
+                      dot={false}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -502,7 +529,7 @@ const Total = styled.div`
     h1 {
       white-space: nowrap;
       font-weight: normal;
-      margin: 0 1em 0 0;
+      margin: 0;
       font-size: 3em;
       font-family: ${theme.fontFancy};
       color: ${theme.teal};
