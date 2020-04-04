@@ -79,15 +79,17 @@ export async function getStaticProps(context) {
       staticDataCombined = { ...staticData, ...summary.summaryData };
     }
   }
-
+  // console.log(summary.inHospital);
   summary.locations = summary.locations.map((item, i) => {
-    const loc = caseDetails.cases.find(x => x.name === item.name);
-    if (loc) {
-      // return { ...item, cases: loc.cases, newCases: loc.newCases };
-      return { ...item, ...loc };
-    }
+    const details = caseDetails.cases.find(x => x.name === item.name);
+    const hosp = summary.inHospital.find(x => x.location === item.name);
+    // if (details) {
+    // return { ...item, cases: loc.cases, newCases: loc.newCases };
+    return { ...item, ...details, inHospital: hosp?.totalCases || 0 };
+    // }
   });
   caseDetails.cases = null;
+  summary.inHospital = null;
 
   return {
     props: {

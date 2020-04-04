@@ -60,6 +60,38 @@ const scraper = async () => {
       }
     });
 
+  let hospitalRows = [];
+  $(".table-style-two")
+    .eq(1)
+    .find("tbody tr")
+    .each((i, elem) => {
+      const location = $(elem)
+        .find("td:nth-child(1)")
+        .text()
+        .trim();
+
+      const totalCases = parseInt(
+        $(elem)
+          .find("td:nth-child(2)")
+          .text()
+          .trim()
+      );
+
+      if (location && location !== "Total" && totalCases > 0) {
+        // const latlngItem = locations.find(x => location === x.name);
+        // if (!latlngItem) {
+
+        //   throw new Error(`No location "${location}" exist`);
+        // }
+
+        hospitalRows.push({
+          location,
+          totalCases
+          // ...latlngItem
+        });
+      }
+    });
+
   let rows = [];
   $(".table-style-two")
     .eq(2)
@@ -115,7 +147,7 @@ const scraper = async () => {
       }
     });
 
-  return { rows, lastUpdated, asAt, summaryData };
+  return { rows, hospitalRows, lastUpdated, asAt, summaryData };
 };
 
 export default scraper;

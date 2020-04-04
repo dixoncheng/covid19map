@@ -1,5 +1,31 @@
+import { fixTypos } from "./utils";
+import locations from "./regions";
+
 const processSummary = data => {
-  const { rows, lastUpdated, asAt, summaryData, ...others } = data;
+  const {
+    rows,
+    hospitalRows,
+    lastUpdated,
+    asAt,
+    summaryData,
+    ...others
+  } = data;
+
+  rows.forEach(item => {
+    item.location = fixTypos(item.location);
+    const loc = locations.find(x => item.location === x.name);
+    if (!loc) {
+      throw new Error(`No location "${item.location}" exist`);
+    }
+  });
+
+  hospitalRows.forEach(item => {
+    item.location = fixTypos(item.location);
+    const loc = locations.find(x => item.location === x.name);
+    if (!loc) {
+      throw new Error(`No location "${item.location}" exist`);
+    }
+  });
 
   // sort locations by cases descending
   rows.sort((a, b) => {
@@ -25,6 +51,7 @@ const processSummary = data => {
 
   return {
     locations: rows,
+    inHospital: hospitalRows,
     lastUpdated,
     asAt,
     asAtDate,
