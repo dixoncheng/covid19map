@@ -62,10 +62,10 @@ const scraper = async () => {
 
   let rows = [];
   $(".table-style-two")
-    .eq(2)
+    .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
-      const location = $(elem)
+      let location = $(elem)
         .find("td:nth-child(1)")
         .text()
         .trim();
@@ -85,6 +85,13 @@ const scraper = async () => {
       );
 
       if (location && location !== "Total" && totalCases > 0) {
+        if (location === "Capital & Coast") {
+          location = "Capital and Coast";
+        }
+        if (location === "Tairawhiti") {
+          location = "Tairāwhiti";
+        }
+
         const latlngItem = locations.find(x => location === x.name);
         if (!latlngItem) {
           throw new Error(`No location "${location}" exist`);
