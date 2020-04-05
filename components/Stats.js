@@ -502,7 +502,7 @@ const Total = styled.div`
     h1 {
       white-space: nowrap;
       font-weight: normal;
-      margin: 0 1em 0 0;
+      margin: 0;
       font-size: 3em;
       font-family: ${theme.fontFancy};
       color: ${theme.teal};
