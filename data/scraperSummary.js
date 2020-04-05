@@ -147,7 +147,31 @@ const scraper = async () => {
       }
     });
 
-  return { rows, hospitalRows, lastUpdated, asAt, summaryData };
+  let transmissionRows = [];
+  $(".table-style-two")
+    .eq(3)
+    .find("tbody tr")
+    .each((i, elem) => {
+      const type = $(elem)
+        .find("td:nth-child(1)")
+        .text()
+        .trim();
+      const percent = $(elem)
+        .find("td:nth-child(2)")
+        .text()
+        .trim();
+
+      transmissionRows.push({ type, percent });
+    });
+
+  return {
+    rows,
+    hospitalRows,
+    transmissionRows,
+    lastUpdated,
+    asAt,
+    summaryData
+  };
 };
 
 export default scraper;

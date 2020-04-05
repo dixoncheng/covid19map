@@ -41,7 +41,7 @@ export async function getStaticProps(context) {
   const rawCases = await scraperCases();
   const clusters = await scraperClusters();
 
-  const casesPer1m = await getCasesPer1m();
+  const casesPer1m = []; // await getCasesPer1m();
   // const timelines = await getTimelines();
   // console.log(timelines);
 

@@ -5,6 +5,7 @@ const processSummary = data => {
   const {
     rows,
     hospitalRows,
+    transmissionRows,
     lastUpdated,
     asAt,
     summaryData,
@@ -25,6 +26,10 @@ const processSummary = data => {
     if (!loc) {
       throw new Error(`No location "${item.location}" exist`);
     }
+  });
+
+  const transmissions = transmissionRows.map(item => {
+    return { percent: parseFloat(item.percent), ...item };
   });
 
   // sort locations by cases descending
@@ -52,6 +57,7 @@ const processSummary = data => {
   return {
     locations: rows,
     inHospital: hospitalRows,
+    transmissions,
     lastUpdated,
     asAt,
     asAtDate,

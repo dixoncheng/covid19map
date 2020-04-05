@@ -26,7 +26,9 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     // dailyCases
   } = caseDetails;
   // console.log(dailyTotals);
-  const { casesPer1m } = data;
+  const { casesPer1m, transmissions } = data;
+  console.log(transmissions);
+
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 
   const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
