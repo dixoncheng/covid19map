@@ -66,17 +66,18 @@ export async function getStaticProps(context) {
     };
   });
 
+  // console.log(summary);
   let staticDataCombined = staticData;
   // if MOH date is newer than data/static.js, use MOH summary data
   if (mohAsAtDate > staticLastUpdated) {
     if (
-      isNaN(summary.confirmedCases) ||
-      isNaN(summary.probableCases) ||
-      isNaN(summary.combinedCases) ||
-      isNaN(summary.newCases) ||
-      isNaN(summary.inHospital) ||
-      isNaN(summary.recoveredCases) ||
-      isNaN(summary.deaths)
+      isNaN(summary.summaryData.confirmedCases) ||
+      isNaN(summary.summaryData.probableCases) ||
+      isNaN(summary.summaryData.combinedCases) ||
+      isNaN(summary.summaryData.newCases) ||
+      isNaN(summary.summaryData.inHospital) ||
+      isNaN(summary.summaryData.recoveredCases) ||
+      isNaN(summary.summaryData.deaths)
     ) {
       throw new Error(`Summary data incomplete`);
     } else {

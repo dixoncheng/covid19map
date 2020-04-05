@@ -210,12 +210,12 @@ const Styles = createGlobalStyle`
       }
     }
     .marker {
-      transition: all .2s;
+      transition: all 0.2s;
       font-family: "Nunito", sans-serif;
       color: #204e61;
       border-radius: 50%;
       font-size: 12px;
-      
+
       ${currentZoom >= 6 &&
         css`
           font-size: 16px;
@@ -231,19 +231,31 @@ const Styles = createGlobalStyle`
       align-items: center;
     }
     .region {
-      text-shadow: -1px -1px 0 white,  
-        1px -1px 0 white,
-        -1px 1px 0 white,
+      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
         1px 1px 0 white;
     }
     .cluster {
       color: #204e61;
-      background: rgba(255, 201, 6, .4);
+      background: rgba(255, 201, 6, 0.4);
       border: solid rgba(255, 201, 6, 1) 1px;
     }
     .hospital {
-      background: rgba(170, 205, 110, 1);
-      border: solid rgb(170, 205, 110); 1px;
+      /* background: rgba(170, 205, 110, 1);
+      border: solid rgb(170, 205, 110); 1px; */
+      /* background: white; */
+
+      > div {
+        position: relative;
+        :after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          top: 0.1em;
+          left: 105%;
+          background: url(/icons/hospo.svg) no-repeat;
+        }
+      }
     }
   `}
 `;

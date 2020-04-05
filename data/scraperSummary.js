@@ -1,6 +1,7 @@
 import cheerio from "cheerio";
 import locations from "./regions";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
+import { fixTypos } from "./utils";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
 const scraper = async () => {
@@ -62,10 +63,10 @@ const scraper = async () => {
 
   let hospitalRows = [];
   $(".table-style-two")
-    .eq(1)
+    .eq(2)
     .find("tbody tr")
     .each((i, elem) => {
-      const location = $(elem)
+      let location = $(elem)
         .find("td:nth-child(1)")
         .text()
         .trim();
@@ -76,6 +77,8 @@ const scraper = async () => {
           .text()
           .trim()
       );
+
+      location = fixTypos(location);
 
       if (location && location !== "Total" && totalCases > 0) {
         // const latlngItem = locations.find(x => location === x.name);
@@ -94,10 +97,10 @@ const scraper = async () => {
 
   let rows = [];
   $(".table-style-two")
-    .eq(2)
+    .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
-      const location = $(elem)
+      let location = $(elem)
         .find("td:nth-child(1)")
         .text()
         .trim();
@@ -116,6 +119,7 @@ const scraper = async () => {
           .trim()
       );
 
+      location = fixTypos(location);
       if (location && location !== "Total" && totalCases > 0) {
         const latlngItem = locations.find(x => location === x.name);
         if (!latlngItem) {
