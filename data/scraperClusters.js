@@ -40,9 +40,6 @@ const scraperClusters = async () => {
       );
 
       location = fixTypos(location);
-      if (location === "Christchurch") {
-        location = "Canterbury";
-      }
       const latlngItem = locations.find(x => location === x.name);
       if (!latlngItem) {
         throw new Error(`No location "${location}" exist`);

@@ -2481,5 +2481,17 @@
   {
     "name": "Hamilton",
     "latlng": [-37.7879076, 175.2818068]
+  },
+  {
+    "name": "Christchurch",
+    "latlng": [-43.530955, 172.6366455]
+  },
+  {
+    "name": "Tauranga",
+    "latlng": [-37.6859006, 176.167505]
+  },
+  {
+    "name": "Invercargill",
+    "latlng": [-46.4121229, 168.3483269]
   }
 ]

@@ -7,7 +7,7 @@ dateFirstCase.setMinutes(0);
 dateFirstCase.setSeconds(0, 0);
 
 const processCases = rawCases => {
-  let maxCases = 0;
+  // let maxCases = 0;
   let totalCasesPublished = 0;
   let countMale = 0;
   let countFemale = 0;
@@ -91,7 +91,6 @@ const processCases = rawCases => {
           loc.cases = [];
         }
         loc.cases.push(item);
-        maxCases = Math.max(maxCases, loc.numCases);
 
         // get daily cases
         const daysDiff = Math.floor(
@@ -145,13 +144,14 @@ const processCases = rawCases => {
       days: item.days,
       cases: i > 0 ? item.cases + dailyCasesAggregate[i - 1].cases : item.cases
     });
+    // maxCases = Math.max(maxCases, loc.numCases);
   });
 
   return {
     cases: locations,
     // lastUpdated,
     totalCasesPublished,
-    maxCases,
+    // maxCases,
     countMale,
     countFemale,
     countOther,

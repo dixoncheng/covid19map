@@ -1,6 +1,7 @@
 import cheerio from "cheerio";
 import locations from "./regions";
 const fetch = require("@zeit/fetch-retry")(require("node-fetch"));
+import { fixTypos } from "./utils";
 
 const URL = `https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases?${new Date()}`;
 const scraper = async () => {
@@ -60,6 +61,40 @@ const scraper = async () => {
       }
     });
 
+  let hospitalRows = [];
+  $(".table-style-two")
+    .eq(2)
+    .find("tbody tr")
+    .each((i, elem) => {
+      let location = $(elem)
+        .find("td:nth-child(1)")
+        .text()
+        .trim();
+
+      const totalCases = parseInt(
+        $(elem)
+          .find("td:nth-child(2)")
+          .text()
+          .trim()
+      );
+
+      location = fixTypos(location);
+
+      if (location && location !== "Total" && totalCases > 0) {
+        // const latlngItem = locations.find(x => location === x.name);
+        // if (!latlngItem) {
+
+        //   throw new Error(`No location "${location}" exist`);
+        // }
+
+        hospitalRows.push({
+          location,
+          totalCases
+          // ...latlngItem
+        });
+      }
+    });
+
   let rows = [];
   $(".table-style-two")
     .eq(1)
@@ -84,14 +119,8 @@ const scraper = async () => {
           .trim()
       );
 
+      location = fixTypos(location);
       if (location && location !== "Total" && totalCases > 0) {
-        if (location === "Capital & Coast") {
-          location = "Capital and Coast";
-        }
-        if (location === "Tairawhiti") {
-          location = "Tairāwhiti";
-        }
-
         const latlngItem = locations.find(x => location === x.name);
         if (!latlngItem) {
           throw new Error(`No location "${location}" exist`);
@@ -122,7 +151,31 @@ const scraper = async () => {
       }
     });
 
-  return { rows, lastUpdated, asAt, summaryData };
+  let transmissionRows = [];
+  $(".table-style-two")
+    .eq(3)
+    .find("tbody tr")
+    .each((i, elem) => {
+      const type = $(elem)
+        .find("td:nth-child(1)")
+        .text()
+        .trim();
+      const percent = $(elem)
+        .find("td:nth-child(2)")
+        .text()
+        .trim();
+
+      transmissionRows.push({ type, percent });
+    });
+
+  return {
+    rows,
+    hospitalRows,
+    transmissionRows,
+    lastUpdated,
+    asAt,
+    summaryData
+  };
 };
 
 export default scraper;

@@ -5,7 +5,7 @@ import {
   Popup,
   TileLayer,
   Polygon,
-  FeatureGroup
+  FeatureGroup,
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
@@ -19,7 +19,7 @@ const Map = ({
   currentView,
   maxCases,
   outerBounds,
-  innerBounds
+  innerBounds,
 }) => {
   // console.log(clusters);
   const mapRef = useRef();
@@ -40,9 +40,9 @@ const Map = ({
   const getRegionIcon = (className, totalCases) => {
     const iconSize = 24;
     return L.divIcon({
-      className,
+      className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`
+      html: `<div>${totalCases}</div>`,
     });
   };
 
@@ -51,13 +51,13 @@ const Map = ({
     const iconSize = 24 + normalise * 30;
     // const iconSize = 28;
     return L.divIcon({
-      className,
+      className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div></div>`
+      html: `<div></div>`,
     });
   };
 
-  const onLocationClick = location => {
+  const onLocationClick = (location) => {
     setCurrentLocation(location);
     onMarkerClick(location);
   };
@@ -67,7 +67,15 @@ const Map = ({
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <MapLegend>
+        <div>
+          <span className="map-cluster" /> Clusters
+        </div>
+        <div>
+          <span className="map-hosp" /> Region with cases in hospital
+        </div>
+      </MapLegend>
       <LeafletMap
         onClick={() => onLocationClick("")}
         ref={mapRef}
@@ -90,41 +98,52 @@ const Map = ({
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {markers.map(({ location, latlng, boundary, totalCases }, i) => (
-          <FeatureGroup key={i}>
-            {totalCases && (
-              <>
-                <Marker
-                  position={latlng}
-                  icon={getRegionIcon("region", totalCases)}
-                  onClick={() => onLocationClick(location)}
-                />
-                <Popup>
-                  <StyledPopup>
-                    <div className="location">{location}</div>
-                    <div className="cases">Number of cases: {totalCases}</div>
-                  </StyledPopup>
-                </Popup>
-              </>
-            )}
-            <Polygon
-              color={currentLocation === location ? "white" : "black"}
-              opacity={currentLocation === location ? 1 : 0.2}
-              weight={currentLocation === location ? 3 : 1}
-              fillColor="#51b6b0"
-              fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
-              positions={boundary[0]}
-              // smoothFactor={10}
-              onClick={() => onLocationClick(location)}
-            />
-          </FeatureGroup>
-        ))}
+        {markers.map(
+          ({ location, latlng, boundary, totalCases, inHospital }, i) => (
+            <FeatureGroup key={i}>
+              {totalCases && (
+                <>
+                  <Marker
+                    position={latlng}
+                    icon={getRegionIcon(
+                      `region ${inHospital > 0 ? "hospital" : ""}`,
+                      totalCases
+                    )}
+                    zIndexOffset={100}
+                    onClick={() => onLocationClick(location)}
+                  />
+                  <Popup>
+                    <StyledPopup>
+                      <div className="location">{location}</div>
+                      <div className="cases">Number of cases: {totalCases}</div>
+                      {inHospital > 0 && (
+                        <div className="cases">
+                          Number of cases in hospital: {inHospital}
+                        </div>
+                      )}
+                    </StyledPopup>
+                  </Popup>
+                </>
+              )}
+              <Polygon
+                color={currentLocation === location ? "white" : "black"}
+                opacity={currentLocation === location ? 1 : 0.2}
+                weight={currentLocation === location ? 3 : 1}
+                fillColor="#51b6b0"
+                fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
+                positions={boundary[0]}
+                // smoothFactor={10}
+                onClick={() => onLocationClick(location)}
+              />
+            </FeatureGroup>
+          )
+        )}
         {clusters.map(({ latlng, totalCases, clusters: clusterItems }, i) => (
           <Marker
             key={i}
             position={latlng}
             icon={getClusterIcon("cluster", totalCases)}
-            zIndexOffset={100}
+            // zIndexOffset={100}
           >
             <Popup>
               <StyledPopup>
@@ -138,6 +157,28 @@ const Map = ({
             </Popup>
           </Marker>
         ))}
+
+        {/* {markers
+          .filter(loc => {
+            return loc.inHospital > 0;
+          })
+          .map(({ location, latlng, inHospital }, i) => (
+            <Marker
+              key={i}
+              position={latlng}
+              icon={getClusterIcon("hospital", inHospital)}
+              zIndexOffset={100}
+            >
+              <Popup>
+                <StyledPopup>
+                  <div className="location">{location}</div>
+                  <div className="cases">
+                    Number of cases in hospital: {inHospital}
+                  </div>
+                </StyledPopup>
+              </Popup>
+            </Marker>
+          ))} */}
       </LeafletMap>
       <Styles currentZoom={currentZoom} />
     </div>
@@ -160,61 +201,109 @@ const StyledPopup = styled.div`
   `}
 `;
 
+// ${({ currentZoom }) => {
+//       // console.log(currentZoom);
+// }
+// }
+
 const Styles = createGlobalStyle`
-  .leaflet-container {
-    height: 50vh;
-    width: 100%;
-  }
-  @media (min-width: 700px) {
+  ${({ theme, currentZoom }) => css`
     .leaflet-container {
-      height: 100vh;
+      height: 50vh;
+      width: 100%;
     }
-  }
-  .region,
-  .cluster {
-    transition: all .2s;
-    font-family: "Nunito", sans-serif;
-    /* background: white; */
-    color: #204e61;
-    border-radius: 50%;
-    /* font-size: ${({ currentZoom }) => (currentZoom <= 5 ? 12 : 16)}px; */
-    font-size: 12px;
+    @media (min-width: 700px) {
+      .leaflet-container {
+        height: 100vh;
+      }
+    }
+    .marker {
+      transition: all 0.2s;
+      font-family: "Nunito", sans-serif;
+      color: #204e61;
+      border-radius: 50%;
+      font-size: 12px;
 
-    ${({ currentZoom }) => css`
       ${currentZoom >= 6 &&
-        css`
-          font-size: 16px;
-        `}
+      css`
+        font-size: 16px;
+      `}
       ${currentZoom >= 7 &&
-        css`
-          font-size: 18px;
-        `}
-    `};
+      css`
+        font-size: 18px;
+      `}
 
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .region {
+      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
+        1px 1px 0 white;
+    }
+    .cluster {
+      color: #204e61;
+      background: rgba(255, 201, 6, 0.4);
+      border: solid rgba(255, 201, 6, 1) 1px;
+    }
+    .hospital {
+      /* background: rgba(170, 205, 110, 1);
+      border: solid rgb(170, 205, 110); 1px; */
+      /* background: white; */
 
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* border: solid #51b6b0 1px; */
-    /* @media (min-width: 700px) {
-      font-size: 16px;
-    } */
-    /* ${({ currentZoom }) => css`
-      ${currentZoom < 6}
-    `} */
-  }
-  .region {
-    text-shadow: -1px -1px 0 white,  
-      1px -1px 0 white,
-      -1px 1px 0 white,
-      1px 1px 0 white;
-  }
-  .cluster {
-    > div { font-size: 0 !important; }
-    color: #204e61;
-    background: rgba(255, 201, 6, .4);
-    /* border: solid white 1px; */
-    border: solid rgba(255, 201, 6, 1) 1px;
-  }
+      > div {
+        position: relative;
+        :after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          top: 0.1em;
+          left: 105%;
+          background: url(/icons/hospo.svg) no-repeat;
+        }
+      }
+    }
+  `}
+`;
+
+const MapLegend = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    bottom: 26px;
+    right: 10px;
+    background: white;
+    border-radius: 5px;
+    z-index: 999;
+    padding: 10px;
+    font-size: 12px;
+    .map-cluster,
+    .map-hosp {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      margin-right: 2px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+    .map-cluster {
+      background: ${theme.yellow};
+      border-radius: 50%;
+    }
+    .map-hosp {
+      background: url(/icons/hospo.svg) no-repeat;
+      background-size: contain;
+    }
+    @media (min-width: ${theme.sm}) {
+      font-size: 14px;
+      bottom: 36px;
+      right: 20px;
+
+      .map-cluster,
+      .map-hosp {
+      }
+    }
+  `}
 `;

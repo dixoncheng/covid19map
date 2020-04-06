@@ -30,8 +30,8 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
   const detailsRef = useRef();
   const totalCases = confirmedCases + probableCases;
 
-  const { lastUpdated, locations, clusters, asAt } = data;
-  const { maxCases } = caseDetails;
+  const { lastUpdated, locations, clusters, asAt, maxCases } = data;
+  // const { maxCases } = caseDetails;
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);

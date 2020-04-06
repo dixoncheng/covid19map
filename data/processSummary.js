@@ -1,5 +1,39 @@
+import { fixTypos } from "./utils";
+import locations from "./regions";
+
 const processSummary = data => {
-  const { rows, lastUpdated, asAt, summaryData, ...others } = data;
+  const {
+    rows,
+    hospitalRows,
+    transmissionRows,
+    lastUpdated,
+    asAt,
+    summaryData,
+    ...others
+  } = data;
+
+  let maxCases = 0;
+  rows.forEach(item => {
+    item.location = fixTypos(item.location);
+    const loc = locations.find(x => item.location === x.name);
+    if (!loc) {
+      throw new Error(`No location "${item.location}" exist`);
+    }
+    maxCases = Math.max(maxCases, item.totalCases);
+  });
+
+  hospitalRows.forEach(item => {
+    item.location = fixTypos(item.location);
+    const loc = locations.find(x => item.location === x.name);
+    if (!loc) {
+      throw new Error(`No location "${item.location}" exist`);
+    }
+  });
+
+  const transmissions = transmissionRows.map(item => {
+    // return { ...item, percent: item.percent.replace("%", "") };
+    return { ...item, percent: parseFloat(item.percent) };
+  });
 
   // sort locations by cases descending
   rows.sort((a, b) => {
@@ -25,10 +59,13 @@ const processSummary = data => {
 
   return {
     locations: rows,
+    inHospital: hospitalRows,
+    transmissions,
     lastUpdated,
     asAt,
     asAtDate,
     summaryData,
+    maxCases,
     ...others
   };
 };

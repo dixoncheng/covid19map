@@ -41,7 +41,7 @@ export async function getStaticProps(context) {
   const rawCases = await scraperCases();
   const clusters = await scraperClusters();
 
-  const casesPer1m = await getCasesPer1m();
+  const casesPer1m = []; // await getCasesPer1m();
   // const timelines = await getTimelines();
   // console.log(timelines);
 
@@ -59,35 +59,42 @@ export async function getStaticProps(context) {
   // console.log(staticLastUpdated);
 
   staticData.dailyTotals = staticData.dailyTotals.map((item, i) => {
-    return { days: i, ...item };
+    return {
+      days: i,
+      newCases: i > 0 ? item.total - staticData.dailyTotals[i - 1].total : 0,
+      ...item
+    };
   });
 
+  // console.log(summary);
   let staticDataCombined = staticData;
   // if MOH date is newer than data/static.js, use MOH summary data
   if (mohAsAtDate > staticLastUpdated) {
     if (
-      isNaN(summary.confirmedCases) ||
-      isNaN(summary.probableCases) ||
-      isNaN(summary.combinedCases) ||
-      isNaN(summary.newCases) ||
-      isNaN(summary.inHospital) ||
-      isNaN(summary.recoveredCases) ||
-      isNaN(summary.deaths)
+      isNaN(summary.summaryData.confirmedCases) ||
+      isNaN(summary.summaryData.probableCases) ||
+      isNaN(summary.summaryData.combinedCases) ||
+      isNaN(summary.summaryData.newCases) ||
+      isNaN(summary.summaryData.inHospital) ||
+      isNaN(summary.summaryData.recoveredCases) ||
+      isNaN(summary.summaryData.deaths)
     ) {
       throw new Error(`Summary data incomplete`);
     } else {
       staticDataCombined = { ...staticData, ...summary.summaryData };
     }
   }
-
+  // console.log(summary.inHospital);
   summary.locations = summary.locations.map((item, i) => {
-    const loc = caseDetails.cases.find(x => x.name === item.name);
-    if (loc) {
-      // return { ...item, cases: loc.cases, newCases: loc.newCases };
-      return { ...item, ...loc };
-    }
+    const details = caseDetails.cases.find(x => x.name === item.name);
+    const hosp = summary.inHospital.find(x => x.location === item.name);
+    // if (details) {
+    // return { ...item, cases: loc.cases, newCases: loc.newCases };
+    return { ...item, ...details, inHospital: hosp?.totalCases || 0 };
+    // }
   });
   caseDetails.cases = null;
+  summary.inHospital = null;
 
   return {
     props: {
