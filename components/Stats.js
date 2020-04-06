@@ -1,6 +1,7 @@
 // import { useState } from "react";
 import styled, { css } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import PieChart from "./PieChart";
 
 const Stats = ({ data, caseDetails, onViewChange, children }) => {
   const {
@@ -13,7 +14,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     countriesAffected,
     inHospital,
     newCases,
-    dailyTotals
+    dailyTotals,
   } = data.staticData;
   const totalCases = confirmedCases + probableCases;
 
@@ -22,7 +23,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
     countFemale,
     countOther,
     ages: ageData,
-    totalCasesPublished
+    totalCasesPublished,
     // dailyCases
   } = caseDetails;
   // console.log(dailyTotals);
@@ -40,6 +41,9 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
   return (
     <div className="container">
       <Infographic>
+        {/* <Row>
+          {transmissions.length > 0 && <PieChart data={transmissions} />}
+        </Row> */}
         {/* <Header>
           <button type="button" className="view-map" onClick={onViewChange}>
             <img src="/infographic/backtomap.svg" />
@@ -192,7 +196,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
                       label={{
                         fontSize: 12,
                         value: "Days since first case detected",
-                        position: "bottom"
+                        position: "bottom",
                       }}
                     />
                     <YAxis
@@ -234,7 +238,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
                       label={{
                         fontSize: 12,
                         value: "Days since first case detected",
-                        position: "bottom"
+                        position: "bottom",
                       }}
                     />
                     <YAxis />
@@ -251,6 +255,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
             </Chart>
           )}
         </Row>
+        xxx
         <Row>{children}</Row>
         <Row>
           <Ages>
@@ -369,23 +374,27 @@ const Infographic = styled.div`
   font-size: .45em;
 }
 
-    ${props.wide &&
+    ${
+      props.wide &&
       css`
         @media (min-width: ${theme.sm}) {
           font-size: 1vw;
         }
-      `}
+      `
+    }
 
     /* .sub-row {
       display: flex;
       margin-top: 2em;
       margin-bottom: 2em;
-      ${props.wide &&
+      ${
+        props.wide &&
         css`
           @media (min-width: ${theme.sm}) {
             margin-bottom: 0;
           }
-        `}
+        `
+      }
     }
     .flex-1 {
       flex: 1;
@@ -400,23 +409,27 @@ const Infographic = styled.div`
       /* grid-template-rows: 1fr 1fr; */
       grid-gap: 0em 2em;
       margin: 2em 0;
-      ${props.wide &&
+      ${
+        props.wide &&
         css`
           @media (min-width: ${theme.sm}) {
             margin: 0;
             grid-gap: 0;
           }
-        `}
+        `
+      }
     }
 
     .date-mobile {
       margin-left: 2.5em;
-      ${props.wide &&
+      ${
+        props.wide &&
         css`
           @media (min-width: ${theme.sm}) {
             display: none;
           }
-        `}
+        `
+      }
     }
 
   `}
@@ -447,12 +460,14 @@ const Header = styled.div`
       display: inline-flex;
       align-items: center;
       font-size: 2em;
-      ${props.wide &&
+      ${
+        props.wide &&
         css`
           @media (min-width: ${theme.sm}) {
             font-size: 1.5em;
           }
-        `}
+        `
+      }
       
       img {
         width: 1.1em;
@@ -466,12 +481,14 @@ const Header = styled.div`
       width: 30em;
       text-align: right;
       margin-left: 20em;
-      ${props.wide &&
+      ${
+        props.wide &&
         css`
           @media (min-width: ${theme.sm}) {
             display: block;
           }
-        `}
+        `
+      }
     }
   `}
 `;
@@ -486,29 +503,29 @@ const Row = styled.div`
       margin-bottom: 0.7em;
     }
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          display: flex;
-          padding: 0 2.5em;
-          > div {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
+    css`
+      @media (min-width: ${theme.sm}) {
+        display: flex;
+        padding: 0 2.5em;
+        > div {
+          margin-top: 0;
+          margin-bottom: 0;
         }
-      `}
+      }
+    `}
     .flex-mobile {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
       ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: space-between;
-          }
-        `}
+      css`
+        @media (min-width: ${theme.sm}) {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: space-between;
+        }
+      `}
     }
   `}
 `;
@@ -521,13 +538,13 @@ const Total = styled.div`
     font-size: 0.99em;
     /* padding-top: 14em; */
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          padding-top: 0;
-          margin-right: 16em;
-          font-size: 1.45em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        padding-top: 0;
+        margin-right: 16em;
+        font-size: 1.45em;
+      }
+    `}
     h1 {
       white-space: nowrap;
       font-weight: normal;
@@ -547,9 +564,9 @@ const TotalNumber = styled.div`
     color: ${theme.green};
     font-size: 5.3em;
     ${num > 999 &&
-      css`
-        font-size: 4.5em;
-      `}
+    css`
+      font-size: 4.5em;
+    `}
 
     span {
       background: white;
@@ -561,11 +578,11 @@ const TotalNumber = styled.div`
       line-height: 1;
     }
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          font-size: 6em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        font-size: 6em;
+      }
+    `}
   `}
 `;
 
@@ -578,12 +595,12 @@ const Alert = styled.div`
     right: 5em;
     font-size: 0.6em;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          font-size: 1em;
-          right: 2.5em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        font-size: 1em;
+        right: 2.5em;
+      }
+    `}
 
     .head {
       height: 3em;
@@ -656,11 +673,11 @@ const Recovered = styled.div`
     justify-content: space-between;
     padding: 0.5em 1em;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          margin: 0 0 0 1em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        margin: 0 0 0 1em;
+      }
+    `}
     > div:first-child {
       border-right: solid ${theme.dark} 0.1em;
       padding-right: 0.6em;
@@ -708,7 +725,7 @@ const People = ({ percent }) => {
           <Person key={i} fill={fill}>
             <div
               dangerouslySetInnerHTML={{
-                __html: require(`../public/infographic/person.svg?include`)
+                __html: require(`../public/infographic/person.svg?include`),
               }}
             />
           </Person>
@@ -798,11 +815,11 @@ const Transmissions = styled.div`
     line-height: 1.1;
     position: relative;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          margin-top: 2em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        margin-top: 2em;
+      }
+    `}
     strong {
       display: block;
       font-size: 3em;
@@ -822,12 +839,12 @@ const Genders = styled.div`
   ${({ theme, ...props }) => css`
     color: ${theme.dark};
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          /* font-size: 6em; */
-          margin: 0 3.5em 1.2em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        /* font-size: 6em; */
+        margin: 0 3.5em 1.2em;
+      }
+    `}
     .head {
       white-space: nowrap;
       font-family: ${theme.fontFancy};
@@ -924,11 +941,11 @@ const Chart = styled.div`
     .chart-wrap {
       height: 25em;
       ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            width: 40em;
-          }
-        `}
+      css`
+        @media (min-width: ${theme.sm}) {
+          width: 40em;
+        }
+      `}
     }
   `}
 `;
@@ -949,12 +966,12 @@ const Ages = styled.div`
       flex-direction: column;
       height: 40em;
       ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            flex-direction: row;
-            height: auto;
-          }
-        `}
+      css`
+        @media (min-width: ${theme.sm}) {
+          flex-direction: row;
+          height: auto;
+        }
+      `}
     }
     .foot {
       display: none;
@@ -963,11 +980,11 @@ const Ages = styled.div`
       font-size: 1.6em;
       color: ${theme.dark};
       ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            display: block;
-          }
-        `}
+      css`
+        @media (min-width: ${theme.sm}) {
+          display: block;
+        }
+      `}
       strong {
         display: block;
         color: ${theme.green};
@@ -991,14 +1008,14 @@ const Age = styled.div`
     min-height: 1.5em;
     min-width: 2.6em;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          font-size: 1.2em;
-          width: ${percent}%;
-          height: 9em;
-          flex-direction: column;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        font-size: 1.2em;
+        width: ${percent}%;
+        height: 9em;
+        flex-direction: column;
+      }
+    `}
     strong {
       font-weight: normal;
       opacity: 0.9;
@@ -1007,11 +1024,11 @@ const Age = styled.div`
         content: " - ";
         margin-left: 0.4em;
         ${props.wide &&
-          css`
-            @media (min-width: ${theme.sm}) {
-              display: none;
-            }
-          `}
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: none;
+          }
+        `}
       }
     }
     :nth-child(1) {
@@ -1053,11 +1070,11 @@ const Globe = styled.div`
 
     font-size: 1.3em;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          font-size: 1em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        font-size: 1em;
+      }
+    `}
 
     .globe {
       position: relative;
@@ -1073,11 +1090,11 @@ const Globe = styled.div`
       left: -2.5em;
       display: none;
       ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            display: block;
-          }
-        `}
+      css`
+        @media (min-width: ${theme.sm}) {
+          display: block;
+        }
+      `}
     }
     .text {
       position: absolute;
@@ -1137,14 +1154,16 @@ const Clipboard = styled.div`
   ${({ theme, ...props }) => css`
     margin: 3em auto 3em !important;
     line-height: 1.1;
-    ${props.wide &&
+    ${
+      props.wide &&
       css`
         @media (min-width: ${theme.sm}) {
           width: 30em;
           margin: 0 !important;
           width: 20em;
         }
-      `}
+      `
+    }
     > div {
       background: #a6e5e3;
       border-radius: 0.5em;
@@ -1172,12 +1191,14 @@ const Clipboard = styled.div`
       margin-bottom: 0.6em;
       br {
         display: none;
-        ${props.wide &&
+        ${
+          props.wide &&
           css`
             @media (min-width: ${theme.sm}) {
               display: block;
             }
-          `}
+          `
+        }
       }
     }
     .location {
@@ -1208,11 +1229,11 @@ const Footer = styled.div`
     padding: 2em 31em 3em 2.5em;
     line-height: 1.5;
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          padding-right: 2.5em;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        padding-right: 2.5em;
+      }
+    `}
     .head {
       font-size: 1.5em;
       color: ${theme.green};
@@ -1300,11 +1321,11 @@ const Logo = styled.div`
     padding: 1em 2.5em 0.5em;
 
     ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          display: none;
-        }
-      `}
+    css`
+      @media (min-width: ${theme.sm}) {
+        display: none;
+      }
+    `}
 
     img {
       width: 6em;

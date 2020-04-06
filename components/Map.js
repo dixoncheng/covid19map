@@ -5,7 +5,7 @@ import {
   Popup,
   TileLayer,
   Polygon,
-  FeatureGroup
+  FeatureGroup,
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
@@ -19,7 +19,7 @@ const Map = ({
   currentView,
   maxCases,
   outerBounds,
-  innerBounds
+  innerBounds,
 }) => {
   // console.log(clusters);
   const mapRef = useRef();
@@ -42,7 +42,7 @@ const Map = ({
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`
+      html: `<div>${totalCases}</div>`,
     });
   };
 
@@ -53,11 +53,11 @@ const Map = ({
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div></div>`
+      html: `<div></div>`,
     });
   };
 
-  const onLocationClick = location => {
+  const onLocationClick = (location) => {
     setCurrentLocation(location);
     onMarkerClick(location);
   };
@@ -67,7 +67,16 @@ const Map = ({
   };
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <MapLegend>
+        <div className="head">Map key</div>
+        <div>
+          <span className="map-cluster" /> Clusters
+        </div>
+        <div>
+          <span className="map-hosp" /> Region with cases in hospital
+        </div>
+      </MapLegend>
       <LeafletMap
         onClick={() => onLocationClick("")}
         ref={mapRef}
@@ -217,13 +226,13 @@ const Styles = createGlobalStyle`
       font-size: 12px;
 
       ${currentZoom >= 6 &&
-        css`
-          font-size: 16px;
-        `}
+      css`
+        font-size: 16px;
+      `}
       ${currentZoom >= 7 &&
-        css`
-          font-size: 18px;
-        `}
+      css`
+        font-size: 18px;
+      `}
 
       font-weight: bold;
       display: flex;
@@ -258,4 +267,15 @@ const Styles = createGlobalStyle`
       }
     }
   `}
+`;
+
+const MapLegend = styled.div`
+  position: absolute;
+  bottom: 26px;
+  right: 10px;
+  background: white;
+  border-radius: 5px;
+  z-index: 999;
+  padding: 10px;
+  font-size: 12px;
 `;

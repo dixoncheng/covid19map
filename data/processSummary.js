@@ -12,12 +12,14 @@ const processSummary = data => {
     ...others
   } = data;
 
+  let maxCases = 0;
   rows.forEach(item => {
     item.location = fixTypos(item.location);
     const loc = locations.find(x => item.location === x.name);
     if (!loc) {
       throw new Error(`No location "${item.location}" exist`);
     }
+    maxCases = Math.max(maxCases, item.totalCases);
   });
 
   hospitalRows.forEach(item => {
@@ -29,7 +31,8 @@ const processSummary = data => {
   });
 
   const transmissions = transmissionRows.map(item => {
-    return { percent: parseFloat(item.percent), ...item };
+    // return { ...item, percent: item.percent.replace("%", "") };
+    return { ...item, percent: parseFloat(item.percent) };
   });
 
   // sort locations by cases descending
@@ -62,6 +65,7 @@ const processSummary = data => {
     asAt,
     asAtDate,
     summaryData,
+    maxCases,
     ...others
   };
 };
