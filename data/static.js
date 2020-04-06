@@ -1,12 +1,12 @@
 export const staticData = {
-  confirmedCases: 647 + 76 + 49 + 52 + 48,
-  probableCases: 61 + 13 + 22 + 30 + 41,
-  recoveredCases: 156,
-  inHospital: 15,
-  newCases: 89,
+  confirmedCases: 647 + 76 + 49 + 52 + 48 + 39,
+  probableCases: 61 + 13 + 22 + 30 + 41 + 28,
+  recoveredCases: 176,
+  inHospital: 13,
+  newCases: 67,
   deaths: 1,
   alertLevel: 4,
-  lastUpdated: "2020-04-05 12:00",
+  lastUpdated: "2020-04-06 12:00",
   dailyTotals: [
     { total: 1 },
     { total: 1 },
@@ -45,6 +45,7 @@ export const staticData = {
     { total: 797 },
     { total: 868 },
     { total: 950 },
-    { total: 1039 }
-  ]
+    { total: 1039 },
+    { total: 1106 },
+  ],
 };
