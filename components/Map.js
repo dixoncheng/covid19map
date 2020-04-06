@@ -69,7 +69,6 @@ const Map = ({
   return (
     <div style={{ position: "relative" }}>
       <MapLegend>
-        <div className="head">Map key</div>
         <div>
           <span className="map-cluster" /> Clusters
         </div>
@@ -270,12 +269,41 @@ const Styles = createGlobalStyle`
 `;
 
 const MapLegend = styled.div`
-  position: absolute;
-  bottom: 26px;
-  right: 10px;
-  background: white;
-  border-radius: 5px;
-  z-index: 999;
-  padding: 10px;
-  font-size: 12px;
+  ${({ theme }) => css`
+    position: absolute;
+    bottom: 26px;
+    right: 10px;
+    background: white;
+    border-radius: 5px;
+    z-index: 999;
+    padding: 10px;
+    font-size: 12px;
+    .map-cluster,
+    .map-hosp {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      margin-right: 2px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+    .map-cluster {
+      background: ${theme.yellow};
+      border-radius: 50%;
+    }
+    .map-hosp {
+      background: url(/icons/hospo.svg) no-repeat;
+      background-size: contain;
+    }
+    @media (min-width: ${theme.sm}) {
+      font-size: 14px;
+      bottom: 36px;
+      right: 20px;
+
+      .map-cluster,
+      .map-hosp {
+      }
+    }
+  `}
 `;

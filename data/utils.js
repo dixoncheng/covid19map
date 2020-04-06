@@ -27,5 +27,18 @@ export function fixTypos(location) {
   if (location === "Tairawhiti") {
     return "Tairāwhiti";
   }
+  if (location === "Capital & Coast (Wellington)") {
+    return "Capital and Coast";
+  }
+  if (location === "Counties Manukau (Middlemore)") {
+    return "Counties Manukau";
+  }
+  if (location === "Southern (Invercargill)") {
+    return "Southern";
+  }
+  if (location === "Bay of Plenty (Tauranga)") {
+    return "Bay of Plenty";
+  }
+
   return location;
 }

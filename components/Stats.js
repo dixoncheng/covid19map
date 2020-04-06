@@ -255,7 +255,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
             </Chart>
           )}
         </Row>
-        xxx
+
         <Row>{children}</Row>
         <Row>
           <Ages>
