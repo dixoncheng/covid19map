@@ -28,7 +28,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
   } = caseDetails;
   // console.log(dailyTotals);
   const { casesPer1m, transmissions } = data;
-  console.log(transmissions);
+  // console.log(transmissions);
 
   const recoveryRate = Math.round((recoveredCases / totalCases) * 100);
 

@@ -6,7 +6,7 @@ dateFirstCase.setHours(0);
 dateFirstCase.setMinutes(0);
 dateFirstCase.setSeconds(0, 0);
 
-const processCases = rawCases => {
+const processCases = (rawCases) => {
   // let maxCases = 0;
   let totalCasesPublished = 0;
   let countMale = 0;
@@ -14,12 +14,13 @@ const processCases = rawCases => {
   let countOther = 0;
   let ages = [];
   let dailyCases = [];
+  // let maxDaysDiff = 0;
 
-  rawCases.forEach(item => {
+  rawCases.forEach((item) => {
     if (item.location) {
       item.location = fixTypos(item.location);
 
-      const loc = locations.find(x => item.location === x.name);
+      const loc = locations.find((x) => item.location === x.name);
       if (loc) {
         totalCasesPublished++;
 
@@ -47,7 +48,7 @@ const processCases = rawCases => {
           sortKey = parseInt(item.age);
         }
 
-        const a = ages.find(x => item.age === x.title);
+        const a = ages.find((x) => item.age === x.title);
         if (a) {
           a.numCases++;
         } else {
@@ -55,7 +56,7 @@ const processCases = rawCases => {
             ages.push({
               title: item.age,
               numCases: 1,
-              sortKey
+              sortKey,
             });
           }
         }
@@ -96,15 +97,27 @@ const processCases = rawCases => {
         const daysDiff = Math.floor(
           (itemDate - dateFirstCase) / (1000 * 60 * 60 * 24)
         );
+        // maxDaysDiff = Math.max(maxDaysDiff, daysDiff);
 
         // ignore today because MOH may not have updated the page
-        if (itemDate.getTime() < now.getTime()) {
-          const day = dailyCases.find(x => x.days === daysDiff);
-          if (day) {
-            day.cases++;
-          } else {
-            dailyCases.push({ days: daysDiff, cases: 1 });
-          }
+        // if (itemDate.getTime() < now.getTime()) {
+        //   const day = dailyCases.find(x => x.days === daysDiff);
+        //   if (day) {
+        //     day.cases++;
+        //   } else {
+        //     dailyCases.push({ days: daysDiff, cases: 1 });
+        //   }
+        // }
+
+        // get daily cases per region
+        if (!loc.dailyCases) {
+          loc.dailyCases = [];
+        }
+        const day = loc.dailyCases.find((x) => x.days === itemDate.getTime());
+        if (day) {
+          day.cases++;
+        } else {
+          loc.dailyCases.push({ days: itemDate.getTime(), cases: 1 });
         }
       } else {
         if (item.loc !== "TBC") {
@@ -126,6 +139,14 @@ const processCases = rawCases => {
     return a.numCases > b.numCases ? -1 : 1;
   });
 
+  locations.forEach((item) => {
+    if (item.dailyCases) {
+      item.dailyCases.sort((a, b) => {
+        return a.days < b.days ? -1 : 1;
+      });
+    }
+  });
+
   dailyCases.sort((a, b) => {
     return a.days < b.days ? -1 : 1;
   });
@@ -142,7 +163,7 @@ const processCases = rawCases => {
   dailyCases.forEach((item, i) => {
     dailyCasesAggregate.push({
       days: item.days,
-      cases: i > 0 ? item.cases + dailyCasesAggregate[i - 1].cases : item.cases
+      cases: i > 0 ? item.cases + dailyCasesAggregate[i - 1].cases : item.cases,
     });
     // maxCases = Math.max(maxCases, loc.numCases);
   });
@@ -156,12 +177,12 @@ const processCases = rawCases => {
     countFemale,
     countOther,
     ages,
-    dailyCases: dailyCasesAggregate
+    dailyCases: dailyCasesAggregate,
   };
 };
 export default processCases;
 
-const normalizeGenders = gender => {
+const normalizeGenders = (gender) => {
   // normalize genders
   if (gender === "M") {
     return "Male";
@@ -175,7 +196,7 @@ const normalizeGenders = gender => {
   return gender;
 };
 
-const normalizeAges = age => {
+const normalizeAges = (age) => {
   // normalize ages
   // const age = parseInt(item.age);
   // if (!isNaN(age)) {

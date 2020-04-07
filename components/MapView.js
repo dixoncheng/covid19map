@@ -2,20 +2,28 @@ import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
 import Stats from "../components/Stats";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
 const Map = dynamic(() => import("./Map"), {
-  ssr: false
+  ssr: false,
 });
 
 const center = { lat: -41.0495881, lng: 173.2682669 };
 const zoom = 6;
 const outerBounds = [
   [-28.00178557, 160.67596054],
-  [-48.57478991, 183.27441406]
+  [-48.57478991, 183.27441406],
 ];
 const innerBounds = [
   [-34.76671725, 166.2361908],
-  [-47.30251579, 177.66849518]
+  [-47.30251579, 177.66849518],
 ];
 
 const MapView = ({ data, caseDetails, onViewChange }) => {
@@ -24,7 +32,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
     probableCases,
     recoveredCases,
     alertLevel,
-    deaths
+    deaths,
   } = data.staticData;
   const infoRef = useRef();
   const detailsRef = useRef();
@@ -36,9 +44,9 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
 
-  const showLocation = location => {
+  const showLocation = (location) => {
     if (location) {
-      const loc = locations.find(x => location === x.name);
+      const loc = locations.find((x) => location === x.name);
       // const l = locations.find(x => location === x.name);
       // if (!loc) {
       //   setLocation({ location, totalCases: l.totalCases });
@@ -217,14 +225,11 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               caseDetails={caseDetails}
               onViewChange={() => setView("")}
             >
-              <SummaryTable cols={2}>
+              {/* <SummaryTable cols={2}>
                 <thead>
                   <tr>
                     <th>Location</th>
                     <th>Case/s</th>
-
-                    {/* <th>Recovered</th>
-                    <th>Deaths</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -235,21 +240,93 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
                         showLocation(item.location);
                       }}
                     >
-                      <td>{item.location}</td>
+                      <td>
+                        <div className="name-wrap">
+                          {item.location}
+                          <InlineChart>
+                            <ResponsiveContainer>
+                              <LineChart
+                                data={item.dailyCases.reverse()}
+                                // margin={{ left: -30, right: 10, bottom: 20 }}
+                              >
+                                <Line
+                                  type="monotone"
+                                  dataKey="cases"
+                                  stroke="#51b6b0"
+                                  strokeWidth={1}
+                                  dot={false}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </InlineChart>
+                        </div>
+                      </td>
                       <td>
                         {item.newCases > 0 && <small>+{item.newCases}</small>}
                         {item.totalCases}
                         <div
                           className="inline-icon"
                           dangerouslySetInnerHTML={{
-                            __html: require(`../public/arrow.svg?include`)
+                            __html: require(`../public/arrow.svg?include`),
                           }}
                         />
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </SummaryTable>
+              </SummaryTable> */}
+
+              <Bar>
+                Location
+                <span>Case/s</span>
+              </Bar>
+
+              {locations.map((item, i) => (
+                <Location
+                  key={i}
+                  onClick={() => {
+                    showLocation(item.location);
+                  }}
+                >
+                  <div className="body">
+                    <div>{item.location}</div>
+                    <div>
+                      {item.newCases > 0 && <small>+{item.newCases}</small>}
+                      {item.totalCases}
+                      <div
+                        className="inline-icon"
+                        dangerouslySetInnerHTML={{
+                          __html: require(`../public/arrow.svg?include`),
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <InlineChart>
+                    <ResponsiveContainer>
+                      <LineChart
+                        data={item.dailyCases}
+                        // margin={{ left: -30, right: 10, bottom: 20 }}
+                      >
+                        <XAxis
+                          dataKey="days"
+                          type="number"
+                          domain={["auto", "auto"]}
+                          hide
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="cases"
+                          stroke="#51b6b0"
+                          strokeWidth={1}
+                          dot={false}
+                        />
+                        <Tooltip />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </InlineChart>
+                </Location>
+              ))}
             </Stats>
 
             <p>
@@ -475,13 +552,13 @@ const SummaryTable = styled.table`
         padding-left: 15px;
       }
       ${cols === 2 &&
-        css`
-          /* font-size: 20px; */
-          &:last-child {
-            text-align: right;
-            padding-right: 15px;
-          }
-        `}
+      css`
+        /* font-size: 20px; */
+        &:last-child {
+          text-align: right;
+          padding-right: 15px;
+        }
+      `}
     }
     th {
       background: ${theme.green};
@@ -491,10 +568,17 @@ const SummaryTable = styled.table`
       cursor: pointer;
       background: white;
       border-top: solid ${theme.light} 4px;
+      padding-top: 0;
+      padding-bottom: 0;
+      white-space: nowrap;
       small {
         color: ${theme.green};
         margin-right: 1em;
       }
+    }
+    .name-wrap {
+      display: flex;
+      align-items: center;
     }
     .inline-icon {
       opacity: 0.3;
@@ -515,9 +599,10 @@ const Bar = styled.div`
     background: ${theme.green};
     color: white;
     padding: 7px 15px;
-    @media (min-width: ${theme.md}) {
+    margin: 0 !important;
+    /* @media (min-width: ${theme.md}) {
       font-size: 20px;
-    }
+    } */
     span {
       text-align: right;
     }
@@ -535,16 +620,16 @@ const Case = styled.div`
       background: ${theme.teal};
       padding: 2px 15px;
       ${status === "Probable" &&
-        css`
-          background: ${theme.green};
-        `}
+      css`
+        background: ${theme.green};
+      `}
     }
     .age {
       color: ${theme.teal};
       ${status === "Probable" &&
-        css`
-          color: ${theme.green};
-        `}
+      css`
+        color: ${theme.green};
+      `}
     }
     .details {
       background: white;
@@ -621,4 +706,32 @@ const Share = styled.div`
     position: relative;
     top: -1px;
   }
+`;
+
+const InlineChart = styled.div`
+  width: 50%;
+  height: 40px;
+  /* margin-left: 5px;
+  display: inline-block; */
+`;
+
+const Location = styled.div`
+  ${({ theme }) => css`
+    font-size: 15px;
+    background: white;
+    padding: 3px 8px 5px;
+    margin: 5px 0 !important;
+    .inline-icon {
+      opacity: 0.3;
+    }
+    small {
+      font-weight: bold;
+      color: ${theme.green};
+      margin-right: 6px;
+    }
+    .body {
+      display: flex;
+      justify-content: space-between;
+    }
+  `}
 `;
