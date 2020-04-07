@@ -39,6 +39,9 @@ export function fixTypos(location) {
   if (location === "Bay of Plenty (Tauranga)") {
     return "Bay of Plenty";
   }
+  if (location === "Southern (Dunedin)") {
+    return "Southern";
+  }
 
   return location;
 }
