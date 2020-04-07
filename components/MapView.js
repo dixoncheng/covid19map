@@ -38,7 +38,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
   const detailsRef = useRef();
   const totalCases = confirmedCases + probableCases;
 
-  const { lastUpdated, locations, clusters, asAt, maxCases } = data;
+  const { lastUpdated, locations, clusters, asAt, maxCases, history } = data;
   // const { maxCases } = caseDetails;
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
@@ -290,38 +290,38 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
                 >
                   <div className="body">
                     <div>{item.location}</div>
-                    <div>
+                    <div className="num-cases">
+                      <div className="total-cases">{item.totalCases}</div>
                       {item.newCases > 0 && <small>+{item.newCases}</small>}
-                      {item.totalCases}
-                      <div
+                      {/* <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
                           __html: require(`../public/arrow.svg?include`),
                         }}
-                      />
+                      /> */}
                     </div>
                   </div>
 
                   <InlineChart>
                     <ResponsiveContainer>
                       <LineChart
-                        data={item.dailyCases}
+                        data={history[item.name]}
                         // margin={{ left: -30, right: 10, bottom: 20 }}
                       >
                         <XAxis
-                          dataKey="days"
-                          type="number"
-                          domain={["auto", "auto"]}
+                          dataKey="date"
+                          // type="number"
+                          // domain={["auto", "auto"]}
                           hide
                         />
                         <Line
                           type="monotone"
-                          dataKey="cases"
+                          dataKey="total"
                           stroke="#51b6b0"
                           strokeWidth={1}
                           dot={false}
                         />
-                        <Tooltip />
+                        {/* <Tooltip /> */}
                       </LineChart>
                     </ResponsiveContainer>
                   </InlineChart>
@@ -708,30 +708,50 @@ const Share = styled.div`
   }
 `;
 
-const InlineChart = styled.div`
-  width: 50%;
-  height: 40px;
-  /* margin-left: 5px;
-  display: inline-block; */
-`;
-
 const Location = styled.div`
   ${({ theme }) => css`
     font-size: 15px;
     background: white;
     padding: 3px 8px 5px;
     margin: 5px 0 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .body {
+      width: 50%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .num-cases {
+      line-height: 1;
+      margin: 0 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* position: relative; */
+      /* top: 1px; */
+    }
     .inline-icon {
       opacity: 0.3;
     }
+    .total-cases {
+      font-size: 1.3em;
+    }
     small {
+      font-size: 14px;
       font-weight: bold;
       color: ${theme.green};
-      margin-right: 6px;
-    }
-    .body {
-      display: flex;
-      justify-content: space-between;
+      margin-top: 2px;
+      /* margin-right: 6px; */
     }
   `}
+`;
+
+const InlineChart = styled.div`
+  width: 50%;
+  height: 50px;
+  /* margin-left: 5px;
+  display: inline-block; */
 `;

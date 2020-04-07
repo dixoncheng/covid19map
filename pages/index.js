@@ -11,6 +11,7 @@ import scraperClusters from "../data/scraperClusters";
 import processClusters from "../data/processClusters";
 import { staticData } from "../data/static";
 import MapView from "../components/MapView";
+import updateHistory from "../data/updateHistory";
 
 const Home = ({ data, caseDetails, casesPer1m }) => {
   console.log(data);
@@ -101,6 +102,8 @@ export async function getStaticProps(context) {
   caseDetails.cases = null;
   summary.inHospital = null;
 
+  const history = await updateHistory(summary);
+
   return {
     props: {
       data: {
@@ -108,6 +111,7 @@ export async function getStaticProps(context) {
         staticData: staticDataCombined,
         casesPer1m,
         clusters,
+        history,
       },
       caseDetails,
     },
