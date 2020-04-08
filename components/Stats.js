@@ -536,7 +536,7 @@ const Total = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.99em;
+    font-size: 0.94em;
     /* padding-top: 14em; */
     ${props.wide &&
     css`
