@@ -278,7 +278,7 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
 
               <Bar>
                 Location
-                <span>Case/s</span>
+                <span>Daily cases</span>
               </Bar>
 
               {locations.map((item, i) => (
@@ -599,7 +599,7 @@ const Bar = styled.div`
     font-size: 14px;
     background: ${theme.green};
     color: white;
-    padding: 7px 15px;
+    padding: 7px 10px;
     margin: 0 !important;
     /* @media (min-width: ${theme.md}) {
       font-size: 20px;
@@ -711,26 +711,35 @@ const Share = styled.div`
 
 const Location = styled.div`
   ${({ theme }) => css`
+    cursor: pointer;
     font-size: 15px;
     background: white;
-    padding: 3px 8px 5px;
+    padding: 2px 8px 2px;
     margin: 5px 0 !important;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
+    transition: 0.3s ease;
+
+    :hover {
+      background: #bee1dd;
+    }
     .body {
+      padding: 6px 0;
       width: 50%;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      /* align-items: center; */
     }
     .num-cases {
-      line-height: 1;
+      /* padding-top: 3px;
+      line-height: 1; */
       margin: 0 10px;
-      display: flex;
+      text-align: right;
+      /* display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: center; */
+      /* align-items: center; */
       /* position: relative; */
       /* top: 1px; */
     }
@@ -744,8 +753,11 @@ const Location = styled.div`
       font-size: 14px;
       font-weight: bold;
       color: ${theme.green};
-      margin-top: 2px;
+      /* margin-top: 2px; */
       /* margin-right: 6px; */
+      text-align: right;
+      position: relative;
+      top: -4px;
     }
   `}
 `;

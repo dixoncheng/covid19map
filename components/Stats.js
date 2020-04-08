@@ -41,7 +41,6 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
   return (
     <div className="container">
       <Infographic>
-        <Row>{children}</Row>
         {/* <Row>
           {transmissions.length > 0 && <PieChart data={transmissions} />}
         </Row> */}
@@ -257,7 +256,7 @@ const Stats = ({ data, caseDetails, onViewChange, children }) => {
           )}
         </Row>
 
-        {/* <Row>{children}</Row> */}
+        <Row>{children}</Row>
         <Row>
           <Ages>
             <div className="head">Age Groups</div>
