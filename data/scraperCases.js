@@ -8,6 +8,8 @@ const scraperCases = async () => {
 
   const $ = await cheerio.load(html);
 
+  const excel = $(".field-name-body").find("ul").eq(1).find("a").attr("href");
+
   // const lastUpdated = $(".page_updated .date").text();
   // const lastUpdated = $(".field-name-body .georgia-italic")
   //   .first()
@@ -19,45 +21,16 @@ const scraperCases = async () => {
     .find("tr")
     .each((i, elem) => {
       rawCases.push({
-        date: $(elem)
-          .find("td:nth-child(1)")
-          .text()
-          .trim(),
-        location: $(elem)
-          .find("td:nth-child(4)")
-          .text()
-          .trim(),
-        age: clean(
-          $(elem)
-            .find("td:nth-child(3)")
-            .text()
-            .trim()
-        ),
-        gender: $(elem)
-          .find("td:nth-child(2)")
-          .text()
-          .trim(),
-        overseas: $(elem)
-          .find("td:nth-child(5)")
-          .text()
-          .trim(),
-        cityBefore: $(elem)
-          .find("td:nth-child(6)")
-          .text()
-          .trim(),
-        flightNo: $(elem)
-          .find("td:nth-child(7)")
-          .text()
-          .trim(),
-        dateDepart: $(elem)
-          .find("td:nth-child(8)")
-          .text()
-          .trim(),
-        dateArrive: $(elem)
-          .find("td:nth-child(9)")
-          .text()
-          .trim(),
-        status: "Confirmed"
+        date: $(elem).find("td:nth-child(1)").text().trim(),
+        location: $(elem).find("td:nth-child(4)").text().trim(),
+        age: clean($(elem).find("td:nth-child(3)").text().trim()),
+        gender: $(elem).find("td:nth-child(2)").text().trim(),
+        overseas: $(elem).find("td:nth-child(5)").text().trim(),
+        cityBefore: $(elem).find("td:nth-child(6)").text().trim(),
+        flightNo: $(elem).find("td:nth-child(7)").text().trim(),
+        dateDepart: $(elem).find("td:nth-child(8)").text().trim(),
+        dateArrive: $(elem).find("td:nth-child(9)").text().trim(),
+        status: "Confirmed",
       });
     });
 
@@ -66,54 +39,25 @@ const scraperCases = async () => {
     .find("tr")
     .each((i, elem) => {
       rawCases.push({
-        date: $(elem)
-          .find("td:nth-child(1)")
-          .text()
-          .trim(),
-        location: $(elem)
-          .find("td:nth-child(4)")
-          .text()
-          .trim(),
-        age: clean(
-          $(elem)
-            .find("td:nth-child(3)")
-            .text()
-            .trim()
-        ),
-        gender: $(elem)
-          .find("td:nth-child(2)")
-          .text()
-          .trim(),
-        overseas: $(elem)
-          .find("td:nth-child(5)")
-          .text()
-          .trim(),
-        cityBefore: $(elem)
-          .find("td:nth-child(6)")
-          .text()
-          .trim(),
-        flightNo: $(elem)
-          .find("td:nth-child(7)")
-          .text()
-          .trim(),
-        dateDepart: $(elem)
-          .find("td:nth-child(8)")
-          .text()
-          .trim(),
-        dateArrive: $(elem)
-          .find("td:nth-child(9)")
-          .text()
-          .trim(),
-        status: "Probable"
+        date: $(elem).find("td:nth-child(1)").text().trim(),
+        location: $(elem).find("td:nth-child(4)").text().trim(),
+        age: clean($(elem).find("td:nth-child(3)").text().trim()),
+        gender: $(elem).find("td:nth-child(2)").text().trim(),
+        overseas: $(elem).find("td:nth-child(5)").text().trim(),
+        cityBefore: $(elem).find("td:nth-child(6)").text().trim(),
+        flightNo: $(elem).find("td:nth-child(7)").text().trim(),
+        dateDepart: $(elem).find("td:nth-child(8)").text().trim(),
+        dateArrive: $(elem).find("td:nth-child(9)").text().trim(),
+        status: "Probable",
       });
     });
 
-  return rawCases;
+  return { rawCases, excel };
 };
 
 export default scraperCases;
 
-const clean = str => {
+const clean = (str) => {
   // remove &nbsp;
   return str.replace(/\u00a0/g, " ");
 };

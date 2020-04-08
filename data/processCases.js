@@ -6,7 +6,7 @@ dateFirstCase.setHours(0);
 dateFirstCase.setMinutes(0);
 dateFirstCase.setSeconds(0, 0);
 
-const processCases = (rawCases) => {
+const processCases = ({ rawCases, excel }) => {
   // let maxCases = 0;
   let totalCasesPublished = 0;
   let countMale = 0;
@@ -168,6 +168,8 @@ const processCases = (rawCases) => {
     // maxCases = Math.max(maxCases, loc.numCases);
   });
 
+  excel = `https://www.health.govt.nz${excel}`;
+
   return {
     cases: locations,
     // lastUpdated,
@@ -178,6 +180,7 @@ const processCases = (rawCases) => {
     countOther,
     ages,
     dailyCases: dailyCasesAggregate,
+    excel,
   };
 };
 export default processCases;

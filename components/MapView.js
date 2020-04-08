@@ -316,10 +316,11 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
                         />
                         <Line
                           type="monotone"
-                          dataKey="total"
+                          dataKey="new"
                           stroke="#51b6b0"
                           strokeWidth={1}
                           dot={false}
+                          isAnimationActive={false}
                         />
                         {/* <Tooltip /> */}
                       </LineChart>
@@ -737,7 +738,7 @@ const Location = styled.div`
       opacity: 0.3;
     }
     .total-cases {
-      font-size: 1.3em;
+      /* font-size: 1em; */
     }
     small {
       font-size: 14px;

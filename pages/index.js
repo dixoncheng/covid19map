@@ -14,7 +14,7 @@ import MapView from "../components/MapView";
 import updateHistory from "../data/updateHistory";
 
 const Home = ({ data, caseDetails, casesPer1m }) => {
-  console.log(data);
+  // console.log(data);
   // console.log(caseDetails);
 
   const router = useRouter();

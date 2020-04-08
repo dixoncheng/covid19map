@@ -24,8 +24,19 @@ const updateHistory = async (summary) => {
       history[loc.name].push({
         date: mohAsAtDate.toJSON(),
         total: loc.totalCases,
+        new: loc.newCases,
       });
     });
+
+    // calculate new cases
+    // for (const loc in history) {
+    //   history[loc] = history[loc].map((day, i) => {
+    //     return {
+    //       ...day,
+    //       new: i > 0 ? day.total - history[loc][i - 1].total : 0,
+    //     };
+    //   });
+    // }
 
     // console.log(history);
     // write file to disk
