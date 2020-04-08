@@ -12,9 +12,11 @@ import processClusters from "../data/processClusters";
 import { staticData } from "../data/static";
 import MapView from "../components/MapView";
 import updateHistory from "../data/updateHistory";
+import updateSummary from "../data/updateSummary";
 
 const Home = ({ data, caseDetails, casesPer1m }) => {
-  // console.log(data);
+  console.log(data);
+
   // console.log(caseDetails);
 
   const router = useRouter();
@@ -103,6 +105,8 @@ export async function getStaticProps(context) {
   summary.inHospital = null;
 
   const history = await updateHistory(summary);
+
+  const summ = await updateSummary(summary);
 
   return {
     props: {

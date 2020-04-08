@@ -1,7 +1,7 @@
 import { fixTypos } from "./utils";
 import locations from "./regions";
 
-const processSummary = data => {
+const processSummary = (data) => {
   const {
     rows,
     hospitalRows,
@@ -13,24 +13,24 @@ const processSummary = data => {
   } = data;
 
   let maxCases = 0;
-  rows.forEach(item => {
+  rows.forEach((item) => {
     item.location = fixTypos(item.location);
-    const loc = locations.find(x => item.location === x.name);
+    const loc = locations.find((x) => item.location === x.name);
     if (!loc) {
       throw new Error(`No location "${item.location}" exist`);
     }
     maxCases = Math.max(maxCases, item.totalCases);
   });
 
-  hospitalRows.forEach(item => {
+  hospitalRows.forEach((item) => {
     item.location = fixTypos(item.location);
-    const loc = locations.find(x => item.location === x.name);
+    const loc = locations.find((x) => item.location === x.name);
     if (!loc) {
       throw new Error(`No location "${item.location}" exist`);
     }
   });
 
-  const transmissions = transmissionRows.map(item => {
+  const transmissions = transmissionRows.map((item) => {
     // return { ...item, percent: item.percent.replace("%", "") };
     return { ...item, percent: parseFloat(item.percent) };
   });
@@ -57,6 +57,14 @@ const processSummary = data => {
   //   }
   // }
 
+  for (const field in summaryData) {
+    summaryData[field] = parseInt(summaryData[field].replace(/,/g, ""));
+
+    if (isNaN(summaryData[field])) {
+      summaryData[field] = 0;
+    }
+  }
+
   return {
     locations: rows,
     inHospital: hospitalRows,
@@ -66,7 +74,7 @@ const processSummary = data => {
     asAtDate,
     summaryData,
     maxCases,
-    ...others
+    ...others,
   };
 };
 export default processSummary;

@@ -7,11 +7,11 @@ const ReadExcel = (data) => {
 };
 export default ReadExcel;
 
-// export async function getStaticProps(context) {
-//   const data = await readExcel();
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
+export async function getStaticProps(context) {
+  const data = await readExcel();
+  return {
+    props: {
+      data,
+    },
+  };
+}

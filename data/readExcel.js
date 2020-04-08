@@ -1,16 +1,17 @@
 import scraperSummary from "../data/scraperSummary";
 import processSummary from "../data/processSummary";
 import updateHistory from "../data/updateHistory";
+import updateSummary from "../data/updateSummary";
 
 const readExcel = async () => {
-  var XLSX = require("xlsx");
-  var workbook = XLSX.readFile("data/covid-casedeatails-7april2020.xlsx", {
-    // cellDates: true,
-  });
-  var sheet = workbook.Sheets.Confirmed;
-  var data = XLSX.utils.sheet_to_json(sheet, {
-    range: 3,
-  });
+  // var XLSX = require("xlsx");
+  // var workbook = XLSX.readFile("data/covid-casedeatails-7april2020.xlsx", {
+  //   // cellDates: true,
+  // });
+  // var sheet = workbook.Sheets.Confirmed;
+  // var data = XLSX.utils.sheet_to_json(sheet, {
+  //   range: 3,
+  // });
 
   // determine the date of xls
 
@@ -43,6 +44,11 @@ const readExcel = async () => {
   //   }
   // }
   // console.log(locs);
+  // return;
+  return;
+
+  // const totals = await updateTotals();
+  // console.log(totals);
   // return;
 
   const history = await updateHistory(summary);
