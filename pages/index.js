@@ -11,6 +11,7 @@ import scraperClusters from "../data/scraperClusters";
 import processClusters from "../data/processClusters";
 import { staticData } from "../data/static";
 import MapView from "../components/MapView";
+import updateHistory from "../data/updateHistory";
 
 const Home = ({ data, caseDetails, casesPer1m }) => {
   // console.log(data);
@@ -62,7 +63,7 @@ export async function getStaticProps(context) {
     return {
       days: i,
       newCases: i > 0 ? item.total - staticData.dailyTotals[i - 1].total : 0,
-      ...item
+      ...item,
     };
   });
 
@@ -86,15 +87,22 @@ export async function getStaticProps(context) {
   }
   // console.log(summary.inHospital);
   summary.locations = summary.locations.map((item, i) => {
-    const details = caseDetails.cases.find(x => x.name === item.name);
-    const hosp = summary.inHospital.find(x => x.location === item.name);
+    const details = caseDetails.cases.find((x) => x.name === item.name);
+    const hosp = summary.inHospital.find((x) => x.location === item.name);
     // if (details) {
     // return { ...item, cases: loc.cases, newCases: loc.newCases };
-    return { ...item, ...details, inHospital: hosp?.totalCases || 0 };
+    return {
+      ...item,
+      cases: details.cases,
+      ...details,
+      inHospital: hosp?.totalCases || 0,
+    };
     // }
   });
   caseDetails.cases = null;
   summary.inHospital = null;
+
+  const history = await updateHistory(summary);
 
   return {
     props: {
@@ -102,10 +110,11 @@ export async function getStaticProps(context) {
         ...summary,
         staticData: staticDataCombined,
         casesPer1m,
-        clusters
+        clusters,
+        history,
       },
-      caseDetails
-    }
+      caseDetails,
+    },
   };
 }
 

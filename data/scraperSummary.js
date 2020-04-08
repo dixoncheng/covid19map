@@ -10,28 +10,17 @@ const scraper = async () => {
   const $ = await cheerio.load(html);
 
   // const lastUpdated = $(".page_updated .date").text();
-  const lastUpdated = $(".field-name-body .georgia-italic")
-    .first()
-    .text();
+  const lastUpdated = $(".field-name-body .georgia-italic").first().text();
 
-  const asAt = $(".table-style-two")
-    .eq(0)
-    .find("caption")
-    .text();
+  const asAt = $(".table-style-two").eq(0).find("caption").text();
 
   let summaryData = {};
   $(".table-style-two")
     .eq(0)
     .find("tbody tr")
     .each((i, elem) => {
-      const totalToDate = $(elem)
-        .find("td:nth-child(2)")
-        .text()
-        .trim();
-      const newIn24h = $(elem)
-        .find("td:nth-child(3)")
-        .text()
-        .trim();
+      const totalToDate = $(elem).find("td:nth-child(2)").text().trim();
+      const newIn24h = $(elem).find("td:nth-child(3)").text().trim();
 
       if (i === 0) {
         // summaryData.confirmedCases = { totalToDate, newIn24h };
@@ -66,16 +55,10 @@ const scraper = async () => {
     .eq(2)
     .find("tbody tr")
     .each((i, elem) => {
-      let location = $(elem)
-        .find("td:nth-child(1)")
-        .text()
-        .trim();
+      let location = $(elem).find("td:nth-child(1)").text().trim();
 
       const totalCases = parseInt(
-        $(elem)
-          .find("td:nth-child(2)")
-          .text()
-          .trim()
+        $(elem).find("td:nth-child(2)").text().trim()
       );
 
       location = fixTypos(location);
@@ -89,7 +72,7 @@ const scraper = async () => {
 
         hospitalRows.push({
           location,
-          totalCases
+          totalCases,
           // ...latlngItem
         });
       }
@@ -100,28 +83,17 @@ const scraper = async () => {
     .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
-      let location = $(elem)
-        .find("td:nth-child(1)")
-        .text()
-        .trim();
+      let location = $(elem).find("td:nth-child(1)").text().trim();
 
       const totalCases = parseInt(
-        $(elem)
-          .find("td:nth-child(2)")
-          .text()
-          .trim()
+        $(elem).find("td:nth-child(2)").text().trim()
       );
 
-      const newCases = parseInt(
-        $(elem)
-          .find("td:nth-child(3)")
-          .text()
-          .trim()
-      );
+      const newCases = parseInt($(elem).find("td:nth-child(3)").text().trim());
 
       location = fixTypos(location);
       if (location && location !== "Total" && totalCases > 0) {
-        const latlngItem = locations.find(x => location === x.name);
+        const latlngItem = locations.find((x) => location === x.name);
         if (!latlngItem) {
           throw new Error(`No location "${location}" exist`);
         }
@@ -146,7 +118,7 @@ const scraper = async () => {
           // probableCases,
           totalCases,
           newCases,
-          ...latlngItem
+          ...latlngItem,
         });
       }
     });
@@ -156,14 +128,8 @@ const scraper = async () => {
     .eq(3)
     .find("tbody tr")
     .each((i, elem) => {
-      const type = $(elem)
-        .find("td:nth-child(1)")
-        .text()
-        .trim();
-      const percent = $(elem)
-        .find("td:nth-child(2)")
-        .text()
-        .trim();
+      const type = $(elem).find("td:nth-child(1)").text().trim();
+      const percent = $(elem).find("td:nth-child(2)").text().trim();
 
       transmissionRows.push({ type, percent });
     });
@@ -174,7 +140,7 @@ const scraper = async () => {
     transmissionRows,
     lastUpdated,
     asAt,
-    summaryData
+    summaryData,
   };
 };
 
