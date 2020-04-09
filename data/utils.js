@@ -45,5 +45,9 @@ export function fixTypos(location) {
   if (location === "Southern (Lakes District & Dunedin)") {
     return "Southern";
   }
+  if (location === "Southern (Lakes District, Dunedin & Southland)") {
+    return "Southern";
+  }
+
   return location;
 }
