@@ -1,5 +1,12 @@
 import styled, { css } from "styled-components";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  // Tooltip,
+} from "recharts";
 
 const TotalChart = ({ summary }) => {
   return (
@@ -25,13 +32,28 @@ const TotalChart = ({ summary }) => {
             <YAxis />
             <Line
               type="monotone"
+              dataKey="recovered"
+              stroke="#aacd6e"
+              strokeWidth={4}
+              dot={false}
+            />
+
+            <Line
+              type="monotone"
               dataKey="combined"
               stroke="#ffc906"
               strokeWidth={4}
               dot={false}
             />
+
+            {/* <Tooltip /> */}
           </LineChart>
         </ResponsiveContainer>
+
+        <div className="legend">
+          <div className="legend-item daily">New cases</div>
+          <div className="legend-item recovered">Recovered cases</div>
+        </div>
       </div>
     </Chart>
   );
@@ -55,12 +77,37 @@ const Chart = styled.div`
     }
     .chart-wrap {
       height: 25em;
+      padding-bottom: 20px;
       ${props.wide &&
       css`
         @media (min-width: ${theme.sm}) {
           width: 40em;
         }
       `}
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0 0 10px;
+      font-size: 12px;
+      color: black;
+    }
+    .legend-item {
+      margin: 0 10px;
+      :before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 4px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    }
+    .daily:before {
+      background: ${theme.yellow};
+    }
+    .recovered:before {
+      background: ${theme.green};
     }
   `}
 `;

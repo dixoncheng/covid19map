@@ -25,6 +25,14 @@ const TotalChart = ({ summary }) => {
             <YAxis />
             <Line
               type="monotone"
+              dataKey="recoveredTotal"
+              stroke="#aacd6e"
+              strokeWidth={4}
+              dot={false}
+            />
+
+            <Line
+              type="monotone"
               dataKey="combinedTotal"
               stroke="#51b6b0"
               strokeWidth={4}
@@ -32,6 +40,11 @@ const TotalChart = ({ summary }) => {
             />
           </LineChart>
         </ResponsiveContainer>
+
+        <div className="legend">
+          <div className="legend-item total">Total cases</div>
+          <div className="legend-item recovered">Recovered cases</div>
+        </div>
       </div>
     </Chart>
   );
@@ -55,12 +68,37 @@ const Chart = styled.div`
     }
     .chart-wrap {
       height: 25em;
+      padding-bottom: 20px;
       ${props.wide &&
       css`
         @media (min-width: ${theme.sm}) {
           width: 40em;
         }
       `}
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0 0 10px;
+      font-size: 12px;
+      color: black;
+    }
+    .legend-item {
+      margin: 0 10px;
+      :before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 4px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    }
+    .total:before {
+      background: ${theme.teal};
+    }
+    .recovered:before {
+      background: ${theme.green};
     }
   `}
 `;
