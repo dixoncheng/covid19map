@@ -1,15 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
-import Stats from "../components/Stats";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import Row from "../components/Row";
+import TotalCases from "../components/TotalCases";
+import Cases from "../components/Cases";
+import NewCases from "../components/NewCases";
+import Deaths from "../components/Deaths";
+import Recovered from "../components/Recovered";
+import Hospital from "../components/Hospital";
+import Genders from "../components/Genders";
+import TotalChart from "../components/TotalChart";
+import DailyChart from "../components/DailyChart";
+import Ages from "../components/Ages";
+import Terms from "../components/Terms";
+
+import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -26,20 +31,30 @@ const innerBounds = [
   [-47.30251579, 177.66849518],
 ];
 
-const MapView = ({ data, caseDetails, onViewChange }) => {
-  const {
-    confirmedCases,
-    probableCases,
-    recoveredCases,
-    alertLevel,
-    deaths,
-  } = data.staticData;
+const MapView = ({ data }) => {
   const infoRef = useRef();
   const detailsRef = useRef();
-  const totalCases = confirmedCases + probableCases;
 
-  const { lastUpdated, locations, clusters, asAt, maxCases, history } = data;
-  // const { maxCases } = caseDetails;
+  const {
+    locations,
+    clusters,
+    asAt,
+    maxCases,
+    history,
+    alertLevel,
+    summary,
+  } = data;
+  const {
+    combinedTotal,
+    confirmedTotal,
+    probableTotal,
+    combined,
+    deathsTotal,
+    recoveredTotal,
+    hospitalTotal,
+  } = summary[summary.length - 1];
+  const { totalCasesPublished, ages: ageData } = data.caseDetails;
+
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
@@ -47,12 +62,6 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
   const showLocation = (location) => {
     if (location) {
       const loc = locations.find((x) => location === x.name);
-      // const l = locations.find(x => location === x.name);
-      // if (!loc) {
-      //   setLocation({ location, totalCases: l.totalCases });
-      // } else {
-      // setLocation({ ...loc, ...l });
-      // }
       setLocation(loc);
       setView("details");
     } else {
@@ -200,222 +209,96 @@ const MapView = ({ data, caseDetails, onViewChange }) => {
               </a>
             </Share>
 
-            {/* <div className="total">
-              <h2 className="split">
-                Total number of cases <span>{totalCases}</span>
-              </h2>
+            <Row>
+              <TotalCases combinedTotal={combinedTotal} />
+            </Row>
+            <Row>
+              <Cases
+                confirmedTotal={confirmedTotal}
+                probableTotal={probableTotal}
+              />
+            </Row>
 
-              <div className="cases-breakdown">
-                Confirmed cases <span>{confirmedCases}</span>
+            <Row>
+              <div className="grid">
+                <NewCases combined={combined} />
+                <Deaths deathsTotal={deathsTotal} />
               </div>
-              <div className="cases-breakdown">
-                Probable cases <span>{probableCases}</span>
+            </Row>
+
+            <Row>
+              <Recovered
+                recoveredTotal={recoveredTotal}
+                combinedTotal={combinedTotal}
+              />
+            </Row>
+
+            <Row>
+              <div className="grid">
+                <Hospital hospitalTotal={hospitalTotal} />
+                <Genders caseDetails={data.caseDetails} />
               </div>
-              <div className="cases-breakdown">
-                Deaths <span>{deaths}</span>
-              </div>
+            </Row>
 
-              <h2 className="split">
-                Recovered <span>{recoveredCases}</span>
-              </h2>
-            </div> */}
+            <Row>
+              <TotalChart summary={summary} />
+            </Row>
+            <Row>
+              <DailyChart summary={summary} />
+            </Row>
 
-            <Stats
-              data={data}
-              caseDetails={caseDetails}
-              onViewChange={() => setView("")}
-            >
-              {/* <SummaryTable cols={2}>
-                <thead>
-                  <tr>
-                    <th>Location</th>
-                    <th>Case/s</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {locations.map((item, i) => (
-                    <tr
-                      key={i}
-                      onClick={() => {
-                        showLocation(item.location);
-                      }}
-                    >
-                      <td>
-                        <div className="name-wrap">
-                          {item.location}
-                          <InlineChart>
-                            <ResponsiveContainer>
-                              <LineChart
-                                data={item.dailyCases.reverse()}
-                                // margin={{ left: -30, right: 10, bottom: 20 }}
-                              >
-                                <Line
-                                  type="monotone"
-                                  dataKey="cases"
-                                  stroke="#51b6b0"
-                                  strokeWidth={1}
-                                  dot={false}
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </InlineChart>
-                        </div>
-                      </td>
-                      <td>
-                        {item.newCases > 0 && <small>+{item.newCases}</small>}
-                        {item.totalCases}
-                        <div
-                          className="inline-icon"
-                          dangerouslySetInnerHTML={{
-                            __html: require(`../public/arrow.svg?include`),
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </SummaryTable> */}
+            <Bar>
+              Location
+              <span>Daily cases</span>
+            </Bar>
 
-              <Bar>
-                Location
-                <span>Daily cases</span>
-              </Bar>
-
-              {locations.map((item, i) => (
-                <Location
-                  key={i}
-                  onClick={() => {
-                    showLocation(item.location);
-                  }}
-                >
-                  <div className="body">
-                    <div>{item.location}</div>
-                    <div className="num-cases">
-                      <div className="total-cases">{item.totalCases}</div>
-                      {item.newCases > 0 && <small>+{item.newCases}</small>}
-                      {/* <div
+            {locations.map((item, i) => (
+              <Location
+                key={i}
+                onClick={() => {
+                  showLocation(item.location);
+                }}
+              >
+                <div className="body">
+                  <div>{item.location}</div>
+                  <div className="num-cases">
+                    <div className="total-cases">{item.totalCases}</div>
+                    {item.newCases > 0 && <small>+{item.newCases}</small>}
+                    {/* <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
                           __html: require(`../public/arrow.svg?include`),
                         }}
                       /> */}
-                    </div>
                   </div>
+                </div>
 
-                  <InlineChart>
-                    <ResponsiveContainer>
-                      <LineChart
-                        data={history[item.name]}
-                        // margin={{ left: -30, right: 10, bottom: 20 }}
-                      >
-                        <XAxis
-                          dataKey="date"
-                          // type="number"
-                          // domain={["auto", "auto"]}
-                          hide
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="new"
-                          stroke="#51b6b0"
-                          strokeWidth={1}
-                          dot={false}
-                          isAnimationActive={false}
-                        />
-                        {/* <Tooltip /> */}
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </InlineChart>
-                </Location>
-              ))}
-            </Stats>
+                <InlineChart>
+                  <ResponsiveContainer>
+                    <LineChart data={history[item.name]}>
+                      <XAxis dataKey="date" hide />
+                      <Line
+                        type="monotone"
+                        dataKey="new"
+                        stroke="#51b6b0"
+                        strokeWidth={1}
+                        dot={false}
+                        isAnimationActive={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </InlineChart>
+              </Location>
+            ))}
 
-            <p>
-              <small>
-                We are working with the official information released by the{" "}
-                <a
-                  href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ministry of Health
-                </a>
-                . Confirmed cases are listed by District Health Board regions.
-              </small>
-            </p>
+            <Row>
+              <Ages
+                totalCasesPublished={totalCasesPublished}
+                ageData={ageData}
+              />
+            </Row>
 
-            <p>
-              <small>
-                Any feedback, ideas, or if you'd like to help, please contact{" "}
-                <a href="mailto:contact@covid19map.nz">contact@covid19map.nz</a>{" "}
-                |{" "}
-                <a
-                  href="https://github.com/dixoncheng/covid19map"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Github
-                </a>
-                <br />
-                <LinkButton
-                  type="button"
-                  onClick={() => setTermsOpened(!termsOpened)}
-                >
-                  Disclaimer and Terms of use
-                </LinkButton>
-              </small>
-            </p>
-            {termsOpened && (
-              <div>
-                <p>
-                  <small>
-                    Covid-19 Map NZ sources its cases directly from the official{" "}
-                    <a
-                      href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Ministry of Health page
-                    </a>
-                    . We are in no way responsible for the accuracy of this
-                    information.
-                  </small>
-                </p>
-                <p>
-                  <small>
-                    Covid-19 Map NZ disclaims and excludes all liability for any
-                    claim, loss, demand or damages of any kind whatsoever
-                    (including for negligence) arising out of or in connection
-                    with the use of either this website or the information,
-                    content or materials included on this site or on any website
-                    we link to.
-                  </small>
-                </p>
-                <p>
-                  <small>
-                    By viewing and using the site, you will be deemed to agree
-                    to these Terms of use.
-                  </small>
-                </p>
-              </div>
-            )}
-            <p className="made-by">
-              <small>Made by</small>{" "}
-              <a
-                href="https://www.linkedin.com/in/emilywongnz/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/linkedin.svg" />
-              </a>{" "}
-              <a
-                href="https://www.linkedin.com/in/dixon-cheng/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/linkedin.svg" />
-              </a>
-            </p>
+            <Terms termsOpened={termsOpened} setTermsOpened={setTermsOpened} />
           </Summary>
         )}
       </Info>
@@ -657,45 +540,6 @@ const Alert = styled.a`
   background: #ffcd38 url(/alert.svg) 100% 50% no-repeat;
   margin: -20px -20px 10px;
   display: block;
-`;
-
-const LinkButton = styled.button`
-  ${({ theme }) => css`
-    border: none;
-    background: none;
-    display: inline;
-    padding: 0;
-    text-decoration: underline;
-    color: ${theme.dark};
-  `}
-`;
-
-const StatsLink = styled.button`
-  ${({ theme }) => css`
-    display: flex;
-    border: none;
-    width: 100%;
-    text-decoration: none;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-    background: ${theme.teal};
-    color: white !important;
-    padding: 7px 15px;
-    margin-bottom: 0.8em;
-    color: white;
-    border-radius: 3px;
-    @media (min-width: ${theme.md}) {
-      font-size: 20px;
-    }
-    > div {
-      margin-left: auto;
-    }
-    img {
-      height: 16px;
-      margin-right: 6px;
-    }
-  `}
 `;
 
 const Share = styled.div`
