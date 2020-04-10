@@ -13,6 +13,8 @@ import TotalChart from "../components/TotalChart";
 import DailyChart from "../components/DailyChart";
 import Ages from "../components/Ages";
 import Terms from "../components/Terms";
+import TransmissionChart from "../components/TransmissionChart";
+import Tests from "../components/Tests";
 
 import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 
@@ -24,7 +26,7 @@ const center = { lat: -41.0495881, lng: 173.2682669 };
 const zoom = 6;
 const outerBounds = [
   [-28.00178557, 160.67596054],
-  [-48.57478991, 183.27441406],
+  [-51.57478991, 183.27441406],
 ];
 const innerBounds = [
   [-34.76671725, 166.2361908],
@@ -43,6 +45,8 @@ const MapView = ({ data }) => {
     history,
     alertLevel,
     summary,
+    transmissions,
+    testingData,
   } = data;
   const {
     combinedTotal,
@@ -240,11 +244,21 @@ const MapView = ({ data }) => {
               </div>
             </Row>
 
+            {testingData && (
+              <Row>
+                <Tests tests={testingData.yesterdayTotal} />
+              </Row>
+            )}
+
             <Row>
               <TotalChart summary={summary} />
             </Row>
             <Row>
               <DailyChart summary={summary} />
+            </Row>
+
+            <Row>
+              <TransmissionChart data={transmissions} />
             </Row>
 
             <Bar>

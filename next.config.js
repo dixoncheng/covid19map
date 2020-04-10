@@ -7,7 +7,7 @@ module.exports = withOptimizedImages(
   withPWA({
     pwa: {
       dest: "public",
-      disable: process.env.ENV === "development",
+      disable: true, //process.env.ENV === "development",
       runtimeCaching: [],
     },
     webpack: (config, { isServer }) => {

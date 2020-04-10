@@ -10,7 +10,10 @@ const Hospital = ({ hospitalTotal }) => {
           <br /> hospital
         </span>
       </div>
-      <img src="/infographic/hospital.svg" />
+      <div className="row">
+        <img src="/infographic/hospital.svg" />
+        {/* <div>are in Intensive Care Unit</div> */}
+      </div>
     </StyledHospital>
   );
 };
@@ -50,8 +53,8 @@ const StyledHospital = styled.div`
     }
     img {
       display: block;
-      width: 17em;
-      margin: 0 auto;
+      width: 10em;
+      margin: 0 auto -2em;
     }
   `}
 `;

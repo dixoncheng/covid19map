@@ -115,11 +115,11 @@ const Map = ({
                   <Popup>
                     <StyledPopup>
                       <div className="location">{location}</div>
-                      <div className="cases">Number of cases: {totalCases}</div>
+                      <div className="cases">
+                        {totalCases} case{totalCases > 1 && "s"}
+                      </div>
                       {inHospital > 0 && (
-                        <div className="cases">
-                          Number of cases in hospital: {inHospital}
-                        </div>
+                        <div className="cases">{inHospital} in hospital</div>
                       )}
                     </StyledPopup>
                   </Popup>
@@ -138,25 +138,30 @@ const Map = ({
             </FeatureGroup>
           )
         )}
-        {clusters.map(({ latlng, totalCases, clusters: clusterItems }, i) => (
-          <Marker
-            key={i}
-            position={latlng}
-            icon={getClusterIcon("cluster", totalCases)}
-            // zIndexOffset={100}
-          >
-            <Popup>
-              <StyledPopup>
-                {clusterItems.map(({ name, totalCases }, i) => (
-                  <div className="cluster-desc" key={i}>
-                    <div className="location">Cluster: {name}</div>
-                    <div className="cases">Number of cases: {totalCases}</div>
+        {clusters.map(
+          ({ latlng, totalCases, location, clusters: clusterItems }, i) => (
+            <Marker
+              key={i}
+              position={latlng}
+              icon={getClusterIcon("cluster", totalCases)}
+              // zIndexOffset={100}
+            >
+              <Popup>
+                <StyledPopup>
+                  <div className="head">
+                    {location} cluster{clusterItems.length > 1 && "s"}
                   </div>
-                ))}
-              </StyledPopup>
-            </Popup>
-          </Marker>
-        ))}
+                  {clusterItems.map(({ name, totalCases, location }, i) => (
+                    <div className="cluster-desc" key={i}>
+                      <div className="location">{name}</div>
+                      <div className="cases">{totalCases} cases</div>
+                    </div>
+                  ))}
+                </StyledPopup>
+              </Popup>
+            </Marker>
+          )
+        )}
 
         {/* {markers
           .filter(loc => {
@@ -190,10 +195,18 @@ export default Map;
 const StyledPopup = styled.div`
   ${({ theme }) => css`
     color: ${theme.dark};
+    .head {
+      color: ${theme.teal};
+    }
     .location {
       font-weight: bold;
       font-size: 16px;
       font-family: ${theme.font};
+    }
+    .cluster-desc {
+      .location {
+        font-size: 14px;
+      }
     }
     .cluster-desc + .cluster-desc {
       margin-top: 0.5em;
@@ -241,6 +254,7 @@ const Styles = createGlobalStyle`
     .region {
       text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
         1px 1px 0 white;
+      pointer-events: none !important;
     }
     .cluster {
       color: #204e61;
@@ -300,10 +314,6 @@ const MapLegend = styled.div`
       font-size: 14px;
       bottom: 36px;
       right: 20px;
-
-      .map-cluster,
-      .map-hosp {
-      }
     }
   `}
 `;

@@ -95,6 +95,9 @@ const scraper = async () => {
       );
 
       const newCases = parseInt($(elem).find("td:nth-child(3)").text().trim());
+      if (isNaN(newCases)) {
+        throw new Error(`New cases not found`);
+      }
 
       location = fixTypos(location);
       if (location && location !== "Total" && totalCases > 0) {
@@ -135,8 +138,29 @@ const scraper = async () => {
     .each((i, elem) => {
       const type = $(elem).find("td:nth-child(1)").text().trim();
       const percent = $(elem).find("td:nth-child(2)").text().trim();
-
       transmissionRows.push({ type, percent });
+    });
+
+  let testingData = {};
+  $(".table-style-two")
+    .eq(4)
+    .find("tbody tr")
+    .each((i, elem) => {
+      const tests = $(elem).find("td:nth-child(2)").text().trim();
+      // const date = $(elem).find("td:nth-child(3)").text().trim();
+      if (i === 0) {
+        testingData.yesterdayTotal = tests;
+        // testingData.date = date;
+      }
+      if (i === 1) {
+        testingData.rollingAverage = tests;
+      }
+      if (i === 2) {
+        testingData.totalToDate = tests;
+      }
+      if (i === 3) {
+        testingData.supplies = tests;
+      }
     });
 
   return {
@@ -146,6 +170,7 @@ const scraper = async () => {
     lastUpdated,
     asAt,
     summaryData,
+    testingData,
   };
 };
 

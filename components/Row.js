@@ -9,7 +9,7 @@ export default Row;
 const StyledRow = styled.div`
   ${({ theme, ...props }) => css`
     font-size: 2vw;
-    margin: 2em 0 0;
+    margin: 2em 0;
     justify-content: space-between;
 
     @media (min-width: ${theme.sm}) {
