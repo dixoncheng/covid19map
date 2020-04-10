@@ -11,14 +11,14 @@ const TransmissionChart = ({ data = [] }) => {
       <img src="/infographic/commtrans.svg" />
       <div className="row">
         <div>
-          <PieChart width={130} height={120}>
+          <PieChart width={120} height={110}>
             <Pie
               dataKey="percent"
               // isAnimationActive={false}
               data={data}
-              cx={55}
-              cy={55}
-              outerRadius={55}
+              cx={50}
+              cy={50}
+              outerRadius={50}
               // label
             >
               {data.map((entry, index) => (
@@ -61,7 +61,7 @@ const StyledTransmissionChart = styled.div`
     .row {
       border-radius: 0.5em;
       background: white;
-      padding: 1.8em;
+      padding: 1.2em;
 
       display: flex;
       align-items: center;
