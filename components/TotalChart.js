@@ -1,5 +1,12 @@
 import styled, { css } from "styled-components";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
 
 const TotalChart = ({ summary }) => {
   return (
@@ -17,6 +24,7 @@ const TotalChart = ({ summary }) => {
                 fontSize: 12,
                 value: "Days since first case detected",
                 position: "bottom",
+                // color: "#025064",
               }}
               tickFormatter={(tick) =>
                 summary.findIndex((x) => x.date === tick)
@@ -38,12 +46,15 @@ const TotalChart = ({ summary }) => {
               strokeWidth={4}
               dot={false}
             />
+
+            <ReferenceLine x="2020-03-25T00:00:00.000Z" stroke="#025064" />
           </LineChart>
         </ResponsiveContainer>
 
         <div className="legend">
-          <div className="legend-item total">Total cases</div>
-          <div className="legend-item recovered">Recovered cases</div>
+          <div className="legend-item total">Total</div>
+          <div className="legend-item recovered">Recovered</div>
+          <div className="legend-item lockdown">Lv4 lockdown</div>
         </div>
       </div>
     </Chart>
@@ -69,22 +80,25 @@ const Chart = styled.div`
     .chart-wrap {
       height: 25em;
       padding-bottom: 20px;
-      ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          width: 40em;
-        }
-      `}
+      ${
+        props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            width: 40em;
+          }
+        `
+      }
     }
     .legend {
       display: flex;
       justify-content: center;
-      margin: 5px 0 0 10px;
+      margin: 5px 0 0 0px;
       font-size: 12px;
       color: black;
     }
     .legend-item {
-      margin: 0 10px;
+      margin: 0 6px;
+      /* color: ${theme.navy}; */
       :before {
         content: "";
         display: inline-block;
@@ -99,6 +113,9 @@ const Chart = styled.div`
     }
     .recovered:before {
       background: ${theme.green};
+    }
+    .lockdown:before {
+      background: ${theme.navy};
     }
   `}
 `;

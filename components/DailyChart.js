@@ -5,7 +5,7 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
-  // Tooltip,
+  ReferenceLine,
 } from "recharts";
 
 const TotalChart = ({ summary }) => {
@@ -46,13 +46,14 @@ const TotalChart = ({ summary }) => {
               dot={false}
             />
 
-            {/* <Tooltip /> */}
+            <ReferenceLine x="2020-03-25T00:00:00.000Z" stroke="#025064" />
           </LineChart>
         </ResponsiveContainer>
 
         <div className="legend">
-          <div className="legend-item daily">New cases</div>
-          <div className="legend-item recovered">Recovered cases</div>
+          <div className="legend-item daily">New</div>
+          <div className="legend-item recovered">Recovered</div>
+          <div className="legend-item lockdown">Lv4 lockdown</div>
         </div>
       </div>
     </Chart>
@@ -93,7 +94,7 @@ const Chart = styled.div`
       color: black;
     }
     .legend-item {
-      margin: 0 10px;
+      margin: 0 6px;
       :before {
         content: "";
         display: inline-block;
@@ -108,6 +109,9 @@ const Chart = styled.div`
     }
     .recovered:before {
       background: ${theme.green};
+    }
+    .lockdown:before {
+      background: ${theme.navy};
     }
   `}
 `;
