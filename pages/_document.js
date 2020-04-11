@@ -10,7 +10,8 @@ export default class MyDocument extends Document {
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
@@ -21,7 +22,7 @@ export default class MyDocument extends Document {
             {initialProps.styles}
             {sheet.getStyleElement()}
           </>
-        )
+        ),
       };
     } finally {
       sheet.seal();
@@ -86,7 +87,7 @@ export default class MyDocument extends Document {
               gtag('config', '${GA_TRACKING_ID}', {
                 page_path: window.location.pathname,
               });
-              `
+              `,
             }}
           />
           <meta property="og:url" content="https://covid19map.nz/" />
@@ -103,6 +104,21 @@ export default class MyDocument extends Document {
           <meta property="og:image:height" content="630" />
           <meta property="og:image:type" content="image/png" />
           <meta property="og:locale" content="en_nz" />
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              if(window.navigator && navigator.serviceWorker) {
+                navigator.serviceWorker.getRegistrations()
+                  .then(function (registrations) {
+                    for (let registration of registrations) {
+                      registration.unregister();
+                    }
+                  });
+              }
+              `,
+            }}
+          />
         </Head>
         <body>
           <Main />
