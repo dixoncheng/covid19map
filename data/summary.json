@@ -643,5 +643,20 @@
     "recovered": 56,
     "deaths": 1,
     "deathsTotal": 2
+  },
+  {
+    "date": "2020-04-11T00:00:00.000Z",
+    "combinedTotal": 1312,
+    "confirmedTotal": 1035,
+    "probableTotal": 277,
+    "combined": 29,
+    "confirmed": 20,
+    "probable": 9,
+    "hospital": -1,
+    "hospitalTotal": 15,
+    "recoveredTotal": 422,
+    "recovered": 49,
+    "deaths": 2,
+    "deathsTotal": 4
   }
 ]

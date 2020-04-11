@@ -13,7 +13,7 @@ import updateHistory from "../data/updateHistory";
 import updateSummary from "../data/updateSummary";
 
 const Home = ({ data }) => {
-  console.log(data);
+  // console.log(data);
 
   const router = useRouter();
   const [view, setView] = useState(router.route === "/stats" ? "stats" : "");
