@@ -46,7 +46,7 @@ export async function getStaticProps(context) {
     // return { ...item, cases: loc.cases, newCases: loc.newCases };
     return {
       ...item,
-      cases: details.cases,
+      cases: details.cases || [],
       ...details,
       inHospital: hosp?.totalCases || 0,
     };

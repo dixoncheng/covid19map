@@ -116,6 +116,25 @@ export default class MyDocument extends Document {
                     }
                   });
               }
+              async function deleteCaches() {
+                try {
+                  const keys = await window.caches.keys();
+                  await Promise.all(keys.map(key => caches.delete(key)));
+                } catch (err) {
+                  console.log('deleteCache err: ', err);
+                }
+              }
+
+              // run this function on your app load
+              function resetCacheForUpdate() {
+                if (!localStorage.getItem('cacheReset')) {
+                  deleteCaches()
+                    .then(_ => {
+                      localStorage.setItem('cacheReset', 'yes');
+                    }) 
+                }
+              }
+              resetCacheForUpdate();
               `,
             }}
           />
