@@ -57,7 +57,7 @@ const scraper = async () => {
 
   let hospitalRows = [];
   $(".table-style-two")
-    .eq(1)
+    .eq(2)
     .find("tbody tr")
     .each((i, elem) => {
       let location = $(elem).find("td:nth-child(1)").text().trim();
@@ -85,7 +85,7 @@ const scraper = async () => {
 
   let rows = [];
   $(".table-style-two")
-    .eq(2)
+    .eq(1)
     .find("tbody tr")
     .each((i, elem) => {
       let location = $(elem).find("td:nth-child(1)").text().trim();
