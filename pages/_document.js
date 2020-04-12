@@ -104,21 +104,6 @@ export default class MyDocument extends Document {
           <meta property="og:image:height" content="630" />
           <meta property="og:image:type" content="image/png" />
           <meta property="og:locale" content="en_nz" />
-
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              if(window.navigator && navigator.serviceWorker) {
-                navigator.serviceWorker.getRegistrations()
-                  .then(function (registrations) {
-                    for (let registration of registrations) {
-                      registration.unregister();
-                    }
-                  });
-              }
-              `,
-            }}
-          />
         </Head>
         <body>
           <Main />
