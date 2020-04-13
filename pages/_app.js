@@ -3,7 +3,7 @@ import Router from "next/router";
 import { ThemeProvider, createGlobalStyle, css } from "styled-components";
 import * as gtag from "../lib/gtag";
 
-Router.events.on("routeChangeComplete", url => gtag.pageview(url));
+Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps, ...props }) {
     dark: "#204e61",
     sm: "700px",
     md: "800px",
-    fontFancy: "'Bowlby One', sans-serif"
+    fontFancy: "'Bowlby One', sans-serif",
   };
   return (
     <ThemeProvider theme={theme}>
@@ -58,6 +58,7 @@ const Styles = createGlobalStyle`
     }
     button,
     a {
+      font-family: "Nunito", sans-serif;
       transition: all 0.3s ease;
     }
     button:hover,

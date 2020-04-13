@@ -5,6 +5,12 @@ const withPWA = require("next-pwa");
 
 module.exports = withOptimizedImages(
   withPWA({
+    env: {
+      API:
+        process.env.ENV === "development"
+          ? "http://localhost:5000"
+          : "https://api.covid19map.nz",
+    },
     pwa: {
       dest: "public",
       disable: true, //process.env.ENV === "development",

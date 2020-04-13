@@ -21,7 +21,6 @@ const Map = ({
   outerBounds,
   innerBounds,
 }) => {
-  // console.log(clusters);
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
   const [currentZoom, setCurrentZoom] = useState("100");
@@ -98,7 +97,7 @@ const Map = ({
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {markers.map(
+        {markers?.map(
           ({ location, latlng, boundary, totalCases, inHospital }, i) => (
             <FeatureGroup key={i}>
               {totalCases && (
@@ -138,7 +137,7 @@ const Map = ({
             </FeatureGroup>
           )
         )}
-        {clusters.map(
+        {clusters?.map(
           ({ latlng, totalCases, location, clusters: clusterItems }, i) => (
             <Marker
               key={i}
@@ -162,28 +161,6 @@ const Map = ({
             </Marker>
           )
         )}
-
-        {/* {markers
-          .filter(loc => {
-            return loc.inHospital > 0;
-          })
-          .map(({ location, latlng, inHospital }, i) => (
-            <Marker
-              key={i}
-              position={latlng}
-              icon={getClusterIcon("hospital", inHospital)}
-              zIndexOffset={100}
-            >
-              <Popup>
-                <StyledPopup>
-                  <div className="location">{location}</div>
-                  <div className="cases">
-                    Number of cases in hospital: {inHospital}
-                  </div>
-                </StyledPopup>
-              </Popup>
-            </Marker>
-          ))} */}
       </LeafletMap>
       <Styles currentZoom={currentZoom} />
     </div>
@@ -213,11 +190,6 @@ const StyledPopup = styled.div`
     }
   `}
 `;
-
-// ${({ currentZoom }) => {
-//       // console.log(currentZoom);
-// }
-// }
 
 const Styles = createGlobalStyle`
   ${({ theme, currentZoom }) => css`

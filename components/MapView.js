@@ -33,7 +33,7 @@ const innerBounds = [
   [-47.30251579, 177.66849518],
 ];
 
-const MapView = ({ data }) => {
+const MapView = ({ data = {}, error }) => {
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -56,8 +56,8 @@ const MapView = ({ data }) => {
     deathsTotal,
     recoveredTotal,
     hospitalTotal,
-  } = summary[summary.length - 1];
-  const { totalCasesPublished, ages: ageData } = data.caseDetails;
+  } = summary ? summary[summary.length - 1] : {};
+  const { totalCasesPublished, ages: ageData } = data?.caseDetails || {};
 
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
@@ -171,7 +171,7 @@ const MapView = ({ data }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Alert Level {alertLevel}
+              Alert Level 4
             </Alert>
             <Logo>
               <img className="logo" src="/logo.svg" />
@@ -180,139 +180,151 @@ const MapView = ({ data }) => {
                 <h2>Current Cases in New Zealand</h2>
               </div>
             </Logo>
-            <div className="meta">
-              <small>{asAt}</small>
-              <br />
-              <small>
-                Source:{" "}
-                <a
-                  href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ministry of Health
-                </a>
-              </small>
-            </div>
+            {data.locations && (
+              <>
+                <div className="meta">
+                  <small>{asAt}</small>
+                  <br />
+                  <small>
+                    Source:{" "}
+                    <a
+                      href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Ministry of Health
+                    </a>
+                  </small>
+                </div>
 
-            <Share>
-              <small>Share:</small>
-              <a
-                href="https://www.facebook.com/sharer/sharer.php?u=https://covid19map.nz/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/fb.svg" />
-              </a>
-              <a
-                href="http://www.twitter.com/share?url=https://covid19map.nz/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/tw.svg" />
-              </a>
-            </Share>
+                <Share>
+                  <small>Share:</small>
+                  <a
+                    href="https://www.facebook.com/sharer/sharer.php?u=https://covid19map.nz/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src="/fb.svg" />
+                  </a>
+                  <a
+                    href="http://www.twitter.com/share?url=https://covid19map.nz/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src="/tw.svg" />
+                  </a>
+                </Share>
 
-            <Row>
-              <TotalCases combinedTotal={combinedTotal} />
-            </Row>
-            <Row>
-              <Cases
-                confirmedTotal={confirmedTotal}
-                probableTotal={probableTotal}
-              />
-            </Row>
+                <Row>
+                  <TotalCases combinedTotal={combinedTotal} />
+                </Row>
+                <Row>
+                  <Cases
+                    confirmedTotal={confirmedTotal}
+                    probableTotal={probableTotal}
+                  />
+                </Row>
 
-            <Row>
-              <div className="grid">
-                <NewCases combined={combined} />
-                <Deaths deathsTotal={deathsTotal} />
-              </div>
-            </Row>
+                <Row>
+                  <div className="grid">
+                    <NewCases combined={combined} />
+                    <Deaths deathsTotal={deathsTotal} />
+                  </div>
+                </Row>
 
-            <Row>
-              <Recovered
-                recoveredTotal={recoveredTotal}
-                combinedTotal={combinedTotal}
-              />
-            </Row>
+                <Row>
+                  <Recovered
+                    recoveredTotal={recoveredTotal}
+                    combinedTotal={combinedTotal}
+                  />
+                </Row>
 
-            <Row>
-              <div className="grid">
-                <Hospital hospitalTotal={hospitalTotal} />
-                <Genders caseDetails={data.caseDetails} />
-              </div>
-            </Row>
+                <Row>
+                  <div className="grid">
+                    <Hospital hospitalTotal={hospitalTotal} />
+                    <Genders caseDetails={data.caseDetails} />
+                  </div>
+                </Row>
 
-            {testingData && (
-              <Row>
-                <Tests tests={testingData.yesterdayTotal} />
-              </Row>
-            )}
+                {testingData && (
+                  <Row>
+                    <Tests tests={testingData.yesterdayTotal} />
+                  </Row>
+                )}
 
-            <Row>
-              <TotalChart summary={summary} />
-            </Row>
-            <Row>
-              <DailyChart summary={summary} />
-            </Row>
+                <Row>
+                  <TotalChart summary={summary} />
+                </Row>
+                <Row>
+                  <DailyChart summary={summary} />
+                </Row>
 
-            <Row>
-              <TransmissionChart data={transmissions} />
-            </Row>
+                <Row>
+                  <TransmissionChart data={transmissions} />
+                </Row>
 
-            <Bar>
-              Location
-              <span>Daily cases</span>
-            </Bar>
+                <Bar>
+                  Location
+                  <span>Daily cases</span>
+                </Bar>
 
-            {locations.map((item, i) => (
-              <Location
-                key={i}
-                onClick={() => {
-                  showLocation(item.location);
-                }}
-              >
-                <div className="body">
-                  <div>{item.location}</div>
-                  <div className="num-cases">
-                    <div className="total-cases">{item.totalCases}</div>
-                    {item.newCases > 0 && <small>+{item.newCases}</small>}
-                    {/* <div
+                {locations?.map((item, i) => (
+                  <Location
+                    key={i}
+                    onClick={() => {
+                      showLocation(item.location);
+                    }}
+                  >
+                    <div className="body">
+                      <div>{item.location}</div>
+                      <div className="num-cases">
+                        <div className="total-cases">{item.totalCases}</div>
+                        {item.newCases > 0 && <small>+{item.newCases}</small>}
+                        {/* <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
                           __html: require(`../public/arrow.svg?include`),
                         }}
                       /> */}
-                  </div>
-                </div>
+                      </div>
+                    </div>
 
-                <InlineChart>
-                  <ResponsiveContainer>
-                    <LineChart data={history[item.name]}>
-                      <XAxis dataKey="date" hide />
-                      <Line
-                        type="monotone"
-                        dataKey="new"
-                        stroke="#51b6b0"
-                        strokeWidth={1}
-                        dot={false}
-                        isAnimationActive={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </InlineChart>
-              </Location>
-            ))}
+                    <InlineChart>
+                      <ResponsiveContainer>
+                        <LineChart data={history[item.name]}>
+                          <XAxis dataKey="date" hide />
+                          <Line
+                            type="monotone"
+                            dataKey="new"
+                            stroke="#51b6b0"
+                            strokeWidth={1}
+                            dot={false}
+                            isAnimationActive={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </InlineChart>
+                  </Location>
+                ))}
 
-            <Row>
-              <Ages
-                totalCasesPublished={totalCasesPublished}
-                ageData={ageData}
-              />
-            </Row>
+                <Row>
+                  <Ages
+                    totalCasesPublished={totalCasesPublished}
+                    ageData={ageData}
+                  />
+                </Row>
 
-            <Terms termsOpened={termsOpened} setTermsOpened={setTermsOpened} />
+                <Terms
+                  termsOpened={termsOpened}
+                  setTermsOpened={setTermsOpened}
+                />
+              </>
+            )}
+            {error && (
+              <Error type="button" onClick={() => window.location.reload()}>
+                Having trouble retrieving data, please <strong>refresh</strong>.
+              </Error>
+            )}
           </Summary>
         )}
       </Info>
@@ -625,4 +637,18 @@ const InlineChart = styled.div`
   height: 50px;
   /* margin-left: 5px;
   display: inline-block; */
+`;
+
+const Error = styled.button`
+  ${({ theme }) => css`
+    font-size: 1em;
+    margin-top: 50px;
+    text-align: center;
+    padding: 0 40px;
+    border: none;
+    background: none;
+    strong {
+      color: ${theme.teal};
+    }
+  `}
 `;
