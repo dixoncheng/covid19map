@@ -104,6 +104,32 @@ export default class MyDocument extends Document {
           <meta property="og:image:height" content="630" />
           <meta property="og:image:type" content="image/png" />
           <meta property="og:locale" content="en_nz" />
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              async function deleteCaches() {
+                try {
+                  const keys = await window.caches.keys();
+                  await Promise.all(keys.map(key => caches.delete(key)));
+                } catch (err) {
+                  console.log('deleteCache err: ', err);
+                }
+              }
+
+              // run this function on your app load
+              function resetCacheForUpdate() {
+                if (!localStorage.getItem('cacheReset')) {
+                  deleteCaches()
+                    .then(_ => {
+                      localStorage.setItem('cacheReset', 'yes');
+                    }) 
+                }
+              }
+              resetCacheForUpdate();
+              `,
+            }}
+          />
         </Head>
         <body>
           <Main />
