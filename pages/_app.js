@@ -70,9 +70,9 @@ const Styles = createGlobalStyle`
     }
     .inline-icon {
       display: inline-block;
-      margin-left: 17px;
-      height: 10px;
-      width: 10px;
+      height: 12px;
+      width: 12px;
+      margin-right: 3px;
       svg {
         display: block;
         height: 100%;

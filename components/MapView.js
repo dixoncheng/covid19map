@@ -183,18 +183,36 @@ const MapView = ({ data = {}, error }) => {
             {data.locations && (
               <>
                 <div className="meta">
-                  <small>{asAt}</small>
-                  <br />
-                  <small>
-                    Source:{" "}
-                    <a
-                      href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  <div>
+                    <small>{asAt}</small>
+                    <br />
+                    <small>
+                      Source:{" "}
+                      <a
+                        href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Ministry of Health
+                      </a>
+                    </small>
+                  </div>
+                  <div>
+                    <Refresh
+                      type="button"
+                      onClick={() =>
+                        (window.location = `/?${new Date().getTime()}`)
+                      }
                     >
-                      Ministry of Health
-                    </a>
-                  </small>
+                      <div
+                        className="inline-icon"
+                        dangerouslySetInnerHTML={{
+                          __html: require(`../public/refresh.svg?include`),
+                        }}
+                      />
+                      Refresh
+                    </Refresh>
+                  </div>
                 </div>
 
                 <Share>
@@ -394,6 +412,8 @@ const Summary = styled.div`
     }
     .meta {
       margin: 0.5em 0;
+      display: flex;
+      justify-content: space-between;
     }
     .made-by {
       small {
@@ -491,7 +511,7 @@ const SummaryTable = styled.table`
       align-items: center;
     }
     .inline-icon {
-      opacity: 0.3;
+      /* opacity: 0.3; */
     }
     small {
       font-weight: bold;
@@ -614,7 +634,7 @@ const Location = styled.div`
       /* top: 1px; */
     }
     .inline-icon {
-      opacity: 0.3;
+      /* opacity: 0.3; */
     }
     .total-cases {
       /* font-size: 1em; */
@@ -649,6 +669,21 @@ const Error = styled.button`
     background: none;
     strong {
       color: ${theme.teal};
+    }
+  `}
+`;
+
+const Refresh = styled.button`
+  ${({ theme }) => css`
+    border: none;
+    background: ${theme.green};
+    color: white;
+    font-size: 0.8em;
+    padding: 0.1em 0.5em;
+    border-radius: 1em;
+    .inline-icon {
+      position: relative;
+      top: 1px;
     }
   `}
 `;
