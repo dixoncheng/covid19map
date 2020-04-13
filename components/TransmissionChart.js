@@ -1,35 +1,27 @@
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import styled, { css, createGlobalStyle } from "styled-components";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import styled, { css } from "styled-components";
 
 const COLORS = ["#51b6b0", "#aacd6e", "#025064", "#ffc906"];
 
 const TransmissionChart = ({ data = [] }) => {
-  // console.log(data);
   return (
     <StyledTransmissionChart>
       <div className="head">Transmission type</div>
       <img src="/infographic/commtrans.svg" />
       <div className="row">
-        <div>
-          <PieChart width={120} height={110}>
-            <Pie
-              dataKey="percent"
-              // isAnimationActive={false}
-              data={data}
-              cx={50}
-              cy={50}
-              outerRadius={50}
-              // label
-            >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            {/* <Tooltip /> */}
-          </PieChart>
+        <div className="chart-wrap">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie dataKey="percent" data={data} outerRadius="100%">
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
         <div>
           {data.map((item, i) => (
@@ -71,6 +63,11 @@ const StyledTransmissionChart = styled.div`
       top: -4.3em;
       right: 2em;
       width: 11em;
+    }
+    .chart-wrap {
+      width: 14em;
+      height: 14em;
+      margin-right: 1.5em;
     }
   `}
 `;
