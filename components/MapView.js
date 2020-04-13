@@ -326,10 +326,7 @@ const MapView = ({ data = {}, error }) => {
                 ))}
 
                 <Row>
-                  <Ages
-                    totalCasesPublished={totalCasesPublished}
-                    ageData={ageData}
-                  />
+                  <Ages ageData={ageData} />
                 </Row>
 
                 <Terms

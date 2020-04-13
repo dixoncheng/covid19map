@@ -1,36 +1,59 @@
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+} from "recharts";
 import styled, { css } from "styled-components";
 
-const Ages = ({ ageData, totalCasesPublished }) => {
+const COLORS = [
+  "#51b6b0",
+  "#aacd6e",
+  "#025064",
+  "#317c3f",
+  "#956828",
+  "#d4b074",
+  "#ffc906",
+  "#e98e23",
+  "#af5434",
+  "#833f24",
+];
+
+const Ages = ({ ageData }) => {
   return (
     <StyledAges>
       <div className="head">Age Groups</div>
-      <div className="chart">
-        {ageData.map((item, i) => {
-          const percent = Math.round(
-            (item.numCases / totalCasesPublished) * 100
-          );
-          return (
-            <Age
-              key={i}
-              percent={percent}
-              // onMouseOver={() => setcurrentAgeIndex(i)}
+      <div className="chart-wrap">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={ageData}
+            layout="vertical"
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 10,
+            }}
+          >
+            <XAxis type="number" hide />
+            <YAxis type="category" dataKey="title" interval={0} width={90} />
+            <Bar
+              dataKey="numCases"
+              fill="#8884d8"
+              label={{ position: "insideRight", fill: "white" }}
             >
-              {item.title}
-              <strong>{percent || 1}%</strong>
-            </Age>
-          );
-        })}
+              {ageData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-      {/* <div className="foot">
-              {currentAgeIndex !== null && (
-                <>
-                  <strong>{ageData[currentAgeIndex].title}:</strong>{" "}
-                  {ageData[currentAgeIndex].numCases} confirmed{" "}
-                  {ageData[currentAgeIndex].numCases === 1 ? "case" : "cases"}
-                </>
-              )}
-              &nbsp;
-            </div> */}
     </StyledAges>
   );
 };
@@ -48,18 +71,30 @@ const StyledAges = styled.div`
       margin-bottom: 0.5em;
       line-height: 1.1;
     }
-    .chart {
-      display: flex;
-      flex-direction: column;
-      height: 40em;
-      ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          flex-direction: row;
-          height: auto;
-        }
-      `}
+    .chart-wrap {
+      width: 45em;
+      height: 34em;
     }
+    .recharts-cartesian-axis-tick-value tspan {
+      font-size: 1.4em;
+    }
+    .recharts-label {
+      font-size: 1.4em;
+    }
+
+    .recharts-surface {
+      transform: translateX(-30px);
+      @media (min-width: 430px) {
+        transform: translateX(-20px);
+      }
+      @media (min-width: 520px) {
+        transform: translateX(0px);
+      }
+      @media (min-width: ${theme.sm}) {
+        transform: translateX(-30px);
+      }
+    }
+
     .foot {
       display: none;
       background-color: white;
@@ -76,77 +111,6 @@ const StyledAges = styled.div`
         display: block;
         color: ${theme.green};
       }
-    }
-  `}
-`;
-
-const Age = styled.div`
-  ${({ theme, percent, ...props }) => css`
-    /* cursor: pointer; */
-    font-size: 1.5em;
-    color: white;
-    text-align: center;
-    height: ${percent}%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    line-height: 1.1;
-    min-height: 1.5em;
-    min-width: 2.6em;
-    ${props.wide &&
-    css`
-      @media (min-width: ${theme.sm}) {
-        font-size: 1.2em;
-        width: ${percent}%;
-        height: 9em;
-        flex-direction: column;
-      }
-    `}
-    strong {
-      font-weight: normal;
-      opacity: 0.9;
-      display: block;
-      :before {
-        content: " - ";
-        margin-left: 0.4em;
-        ${props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            display: none;
-          }
-        `}
-      }
-    }
-    :nth-child(1) {
-      background-color: ${theme.teal};
-    }
-    :nth-child(2) {
-      background-color: ${theme.dark};
-    }
-    :nth-child(3) {
-      background-color: ${theme.green};
-    }
-    :nth-child(4) {
-      background-color: #317c3f;
-    }
-    :nth-child(5) {
-      background-color: #956828;
-    }
-    :nth-child(6) {
-      background-color: #d4b074;
-    }
-    :nth-child(7) {
-      background-color: ${theme.yellow};
-    }
-    :nth-child(8) {
-      background-color: #e98e23;
-    }
-    :nth-child(9) {
-      background-color: #af5434;
-    }
-    :nth-child(10) {
-      background-color: #833f24;
     }
   `}
 `;
