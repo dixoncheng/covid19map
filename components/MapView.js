@@ -325,9 +325,9 @@ const MapView = ({ data = {}, error }) => {
                   </Location>
                 ))}
 
-                <Row>
+                {/* <Row>
                   <Ages ageData={ageData} />
-                </Row>
+                </Row> */}
 
                 <Terms
                   termsOpened={termsOpened}
