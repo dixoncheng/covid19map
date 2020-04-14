@@ -1,11 +1,11 @@
 import styled, { css } from "styled-components";
 
-const Genders = ({ caseDetails }) => {
-  const { countMale, countFemale, totalCasesPublished } = caseDetails;
-
-  const percentWomen = Math.round((countFemale / totalCasesPublished) * 100);
-  const percentMen = Math.round((countMale / totalCasesPublished) * 100);
-
+const Genders = ({ genders }) => {
+  const male = genders.find((x) => x.gender === "Male");
+  const female = genders.find((x) => x.gender === "Female");
+  const total = genders.reduce((prev, cur) => prev + cur.count, 0);
+  const percentWomen = Math.round((female.count / total) * 100);
+  const percentMen = Math.round((male.count / total) * 100);
   return (
     <StyledGenders>
       <div className="head">Patient genders</div>

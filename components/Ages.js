@@ -21,14 +21,14 @@ const COLORS = [
   "#833f24",
 ];
 
-const Ages = ({ ageData }) => {
+const Ages = ({ ages }) => {
   return (
     <StyledAges>
       <div className="head">Age Groups</div>
       <div className="chart-wrap">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={ageData}
+            data={ages}
             layout="vertical"
             margin={{
               top: 10,
@@ -38,13 +38,13 @@ const Ages = ({ ageData }) => {
             }}
           >
             <XAxis type="number" hide />
-            <YAxis type="category" dataKey="title" interval={0} width={90} />
+            <YAxis type="category" dataKey="age" interval={0} width={90} />
             <Bar
-              dataKey="numCases"
+              dataKey="count"
               fill="#8884d8"
               label={{ position: "insideRight", fill: "white" }}
             >
-              {ageData.map((entry, index) => (
+              {ages.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

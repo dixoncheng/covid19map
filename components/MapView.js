@@ -47,6 +47,8 @@ const MapView = ({ data = {}, error }) => {
     summary,
     transmissions,
     testingData,
+    genders,
+    ages,
   } = data;
   const {
     combinedTotal,
@@ -57,7 +59,6 @@ const MapView = ({ data = {}, error }) => {
     recoveredTotal,
     hospitalTotal,
   } = summary ? summary[summary.length - 1] : {};
-  const { totalCasesPublished, ages: ageData } = data?.caseDetails || {};
 
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
@@ -260,7 +261,7 @@ const MapView = ({ data = {}, error }) => {
                 <Row>
                   <div className="grid">
                     <Hospital hospitalTotal={hospitalTotal} />
-                    <Genders caseDetails={data.caseDetails} />
+                    {genders && <Genders genders={genders} />}
                   </div>
                 </Row>
 
@@ -325,9 +326,11 @@ const MapView = ({ data = {}, error }) => {
                   </Location>
                 ))}
 
-                {/* <Row>
-                  <Ages ageData={ageData} />
-                </Row> */}
+                {ages && (
+                  <Row>
+                    <Ages ages={ages} />
+                  </Row>
+                )}
 
                 <Terms
                   termsOpened={termsOpened}
