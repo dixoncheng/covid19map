@@ -15,6 +15,7 @@ import Ages from "../components/Ages";
 import Terms from "../components/Terms";
 import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
+import Slider from "../components/Slider";
 
 import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 
@@ -156,11 +157,11 @@ const MapView = ({ data = {}, error }) => {
               </p>
             )}
 
-            {location.numCases < location.totalCases && (
+            {location.cases.length < location.totalCases && (
               <p style={{ textAlign: "center" }}>
                 <small>
-                  Details of {location.totalCases - location.numCases} cases yet
-                  to be released
+                  Note: Some case details have been removed by <br />
+                  the Ministry of Health.
                 </small>
               </p>
             )}
@@ -266,11 +267,12 @@ const MapView = ({ data = {}, error }) => {
                   </Row>
                 )}
                 <Row>
-                  <TotalChart summary={summary} />
+                  <Slider>
+                    <DailyChart summary={summary} />
+                    <TotalChart summary={summary} />
+                  </Slider>
                 </Row>
-                <Row>
-                  <DailyChart summary={summary} />
-                </Row>
+                <Row></Row>
                 <Row>
                   <TransmissionChart data={transmissions} />
                 </Row>
@@ -549,7 +551,9 @@ const SummaryTable = styled.table`
   `}
 `;
 
-const Details = styled.div``;
+const Details = styled.div`
+  font-size: 2em;
+`;
 
 const Bar = styled.div`
   ${({ theme }) => css`

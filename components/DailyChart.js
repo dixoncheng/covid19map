@@ -64,6 +64,7 @@ export default TotalChart;
 
 const Chart = styled.div`
   ${({ theme, ...props }) => css`
+    margin: 0 1em;
     background: white;
     border-radius: 0.5em;
     padding: 2.5em 2em;
