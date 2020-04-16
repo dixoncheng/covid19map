@@ -168,7 +168,7 @@ const MapView = ({ data = {}, error }) => {
         ) : (
           <Summary>
             <Alert
-              href="https://covid19.govt.nz/assets/COVID_Alert-levels_v2.pdf"
+              href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-summary.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
