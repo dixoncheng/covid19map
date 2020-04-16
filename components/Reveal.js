@@ -30,7 +30,7 @@ const Reveal = ({ button, full, children }) => {
       <InvisibleButton
         onClick={() => {
           toggle(!open);
-          gtag.event("Toggle", "", "Level 3 slideshow");
+          gtag.event("Level 3 slideshow");
         }}
         active={open}
       >
