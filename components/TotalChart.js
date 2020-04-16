@@ -47,6 +47,14 @@ const TotalChart = ({ summary }) => {
               dot={false}
             />
 
+            {/* <Line
+              type="monotone"
+              dataKey="deathsTotal"
+              stroke="red"
+              strokeWidth={2}
+              dot={false}
+            /> */}
+
             <ReferenceLine x="2020-03-25T00:00:00.000Z" stroke="#025064" />
           </LineChart>
         </ResponsiveContainer>

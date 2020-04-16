@@ -98,38 +98,56 @@ const Map = ({
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         {markers?.map(
-          ({ location, latlng, boundary, totalCases, inHospital }, i) => (
+          (
+            {
+              location,
+              latlng,
+              boundary,
+              totalCases,
+              active,
+              recovered,
+              deaths,
+              inHospital,
+            },
+            i
+          ) => (
             <FeatureGroup key={i}>
-              {totalCases && (
-                <>
-                  <Marker
-                    position={latlng}
-                    icon={getRegionIcon(
-                      `region ${inHospital > 0 ? "hospital" : ""}`,
-                      totalCases
+              <Marker
+                position={latlng}
+                icon={getRegionIcon(
+                  `region ${inHospital > 0 ? "hospital" : ""}`,
+                  active
+                )}
+                zIndexOffset={100}
+                onClick={() => onLocationClick(location)}
+              />
+              <Popup>
+                <StyledPopup>
+                  <div className="location">{location}</div>
+                  <div className="cases">
+                    {active} active case{active > 1 && "s"}
+                    <br />
+                    {recovered} recovered
+                    <br />
+                    {totalCases} total case{totalCases > 1 && "s"}
+                    {deaths > 0 && (
+                      <>
+                        <br />
+                        {deaths} death{deaths > 1 && "s"}
+                      </>
                     )}
-                    zIndexOffset={100}
-                    onClick={() => onLocationClick(location)}
-                  />
-                  <Popup>
-                    <StyledPopup>
-                      <div className="location">{location}</div>
-                      <div className="cases">
-                        {totalCases} case{totalCases > 1 && "s"}
-                      </div>
-                      {inHospital > 0 && (
-                        <div className="cases">{inHospital} in hospital</div>
-                      )}
-                    </StyledPopup>
-                  </Popup>
-                </>
-              )}
+                  </div>
+                  {inHospital > 0 && (
+                    <div className="cases">{inHospital} in hospital</div>
+                  )}
+                </StyledPopup>
+              </Popup>
               <Polygon
                 color={currentLocation === location ? "white" : "black"}
                 opacity={currentLocation === location ? 1 : 0.2}
                 weight={currentLocation === location ? 3 : 1}
                 fillColor="#51b6b0"
-                fillOpacity={((totalCases || 0) - -20) / (maxCases + 10 - 1)}
+                fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
                 onClick={() => onLocationClick(location)}

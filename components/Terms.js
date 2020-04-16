@@ -94,7 +94,23 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
 export default Terms;
 
 const StyledTerms = styled.div`
-  ${({ theme, ...props }) => css``}
+  ${({ theme, ...props }) => css`
+    font-size: 2em;
+    button {
+      font-size: 1em;
+    }
+
+    .made-by {
+      small {
+        position: relative;
+        top: 0.1em;
+      }
+      img {
+        width: 1em;
+        vertical-align: middle;
+      }
+    }
+  `}
 `;
 
 const LinkButton = styled.button`

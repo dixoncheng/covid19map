@@ -215,7 +215,6 @@ const MapView = ({ data = {}, error }) => {
                     </Refresh>
                   </div>
                 </div>
-
                 <Share>
                   <small>Share:</small>
                   <a
@@ -233,7 +232,6 @@ const MapView = ({ data = {}, error }) => {
                     <img src="/tw.svg" />
                   </a>
                 </Share>
-
                 <Row>
                   <TotalCases combinedTotal={combinedTotal} />
                 </Row>
@@ -241,52 +239,62 @@ const MapView = ({ data = {}, error }) => {
                   <Cases
                     confirmedTotal={confirmedTotal}
                     probableTotal={probableTotal}
+                    active={combinedTotal - recoveredTotal - deathsTotal}
                   />
                 </Row>
-
                 <Row>
                   <div className="grid">
                     <NewCases combined={combined} />
                     <Deaths deathsTotal={deathsTotal} />
                   </div>
                 </Row>
-
                 <Row>
                   <Recovered
                     recoveredTotal={recoveredTotal}
                     combinedTotal={combinedTotal}
                   />
                 </Row>
-
                 <Row>
                   <div className="grid">
                     <Hospital hospitalTotal={hospitalTotal} />
                     {genders && <Genders genders={genders} />}
                   </div>
                 </Row>
-
                 {testingData && (
                   <Row>
                     <Tests tests={testingData.yesterdayTotal} />
                   </Row>
                 )}
-
                 <Row>
                   <TotalChart summary={summary} />
                 </Row>
                 <Row>
                   <DailyChart summary={summary} />
                 </Row>
-
                 <Row>
                   <TransmissionChart data={transmissions} />
                 </Row>
-
-                <Bar>
+                {/* <Bar>
                   Location
                   <span>Daily cases</span>
-                </Bar>
+                </Bar> */}
 
+                <Heading>Regional data</Heading>
+                <Legend>
+                  <ul>
+                    <li>
+                      <img src="/active.svg" /> Total Cases
+                    </li>
+                    <li>
+                      <img src="/recovered.svg" />
+                      Recovered
+                    </li>
+                    <li>
+                      <img src="/deaths.svg" />
+                      Deaths
+                    </li>
+                  </ul>
+                </Legend>
                 {locations?.map((item, i) => (
                   <Location
                     key={i}
@@ -295,9 +303,39 @@ const MapView = ({ data = {}, error }) => {
                     }}
                   >
                     <div className="body">
-                      <div>{item.location}</div>
+                      <div>
+                        <span className="name">{item.location}</span>
+                        <CaseCounts>
+                          <ul>
+                            <li>
+                              <img src="/active.svg" /> {item.totalCases}
+                            </li>
+                            <li>
+                              <img src="/recovered.svg" />{" "}
+                              {
+                                history[item.name][
+                                  history[item.name].length - 1
+                                ].recovered
+                              }
+                            </li>
+                            <li>
+                              <img src="/deaths.svg" />{" "}
+                              {
+                                history[item.name][
+                                  history[item.name].length - 1
+                                ].deaths
+                              }
+                            </li>
+                          </ul>
+                        </CaseCounts>
+                      </div>
                       <div className="num-cases">
-                        <div className="total-cases">{item.totalCases}</div>
+                        <div className="total-cases">
+                          {
+                            history[item.name][history[item.name].length - 1]
+                              .active
+                          }
+                        </div>
                         {item.newCases > 0 && <small>+{item.newCases}</small>}
                         {/* <div
                         className="inline-icon"
@@ -325,13 +363,11 @@ const MapView = ({ data = {}, error }) => {
                     </InlineChart>
                   </Location>
                 ))}
-
                 {ages && (
                   <Row>
                     <Ages ages={ages} />
                   </Row>
                 )}
-
                 <Terms
                   termsOpened={termsOpened}
                   setTermsOpened={setTermsOpened}
@@ -366,11 +402,14 @@ const Main = styled.div`
 
 const Info = styled.div`
   ${({ theme }) => css`
+    font-size: 2vw;
+
     color: ${theme.dark};
     box-sizing: border-box;
     padding: 20px;
     background: ${theme.light};
     @media (min-width: ${theme.sm}) {
+      font-size: 0.45em;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
       height: 100vh;
@@ -411,19 +450,10 @@ const Summary = styled.div`
       justify-content: space-between;
     }
     .meta {
+      font-size: 2em;
       margin: 0.5em 0;
       display: flex;
       justify-content: space-between;
-    }
-    .made-by {
-      small {
-        position: relative;
-        top: 1px;
-      }
-      img {
-        width: 16px;
-        vertical-align: middle;
-      }
     }
   `}
 `;
@@ -434,15 +464,15 @@ const Logo = styled.div`
     align-items: center;
 
     img {
-      width: 42px;
-      margin-right: 15px;
-      @media (min-width: ${theme.md}) {
+      width: 6em;
+      margin-right: 1.5em;
+      /* @media (min-width: ${theme.md}) {
         width: 60px;
-      }
+      } */
     }
     h1 {
       white-space: nowrap;
-      font-size: 34px;
+      font-size: 4.5em;
       color: ${theme.teal};
       margin: 0;
       /* @media (min-width: ${theme.md}) {
@@ -451,7 +481,7 @@ const Logo = styled.div`
     }
     h2 {
       white-space: nowrap;
-      font-size: 16px;
+      font-size: 2em;
       color: ${theme.teal};
       margin: 0;
       line-height: 1.1;
@@ -590,8 +620,9 @@ const Alert = styled.a`
 
 const Share = styled.div`
   margin-bottom: 0.8em;
+  font-size: 2em;
   img {
-    height: 22px;
+    height: 1.2em;
     vertical-align: middle;
     margin: 0 3px;
     position: relative;
@@ -602,9 +633,9 @@ const Share = styled.div`
 const Location = styled.div`
   ${({ theme }) => css`
     cursor: pointer;
-    font-size: 15px;
+    font-size: 2.1em;
     background: white;
-    padding: 2px 8px 2px;
+    padding: 0.2em 0.5em 0.2em;
     margin: 5px 0 !important;
     display: flex;
     justify-content: space-between;
@@ -616,12 +647,19 @@ const Location = styled.div`
     }
     .body {
       padding: 6px 0;
-      width: 50%;
+      /* width: 50%; */
+      flex: 1;
       display: flex;
       justify-content: space-between;
       /* align-items: center; */
     }
+    .name {
+      color: ${theme.teal};
+      /* font-weight: bold; */
+    }
     .num-cases {
+      color: ${theme.teal};
+      font-weight: bold;
       /* padding-top: 3px;
       line-height: 1; */
       margin: 0 10px;
@@ -640,20 +678,23 @@ const Location = styled.div`
       /* font-size: 1em; */
     }
     small {
-      font-size: 14px;
+      display: inline-block;
+      background: ${theme.green};
+      font-size: 0.8em;
       font-weight: bold;
-      color: ${theme.green};
-      /* margin-top: 2px; */
-      /* margin-right: 6px; */
+      color: white;
+      padding: 0.15em 0.3em;
+      border-radius: 0.3em;
       text-align: right;
       position: relative;
-      top: -4px;
+      top: -3px;
+      line-height: 1;
     }
   `}
 `;
 
 const InlineChart = styled.div`
-  width: 50%;
+  width: 45%;
   height: 50px;
   /* margin-left: 5px;
   display: inline-block; */
@@ -684,6 +725,77 @@ const Refresh = styled.button`
     .inline-icon {
       position: relative;
       top: 1px;
+      width: 1em;
+      height: 1em;
+      margin-right: 0.2em;
+    }
+  `}
+`;
+
+const Heading = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.dark};
+    font-family: ${theme.fontFancy};
+    font-size: 2.1em;
+    text-transform: uppercase;
+    margin-top: 1.6em;
+    margin-bottom: 0.3em;
+    line-height: 1.1;
+  `}
+`;
+
+const Legend = styled.div`
+  ${({ theme }) => css`
+    margin-bottom: 0.3em;
+    font-size: 2.1em;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 0.8em;
+      font-size: 0.8em;
+      :nth-child(1) img {
+        height: 1.05em;
+      }
+      :nth-child(2) img {
+        height: 0.85em;
+      }
+    }
+    img {
+      height: 1em;
+      margin-right: 0.3em;
+    }
+  `}
+`;
+
+const CaseCounts = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.navy};
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+    }
+    li {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 0.8em;
+      font-size: 0.8em;
+      :nth-child(1) img {
+        height: 1.05em;
+      }
+      :nth-child(2) img {
+        height: 0.85em;
+      }
+    }
+    img {
+      height: 1em;
+      margin-right: 0.3em;
     }
   `}
 `;

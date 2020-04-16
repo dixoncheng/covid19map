@@ -1,13 +1,16 @@
 import styled, { css } from "styled-components";
 
-const Cases = ({ confirmedTotal, probableTotal }) => {
+const Cases = ({ confirmedTotal, probableTotal, active }) => {
   return (
     <StyledCases>
       <div>
-        <strong>{confirmedTotal}</strong> Confirmed Cases
+        <strong>{active}</strong> Active
       </div>
       <div>
-        <strong>{probableTotal}</strong> Probable Cases
+        <strong>{confirmedTotal}</strong> Confirmed
+      </div>
+      <div>
+        <strong>{probableTotal}</strong> Probable
       </div>
     </StyledCases>
   );
@@ -24,8 +27,7 @@ const StyledCases = styled.div`
     color: ${theme.dark};
     position: relative;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
 
     :before {
       content: "";
@@ -38,10 +40,17 @@ const StyledCases = styled.div`
       background-size: contain;
       transform: translateY(-50%);
     }
+    > div {
+      text-align: center;
+      font-size: 0.6em;
+      padding: 0.2em 0;
+    }
     strong {
       color: ${theme.teal};
-      display: inline-block;
+      display: block;
       min-width: 2em;
+      font-size: 2.2em;
+      line-height: 1;
     }
   `}
 `;
