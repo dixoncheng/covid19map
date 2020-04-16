@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import { useMeasure } from "react-use";
+import * as gtag from "../lib/gtag";
 
 const Reveal = ({ button, full, children }) => {
   const defaultHeight = "0px";
@@ -26,7 +27,13 @@ const Reveal = ({ button, full, children }) => {
 
   return (
     <>
-      <InvisibleButton onClick={() => toggle(!open)} active={open}>
+      <InvisibleButton
+        onClick={() => {
+          toggle(!open);
+          gtag.event("Toggle", "", "Level 3 slideshow");
+        }}
+        active={open}
+      >
         {button}
       </InvisibleButton>
       <Container full={full}>

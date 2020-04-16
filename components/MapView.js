@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css } from "styled-components";
+import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 import Row from "../components/Row";
 import TotalCases from "../components/TotalCases";
 import Cases from "../components/Cases";
@@ -17,8 +18,7 @@ import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
 import Reveal from "../components/Reveal";
-
-import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
+import * as gtag from "../lib/gtag";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -45,7 +45,6 @@ const MapView = ({ data = {}, error }) => {
     asAt,
     maxCases,
     history,
-    alertLevel,
     summary,
     transmissions,
     testingData,
@@ -65,7 +64,6 @@ const MapView = ({ data = {}, error }) => {
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
-  const [showLevel3, setShowLevel3] = useState(false);
 
   const showLocation = (location) => {
     if (location) {
@@ -174,6 +172,7 @@ const MapView = ({ data = {}, error }) => {
               href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-summary.pdf"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => gtag.event("Alert", "", "")}
             >
               Alert Level 4
             </Alert>
@@ -204,9 +203,10 @@ const MapView = ({ data = {}, error }) => {
                   <div>
                     <Refresh
                       type="button"
-                      onClick={() =>
-                        (window.location = `/?${new Date().getTime()}`)
-                      }
+                      onClick={() => {
+                        gtag.event("Refresh");
+                        window.location = `/?${new Date().getTime()}`;
+                      }}
                     >
                       <div
                         className="inline-icon"
@@ -224,6 +224,7 @@ const MapView = ({ data = {}, error }) => {
                     href="https://www.facebook.com/covid19mapnz"
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => gtag.event("Follow", "", "Facebook")}
                   >
                     <img src="/Facebook.svg" /> Facebook
                   </a>
@@ -231,6 +232,7 @@ const MapView = ({ data = {}, error }) => {
                     href="https://www.instagram.com/covid19mapnz/"
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => gtag.event("Follow", "", "Instagram")}
                   >
                     <img src="/IG.svg" /> Instagram
                   </a>
@@ -328,6 +330,7 @@ const MapView = ({ data = {}, error }) => {
                     key={i}
                     onClick={() => {
                       showLocation(item.location);
+                      gtag.event("View location", "", item.location);
                     }}
                   >
                     <div className="body">

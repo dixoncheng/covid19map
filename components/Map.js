@@ -9,6 +9,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import styled, { css, createGlobalStyle } from "styled-components";
+import * as gtag from "../lib/gtag";
 
 const Map = ({
   center,
@@ -119,7 +120,10 @@ const Map = ({
                   active
                 )}
                 zIndexOffset={100}
-                onClick={() => onLocationClick(location)}
+                onClick={() => {
+                  onLocationClick(location);
+                  gtag.event("Marker", "Map", location);
+                }}
               />
               <Popup>
                 <StyledPopup>
@@ -150,7 +154,10 @@ const Map = ({
                 fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
-                onClick={() => onLocationClick(location)}
+                onClick={() => {
+                  onLocationClick(location);
+                  gtag.event("Region", "Map", location);
+                }}
               />
             </FeatureGroup>
           )
@@ -162,6 +169,7 @@ const Map = ({
               position={latlng}
               icon={getClusterIcon("cluster", totalCases)}
               // zIndexOffset={100}
+              onClick={() => gtag.event("Cluster", "Map", location)}
             >
               <Popup>
                 <StyledPopup>

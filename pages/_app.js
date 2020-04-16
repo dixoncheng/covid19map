@@ -8,7 +8,7 @@ Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
     font: '"Nunito", sans-serif',
-    teal: "#51b6b0",
+    teal: "#50b1ac",
     green: "#aacd6e",
     navy: "#025064",
     yellow: "#ffc906",

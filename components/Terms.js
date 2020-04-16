@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import * as gtag from "../lib/gtag";
 
 const Terms = ({ termsOpened, setTermsOpened }) => {
   return (
@@ -20,18 +21,28 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
       <p>
         <small>
           Any feedback, ideas, or if you'd like to help, please contact{" "}
-          <a href="mailto:contact@covid19map.nz">contact@covid19map.nz</a> |{" "}
+          <a
+            href="mailto:contact@covid19map.nz"
+            onClick={() => gtag.event("Email")}
+          >
+            contact@covid19map.nz
+          </a>{" "}
+          |{" "}
           <a
             href="https://github.com/dixoncheng/covid19map"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => gtag.event("Github")}
           >
             Github
           </a>
           <br />
           <LinkButton
             type="button"
-            onClick={() => setTermsOpened(!termsOpened)}
+            onClick={() => {
+              setTermsOpened(!termsOpened);
+              gtag.event("Disclaimer");
+            }}
           >
             Disclaimer and Terms of use
           </LinkButton>
@@ -76,6 +87,7 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
           href="https://www.linkedin.com/in/emilywongnz/"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => gtag.event("LinkedIn", "", "Emily")}
         >
           <img src="/linkedin.svg" />
         </a>{" "}
@@ -83,6 +95,7 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
           href="https://www.linkedin.com/in/dixon-cheng/"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => gtag.event("LinkedIn", "", "Dixon")}
         >
           <img src="/linkedin.svg" />
         </a>
