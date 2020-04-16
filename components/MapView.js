@@ -217,20 +217,20 @@ const MapView = ({ data = {}, error }) => {
                   </div>
                 </div>
                 <Share>
-                  <small>Share:</small>
+                  <small>Follow us</small>
                   <a
-                    href="https://www.facebook.com/sharer/sharer.php?u=https://covid19map.nz/"
+                    href="https://www.facebook.com/covid19mapnz"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img src="/fb.svg" />
+                    <img src="/Facebook.svg" /> Facebook
                   </a>
                   <a
-                    href="http://www.twitter.com/share?url=https://covid19map.nz/"
+                    href="https://www.instagram.com/covid19mapnz/"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img src="/tw.svg" />
+                    <img src="/IG.svg" /> Instagram
                   </a>
                 </Share>
                 <Row>
@@ -623,15 +623,26 @@ const Alert = styled.a`
 `;
 
 const Share = styled.div`
-  margin-bottom: 0.8em;
-  font-size: 2em;
-  img {
-    height: 1.2em;
-    vertical-align: middle;
-    margin: 0 3px;
-    position: relative;
-    top: -1px;
-  }
+  ${({ theme }) => css`
+    margin-bottom: 0.8em;
+    font-size: 2em;
+    a {
+      font-size: 0.8em;
+      text-decoration: none;
+      color: white;
+      background: ${theme.navy};
+      border-radius: 2em;
+      padding: 0.26em 0.5em;
+      margin-left: 0.5em;
+    }
+    img {
+      height: 1.2em;
+      vertical-align: middle;
+      margin: 0 3px;
+      position: relative;
+      top: -1px;
+    }
+  `}
 `;
 
 const Location = styled.div`
@@ -706,7 +717,7 @@ const InlineChart = styled.div`
 
 const Error = styled.button`
   ${({ theme }) => css`
-    font-size: 1em;
+    font-size: 2em;
     margin-top: 50px;
     text-align: center;
     padding: 0 40px;
