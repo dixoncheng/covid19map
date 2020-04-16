@@ -1,23 +1,39 @@
 import styled, { css } from "styled-components";
-import { animated } from "react-spring";
-import { useTransitionHeight } from "./useMeasure";
+import React, { useState, useEffect } from "react";
+import { useSpring, animated } from "react-spring";
+import { useMeasure } from "react-use";
 
 const Reveal = ({ button, full, children }) => {
-  const [style, bind, toggle, active] = useTransitionHeight();
-  const sty = {
-    marginLeft: full ? "-20px" : 0,
-    marginRight: full ? "-20px" : 0,
-    ...style,
-  };
+  const defaultHeight = "0px";
+  const [open, toggle] = useState(false);
+  const [contentHeight, setContentHeight] = useState(defaultHeight);
+  const [ref, { height }] = useMeasure();
+
+  // Animations
+  const expand = useSpring({
+    // config: { friction: 10 },
+    height: open ? `${contentHeight}px` : defaultHeight,
+  });
+
+  useEffect(() => {
+    //Sets initial height
+    setContentHeight(height);
+
+    //Adds resize event listener
+    // window.addEventListener("resize", setContentHeight(height));
+    // return window.removeEventListener("resize", setContentHeight(height));
+  }, [height]);
 
   return (
     <>
-      <InvisibleButton onClick={toggle} active={active}>
+      <InvisibleButton onClick={() => toggle(!open)} active={open}>
         {button}
       </InvisibleButton>
-      <animated.div style={sty}>
-        <div {...bind}>{children}</div>
-      </animated.div>
+      <Container full={full}>
+        <animated.div style={expand}>
+          <div ref={ref}>{children}</div>
+        </animated.div>
+      </Container>
     </>
   );
 };
@@ -38,10 +54,17 @@ const InvisibleButton = styled.button`
       display: inline-block;
       width: 0.5em;
       /* height: 0.6em; */
-      position: relative;
-      top: 1px;
+      /* position: relative; */
+      /* top: 1px; */
       transition: all 0.3s ease;
       transform: rotate(${active ? "90deg" : "0deg"});
     }
+  `}
+`;
+
+const Container = styled.div`
+  ${({ theme, full }) => css`
+    overflow: hidden;
+    margin: ${full ? "0 -20px" : 0};
   `}
 `;

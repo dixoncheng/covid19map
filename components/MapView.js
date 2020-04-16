@@ -240,7 +240,7 @@ const MapView = ({ data = {}, error }) => {
                 </Row>
 
                 <Row>
-                  {/* <Reveal
+                  <Reveal
                     full
                     button={
                       <Heading className="head">
@@ -253,26 +253,13 @@ const MapView = ({ data = {}, error }) => {
                         />
                       </Heading>
                     }
-                  > */}
-                  <InvisibleButton onClick={() => setShowLevel3(!showLevel3)}>
-                    <Heading className="head">
-                      What does alert level 3 mean?{" "}
-                      <div
-                        className="icon"
-                        dangerouslySetInnerHTML={{
-                          __html: require(`../public/arrow.svg?include`),
-                        }}
-                      />
-                    </Heading>
-                  </InvisibleButton>
-
-                  {showLevel3 && (
-                    <Slider full>
+                  >
+                    <Slider>
                       {[...Array(10)].map((item, i) => (
                         <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
                       ))}
                     </Slider>
-                  )}
+                  </Reveal>
                 </Row>
 
                 <Row>
@@ -850,28 +837,6 @@ const CaseCounts = styled.div`
     img {
       height: 1em;
       margin-right: 0.3em;
-    }
-  `}
-`;
-
-const InvisibleButton = styled.button`
-  ${({ theme, active }) => css`
-    font-size: 1em;
-    text-align: left;
-    background: none;
-    padding: 0;
-    border: none;
-    .head {
-      margin-top: 0;
-    }
-    .icon {
-      display: inline-block;
-      width: 0.5em;
-      /* height: 0.6em; */
-      position: relative;
-      top: 1px;
-      transition: all 0.3s ease;
-      transform: rotate(${active ? "90deg" : "0deg"});
     }
   `}
 `;
