@@ -16,6 +16,7 @@ import Terms from "../components/Terms";
 import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
+import Reveal from "../components/Reveal";
 
 import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 
@@ -64,6 +65,7 @@ const MapView = ({ data = {}, error }) => {
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
+  const [showLevel3, setShowLevel3] = useState(false);
 
   const showLocation = (location) => {
     if (location) {
@@ -236,6 +238,31 @@ const MapView = ({ data = {}, error }) => {
                 <Row>
                   <TotalCases combinedTotal={combinedTotal} />
                 </Row>
+
+                <Row>
+                  <Reveal
+                    full
+                    button={
+                      <Heading className="head">
+                        What does alert level 3 mean?{" "}
+                        <div
+                          className="icon"
+                          dangerouslySetInnerHTML={{
+                            __html: require(`../public/arrow.svg?include`),
+                          }}
+                        />
+                      </Heading>
+                    }
+                  >
+                    <Slider>
+                      {[...Array(10)].map((item, i) => (
+                        <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
+                      ))}
+                    </Slider>
+                  </Reveal>
+                  {/* )} */}
+                </Row>
+
                 <Row>
                   <Cases
                     confirmedTotal={confirmedTotal}
@@ -267,12 +294,12 @@ const MapView = ({ data = {}, error }) => {
                   </Row>
                 )}
                 <Row>
-                  <Slider>
+                  <Slider full>
                     <DailyChart summary={summary} />
                     <TotalChart summary={summary} />
                   </Slider>
                 </Row>
-                <Row></Row>
+
                 <Row>
                   <TransmissionChart data={transmissions} />
                 </Row>
@@ -411,11 +438,11 @@ const Info = styled.div`
     padding: 20px;
     background: ${theme.light};
     @media (min-width: ${theme.sm}) {
-      font-size: 0.45em;
+      font-size: 0.55em;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
       height: 100vh;
-      width: 375px;
+      width: 450px;
     }
     a {
       color: ${theme.dark};

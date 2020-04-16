@@ -18,6 +18,8 @@
     "react-dom": "16.13.1",
     "react-leaflet": "^2.6.3",
     "react-slick": "^0.25.2",
+    "react-spring": "^8.0.27",
+    "react-use": "^14.1.1",
     "recharts": "^1.8.5",
     "styled-components": "^5.0.1",
     "swr": "^0.2.0",

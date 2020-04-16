@@ -67,6 +67,7 @@ const Styles = createGlobalStyle`
     }
     button {
       cursor: pointer;
+      outline: none;
     }
     .inline-icon {
       display: inline-block;

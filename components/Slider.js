@@ -1,37 +1,37 @@
 import styled, { css } from "styled-components";
 import Slider from "react-slick";
 
-const SliderWrap = ({ children, ...props }) => {
-  const NextArrow = ({ onClick }) => (
-    <button
-      className="slick-right"
-      onClick={onClick}
-      round
-      color="light"
-      icon="chev-right.svg"
-    />
-  );
-  const PrevArrow = ({ onClick }) => (
-    <button
-      className="slick-left"
-      onClick={onClick}
-      round
-      color="light"
-      icon="chev-left.svg"
-    />
-  );
+const SliderWrap = ({ full, children, ...props }) => {
+  // const NextArrow = ({ onClick }) => (
+  //   <button
+  //     className="slick-right"
+  //     onClick={onClick}
+  //     round
+  //     color="light"
+  //     icon="chev-right.svg"
+  //   />
+  // );
+  // const PrevArrow = ({ onClick }) => (
+  //   <button
+  //     className="slick-left"
+  //     onClick={onClick}
+  //     color="light"
+  //     icon="chev-left.svg"
+  //   />
+  // );
 
   return (
-    <StyledSlider>
+    <StyledSlider full={full}>
       <Slider
         centerMode
         centerPadding="18px"
         infinite={false}
         dots
+        arrows={false}
         // adaptiveHeight
         {...props}
-        nextArrow={<NextArrow />}
-        prevArrow={<PrevArrow />}
+        // nextArrow={<NextArrow />}
+        // prevArrow={<PrevArrow />}
       >
         {children}
       </Slider>
@@ -42,8 +42,9 @@ const SliderWrap = ({ children, ...props }) => {
 export default SliderWrap;
 
 const StyledSlider = styled.div`
-  ${({ theme }) => css`
-    margin: 0 -20px 8em !important;
+  ${({ theme, full }) => css`
+    margin: ${full ? "0 -20px 0 !important" : 0};
+    /* padding-bottom: 4em; */
     .slick-slider {
       position: relative;
 
@@ -116,7 +117,10 @@ const StyledSlider = styled.div`
 
       height: 100%;
       min-height: 1px;
-      /* padding: 0 10px */
+      /* slide gap */
+      > div {
+        margin: 0 1em;
+      }
     }
     [dir="rtl"] .slick-slide {
       float: right;
@@ -256,14 +260,14 @@ const StyledSlider = styled.div`
     }
 
     .slick-dots {
-      position: absolute;
-      bottom: -25px;
+      /* position: absolute;
+      bottom: -25px; */
 
       display: block;
 
       width: 100%;
       padding: 0;
-      margin: 0;
+      margin: 1em 0 0 0;
 
       list-style: none;
 
@@ -276,7 +280,7 @@ const StyledSlider = styled.div`
 
       width: 14px;
       height: 14px;
-      /* margin: 0 5px; */
+      margin: 0 1px;
       padding: 0;
 
       cursor: pointer;
@@ -287,9 +291,9 @@ const StyledSlider = styled.div`
 
       display: block;
 
-      width: 20px;
-      height: 20px;
-      padding: 5px;
+      width: 100%;
+      height: 100%;
+      /* padding: 5px; */
 
       cursor: pointer;
 
@@ -309,14 +313,14 @@ const StyledSlider = styled.div`
     .slick-dots li button:before {
       /* font-family: "slick"; */
       font-size: 23px;
-      line-height: 20px;
+      line-height: 12px;
 
       position: absolute;
       top: 0;
       left: 0;
 
-      width: 20px;
-      height: 20px;
+      width: 100%;
+      height: 100%;
 
       content: "•";
       text-align: center;
