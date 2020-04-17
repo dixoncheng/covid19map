@@ -73,5 +73,6 @@ const Container = styled.div`
   ${({ theme, full }) => css`
     overflow: hidden;
     margin: ${full ? "0 -20px" : 0};
+    /* padding: 0.5em 0; */
   `}
 `;

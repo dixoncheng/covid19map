@@ -8,7 +8,7 @@ Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
     font: '"Nunito", sans-serif',
-    teal: "#50b1ac",
+    teal: "#00b6ae",
     green: "#aacd6e",
     navy: "#025064",
     yellow: "#ffc906",
@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps, ...props }) {
     md: "800px",
     fontFancy: "'Bowlby One', sans-serif",
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Styles />

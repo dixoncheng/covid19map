@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ENV=development next dev -p 3001",
-    "dev2": "next dev -p 3001",
+    "dev": "ENV=development DATA=dev next dev -p 3001",
+    "dev-live-data": "ENV=development next dev -p 3001",
     "build": "next build && next export",
     "build-dev": "ENV=development next build && next export",
     "start": "next start"

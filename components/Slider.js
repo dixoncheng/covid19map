@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import Slider from "react-slick";
 
-const SliderWrap = ({ full, children, ...props }) => {
+const SliderWrap = ({ full, padding, children, ...props }) => {
   // const NextArrow = ({ onClick }) => (
   //   <button
   //     className="slick-right"
@@ -21,10 +21,10 @@ const SliderWrap = ({ full, children, ...props }) => {
   // );
 
   return (
-    <StyledSlider full={full}>
+    <StyledSlider full={full} padding={padding}>
       <Slider
         centerMode
-        centerPadding="18px"
+        centerPadding={props.centerPadding || "18px"}
         infinite={false}
         dots
         arrows={false}
@@ -42,9 +42,10 @@ const SliderWrap = ({ full, children, ...props }) => {
 export default SliderWrap;
 
 const StyledSlider = styled.div`
-  ${({ theme, full }) => css`
+  ${({ theme, full, padding }) => css`
     margin: ${full ? "0 -20px 0 !important" : 0};
     /* padding-bottom: 4em; */
+    padding: ${padding ? "1em 0 0 0" : 0};
     .slick-slider {
       position: relative;
 

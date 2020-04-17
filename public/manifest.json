@@ -1,7 +1,7 @@
 {
   "name": "Covid-19 Map NZ",
   "short_name": "Covid-19 Map",
-  "theme_color": "#51b6b0",
+  "theme_color": "#00b6ae",
   "background_color": "#edf3f0",
   "display": "standalone",
   "orientation": "portrait",

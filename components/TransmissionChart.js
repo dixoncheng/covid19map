@@ -1,9 +1,9 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import styled, { css } from "styled-components";
+import styled, { css, withTheme } from "styled-components";
 
-const COLORS = ["#51b6b0", "#aacd6e", "#025064", "#ffc906"];
+const TransmissionChart = ({ data = [], theme }) => {
+  const chartColors = [theme.teal, theme.green, theme.navy, theme.yellow];
 
-const TransmissionChart = ({ data = [] }) => {
   return (
     <StyledTransmissionChart>
       <div className="head">Transmission type</div>
@@ -16,7 +16,7 @@ const TransmissionChart = ({ data = [] }) => {
                 {data.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
+                    fill={chartColors[index % chartColors.length]}
                   />
                 ))}
               </Pie>
@@ -25,7 +25,7 @@ const TransmissionChart = ({ data = [] }) => {
         </div>
         <div>
           {data.map((item, i) => (
-            <LegendItem key={i} type={i}>
+            <LegendItem key={i} typeColor={chartColors[i]}>
               {item.type}: <span>{item.percent}%</span>
             </LegendItem>
           ))}
@@ -35,7 +35,7 @@ const TransmissionChart = ({ data = [] }) => {
   );
 };
 
-export default TransmissionChart;
+export default withTheme(TransmissionChart);
 
 const StyledTransmissionChart = styled.div`
   ${({ theme }) => css`
@@ -73,7 +73,7 @@ const StyledTransmissionChart = styled.div`
 `;
 
 const LegendItem = styled.div`
-  ${({ theme, type }) => css`
+  ${({ theme, typeColor }) => css`
     font-size: 1.5em;
     margin: 0.2em 0;
     :before {
@@ -89,7 +89,7 @@ const LegendItem = styled.div`
       font-weight: bold;
     }
     :before {
-      background-color: ${COLORS[type]};
+      background-color: ${typeColor};
     }
   `}
 `;

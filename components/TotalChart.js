@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, withTheme } from "styled-components";
 import {
   LineChart,
   Line,
@@ -8,7 +8,7 @@ import {
   ReferenceLine,
 } from "recharts";
 
-const TotalChart = ({ summary }) => {
+const TotalChart = ({ summary, theme }) => {
   return (
     <Chart>
       <div className="head">Total cases</div>
@@ -24,7 +24,6 @@ const TotalChart = ({ summary }) => {
                 fontSize: 12,
                 value: "Days since first case detected",
                 position: "bottom",
-                // color: "#025064",
               }}
               tickFormatter={(tick) =>
                 summary.findIndex((x) => x.date === tick)
@@ -34,7 +33,7 @@ const TotalChart = ({ summary }) => {
             <Line
               type="monotone"
               dataKey="recoveredTotal"
-              stroke="#aacd6e"
+              stroke={theme.green}
               strokeWidth={4}
               dot={false}
             />
@@ -42,7 +41,7 @@ const TotalChart = ({ summary }) => {
             <Line
               type="monotone"
               dataKey="combinedTotal"
-              stroke="#51b6b0"
+              stroke={theme.teal}
               strokeWidth={4}
               dot={false}
             />
@@ -69,7 +68,7 @@ const TotalChart = ({ summary }) => {
   );
 };
 
-export default TotalChart;
+export default withTheme(TotalChart);
 
 const Chart = styled.div`
   ${({ theme, ...props }) => css`

@@ -8,7 +8,7 @@ import {
   FeatureGroup,
 } from "react-leaflet";
 import L from "leaflet";
-import styled, { css, createGlobalStyle } from "styled-components";
+import styled, { css, createGlobalStyle, withTheme } from "styled-components";
 import * as gtag from "../lib/gtag";
 
 const Map = ({
@@ -21,6 +21,7 @@ const Map = ({
   maxCases,
   outerBounds,
   innerBounds,
+  theme,
 }) => {
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
@@ -150,7 +151,7 @@ const Map = ({
                 color={currentLocation === location ? "white" : "black"}
                 opacity={currentLocation === location ? 1 : 0.2}
                 weight={currentLocation === location ? 3 : 1}
-                fillColor="#51b6b0"
+                fillColor={theme.teal}
                 fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
@@ -193,7 +194,7 @@ const Map = ({
   );
 };
 
-export default Map;
+export default withTheme(Map);
 
 const StyledPopup = styled.div`
   ${({ theme }) => css`

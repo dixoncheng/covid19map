@@ -5,9 +5,10 @@ module.exports = withOptimizedImages(
   withPWA({
     env: {
       API:
-        process.env.ENV === "development"
+        process.env.DATA === "dev"
           ? "http://localhost:5000"
           : "https://api.covid19map.nz",
+      GA: process.env.ENV === "development" ? "UA-93113-29" : "UA-93113-28",
     },
     pwa: {
       dest: "public",

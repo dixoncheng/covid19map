@@ -6,22 +6,22 @@ import {
   YAxis,
   ResponsiveContainer,
 } from "recharts";
-import styled, { css } from "styled-components";
+import styled, { css, withTheme } from "styled-components";
 
-const COLORS = [
-  "#51b6b0",
-  "#aacd6e",
-  "#025064",
-  "#317c3f",
-  "#956828",
-  "#d4b074",
-  "#ffc906",
-  "#e98e23",
-  "#af5434",
-  "#833f24",
-];
+const Ages = ({ ages, theme }) => {
+  const chartColors = [
+    theme.teal,
+    theme.green,
+    theme.navy,
+    "#317c3f",
+    "#956828",
+    "#d4b074",
+    theme.yellow,
+    "#e98e23",
+    "#af5434",
+    "#833f24",
+  ];
 
-const Ages = ({ ages }) => {
   return (
     <StyledAges>
       <div className="head">Age Groups</div>
@@ -47,7 +47,7 @@ const Ages = ({ ages }) => {
               {ages.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={chartColors[index % chartColors.length]}
                 />
               ))}
             </Bar>
@@ -58,7 +58,7 @@ const Ages = ({ ages }) => {
   );
 };
 
-export default Ages;
+export default withTheme(Ages);
 
 const StyledAges = styled.div`
   ${({ theme, ...props }) => css`

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import styled, { css } from "styled-components";
+import styled, { css, withTheme } from "styled-components";
 import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 import Row from "../components/Row";
 import TotalCases from "../components/TotalCases";
@@ -35,7 +35,7 @@ const innerBounds = [
   [-47.30251579, 177.66849518],
 ];
 
-const MapView = ({ data = {}, error }) => {
+const MapView = ({ data = {}, error, theme }) => {
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -242,26 +242,28 @@ const MapView = ({ data = {}, error }) => {
                 </Row>
 
                 <Row>
-                  <Reveal
-                    full
-                    button={
-                      <Heading className="head">
-                        What does alert level 3 mean?{" "}
-                        <div
-                          className="icon"
-                          dangerouslySetInnerHTML={{
-                            __html: require(`../public/arrow.svg?include`),
-                          }}
-                        />
-                      </Heading>
-                    }
-                  >
-                    <Slider>
-                      {[...Array(10)].map((item, i) => (
-                        <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
-                      ))}
-                    </Slider>
-                  </Reveal>
+                  <Feature>
+                    <Reveal
+                      // full
+                      button={
+                        <Heading className="head">
+                          What does alert level 3 mean?{" "}
+                          <div
+                            className="icon"
+                            dangerouslySetInnerHTML={{
+                              __html: require(`../public/arrow.svg?include`),
+                            }}
+                          />
+                        </Heading>
+                      }
+                    >
+                      <Slider full centerPadding="38px" padding>
+                        {[...Array(10)].map((item, i) => (
+                          <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
+                        ))}
+                      </Slider>
+                    </Reveal>
+                  </Feature>
                 </Row>
 
                 <Row>
@@ -384,7 +386,7 @@ const MapView = ({ data = {}, error }) => {
                           <Line
                             type="monotone"
                             dataKey="new"
-                            stroke="#51b6b0"
+                            stroke={theme.teal}
                             strokeWidth={1}
                             dot={false}
                             isAnimationActive={false}
@@ -417,7 +419,7 @@ const MapView = ({ data = {}, error }) => {
   );
 };
 
-export default MapView;
+export default withTheme(MapView);
 
 const Wrap = styled.div`
   ${({ theme }) => css`
@@ -840,6 +842,20 @@ const CaseCounts = styled.div`
     img {
       height: 1em;
       margin-right: 0.3em;
+    }
+  `}
+`;
+
+const Feature = styled.div`
+  ${({ theme }) => css`
+    border: solid ${theme.green} 0.4em;
+    border-radius: 0.5em;
+    padding: 1.3em 0 1.1em;
+    background-color: ${theme.green};
+    .head {
+      color: white;
+      font-size: 2em;
+      margin: 0 0.8em;
     }
   `}
 `;

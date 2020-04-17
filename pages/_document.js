@@ -59,7 +59,7 @@ export default class MyDocument extends Document {
             href="/icons/favicon-32x32.png"
           />
           <link rel="apple-touch-icon" href="/icons/apple-icon.png"></link>
-          <meta name="theme-color" content="#51b6b0" />
+          <meta name="theme-color" content="#00b6ae" />
           <link rel="icon" href="/favicon.ico" />
 
           <link
