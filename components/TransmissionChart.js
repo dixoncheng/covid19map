@@ -7,7 +7,7 @@ const TransmissionChart = ({ data = [], theme }) => {
   return (
     <StyledTransmissionChart>
       <div className="head">Transmission type</div>
-      <img src="/infographic/commtrans.svg" />
+      <img src={require(`../public/infographic/commtrans.svg`)} />
       <div className="row">
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height="100%">

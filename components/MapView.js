@@ -169,7 +169,7 @@ const MapView = ({ data = {}, error, theme }) => {
         ) : (
           <Summary>
             <Alert
-              href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-summary.pdf"
+              href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-detailed.pdf"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => gtag.event("Alert", "", "")}
@@ -177,7 +177,7 @@ const MapView = ({ data = {}, error, theme }) => {
               Alert Level 4
             </Alert>
             <Logo>
-              <img className="logo" src="/logo.svg" />
+              <img className="logo" src={require(`../public/logo.svg`)} />
               <div>
                 <h1>Covid19map.nz</h1>
                 <h2>Current Cases in New Zealand</h2>
@@ -211,7 +211,7 @@ const MapView = ({ data = {}, error, theme }) => {
                       <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
-                          __html: require(`../public/refresh.svg?include`),
+                          __html: require(`../public/refresh.svg?original&include`),
                         }}
                       />
                       Refresh
@@ -226,7 +226,7 @@ const MapView = ({ data = {}, error, theme }) => {
                     rel="noopener noreferrer"
                     onClick={() => gtag.event("Follow", "", "Facebook")}
                   >
-                    <img src="/Facebook.svg" /> Facebook
+                    <img src={require(`../public/Facebook.svg`)} /> Facebook
                   </a>
                   <a
                     href="https://www.instagram.com/covid19mapnz/"
@@ -234,7 +234,7 @@ const MapView = ({ data = {}, error, theme }) => {
                     rel="noopener noreferrer"
                     onClick={() => gtag.event("Follow", "", "Instagram")}
                   >
-                    <img src="/IG.svg" /> Instagram
+                    <img src={require(`../public/IG.svg`)} /> Instagram
                   </a>
                 </Share>
                 <Row>
@@ -259,7 +259,11 @@ const MapView = ({ data = {}, error, theme }) => {
                     >
                       <Slider full centerPadding="38px" padding>
                         {[...Array(10)].map((item, i) => (
-                          <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
+                          // <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
+                          <img
+                            key={i}
+                            src={require(`../public/What L3 means/Lv3 ${i}.svg`)}
+                          />
                         ))}
                       </Slider>
                     </Reveal>
@@ -315,14 +319,14 @@ const MapView = ({ data = {}, error, theme }) => {
                 <Legend>
                   <ul>
                     <li>
-                      <img src="/active.svg" /> Total Cases
+                      <img src={require(`../public/active.svg`)} /> Total Cases
                     </li>
                     <li>
-                      <img src="/recovered.svg" />
+                      <img src={require(`../public/recovered.svg`)} />
                       Recovered
                     </li>
                     <li>
-                      <img src="/deaths.svg" />
+                      <img src={require(`../public/deaths.svg`)} />
                       Deaths
                     </li>
                   </ul>
@@ -341,10 +345,11 @@ const MapView = ({ data = {}, error, theme }) => {
                         <CaseCounts>
                           <ul>
                             <li>
-                              <img src="/active.svg" /> {item.totalCases}
+                              <img src={require(`../public/active.svg`)} />{" "}
+                              {item.totalCases}
                             </li>
                             <li>
-                              <img src="/recovered.svg" />{" "}
+                              <img src={require(`../public/recovered.svg`)} />{" "}
                               {
                                 history[item.name][
                                   history[item.name].length - 1
@@ -352,7 +357,7 @@ const MapView = ({ data = {}, error, theme }) => {
                               }
                             </li>
                             <li>
-                              <img src="/deaths.svg" />{" "}
+                              <img src={require(`../public/deaths.svg`)} />{" "}
                               {
                                 history[item.name][
                                   history[item.name].length - 1

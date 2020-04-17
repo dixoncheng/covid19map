@@ -89,7 +89,7 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
           rel="noopener noreferrer"
           onClick={() => gtag.event("LinkedIn", "", "Emily")}
         >
-          <img src="/linkedin.svg" />
+          <img src={require(`../public/linkedin.svg`)} />
         </a>{" "}
         <a
           href="https://www.linkedin.com/in/dixon-cheng/"
@@ -97,7 +97,7 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
           rel="noopener noreferrer"
           onClick={() => gtag.event("LinkedIn", "", "Dixon")}
         >
-          <img src="/linkedin.svg" />
+          <img src={require(`../public/linkedin.svg`)} />
         </a>
       </p>
     </StyledTerms>
@@ -112,12 +112,7 @@ const StyledTerms = styled.div`
     button {
       font-size: 1em;
     }
-
     .made-by {
-      small {
-        position: relative;
-        top: 0.1em;
-      }
       img {
         width: 1em;
         vertical-align: middle;

@@ -274,7 +274,7 @@ const Styles = createGlobalStyle`
           position: absolute;
           top: 0.1em;
           left: 105%;
-          background: url(/icons/hospo.svg) no-repeat;
+          background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
         }
       }
     }
@@ -306,7 +306,7 @@ const MapLegend = styled.div`
       border-radius: 50%;
     }
     .map-hosp {
-      background: url(/icons/hospo.svg) no-repeat;
+      background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
       background-size: contain;
     }
     @media (min-width: ${theme.sm}) {

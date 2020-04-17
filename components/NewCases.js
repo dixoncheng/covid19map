@@ -8,7 +8,7 @@ const NewCases = ({ combined }) => {
       in the last
       <br />
       24 hours
-      <img src="/infographic/nznewcases.svg" />
+      <img src={require(`../public/infographic/nznewcases.svg`)} />
     </StyledNewCases>
   );
 };

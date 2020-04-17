@@ -14,13 +14,13 @@ const Genders = ({ genders }) => {
           <div>
             <strong>{percentWomen}</strong> women
           </div>
-          <img src="/infographic/female.svg" />
+          <img src={require(`../public/infographic/female.svg`)} />
         </div>
         <div className="male">
           <div>
             <strong>{percentMen}</strong> men
           </div>
-          <img src="/infographic/male.svg" />
+          <img src={require(`../public/infographic/male.svg`)} />
         </div>
       </div>
     </StyledGenders>

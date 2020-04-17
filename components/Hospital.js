@@ -11,7 +11,7 @@ const Hospital = ({ hospitalTotal }) => {
         </span>
       </div>
       <div className="row">
-        <img src="/infographic/hospital.svg" />
+        <img src={require(`../public/infographic/hospital.svg`)} />
         {/* <div>are in Intensive Care Unit</div> */}
       </div>
     </StyledHospital>

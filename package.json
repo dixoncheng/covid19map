@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "imagemin-svgo": "^7.1.0",
     "leaflet": "^1.6.0",
     "next": "9.3.2",
     "next-optimized-images": "^2.5.5",

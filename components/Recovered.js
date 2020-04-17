@@ -89,7 +89,7 @@ const People = ({ percent }) => {
           <Person key={i} fill={fill}>
             <div
               dangerouslySetInnerHTML={{
-                __html: require(`../public/infographic/person.svg?include`),
+                __html: require(`../public/infographic/person.svg?original&include`),
               }}
             />
           </Person>

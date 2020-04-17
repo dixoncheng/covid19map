@@ -36,7 +36,8 @@ const StyledCases = styled.div`
       left: 0.7em;
       width: 3em;
       height: 3em;
-      background: url(/infographic/cases.svg) center center no-repeat;
+      background: url(${require(`../public/infographic/cases.svg`)}) center
+        center no-repeat;
       background-size: contain;
       transform: translateY(-50%);
     }

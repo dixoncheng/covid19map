@@ -4,7 +4,7 @@ const Tests = ({ tests }) => {
   return (
     <StyledTests>
       <strong>{tests}</strong> <span>tests processed yesterday</span>
-      <img src="/infographic/testing.svg" />
+      <img src={require(`../public/infographic/testing.svg`)} />
     </StyledTests>
   );
 };

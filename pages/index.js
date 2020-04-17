@@ -11,7 +11,10 @@ const Home = () => {
   return (
     <div className="container">
       <Head>
-        <title>Covid 19 Map NZ</title>
+        <title>
+          Covid-19 Map New Zealand - A visual look at the current Covid-19 cases
+          in New Zealand
+        </title>
       </Head>
       <MapView data={data} error={error} />
     </div>
