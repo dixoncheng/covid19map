@@ -1,34 +1,21 @@
 import {
   BarChart,
   Bar,
-  Cell,
+  // Cell,
   XAxis,
   YAxis,
   ResponsiveContainer,
 } from "recharts";
 import styled, { css, withTheme } from "styled-components";
 
-const Ages = ({ ages, theme }) => {
-  const chartColors = [
-    theme.teal,
-    theme.green,
-    theme.navy,
-    "#317c3f",
-    "#956828",
-    "#d4b074",
-    theme.yellow,
-    "#e98e23",
-    "#af5434",
-    "#833f24",
-  ];
-
+const RegionAgeGenderChart = ({ data, theme }) => {
   return (
-    <StyledAges>
-      <div className="head">Age Groups</div>
+    <StyledRegionAgeGenderChart>
+      <div className="head">Age Groups by district</div>
       <div className="chart-wrap">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={ages}
+            data={data}
             layout="vertical"
             margin={{
               top: 10,
@@ -41,29 +28,35 @@ const Ages = ({ ages, theme }) => {
             <XAxis type="number" hide />
             <YAxis type="category" dataKey="age" interval={0} width={90} />
             <Bar
-              dataKey="count"
-              fill="#8884d8"
-              label={{ position: "insideRight", fill: "white" }}
-            >
-              {ages.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={chartColors[index % chartColors.length]}
-                />
-              ))}
-            </Bar>
+              dataKey="male"
+              fill={theme.teal}
+              // label={{ position: "insideRight", fill: "white" }}
+              stackId="a"
+            />
+            <Bar
+              dataKey="female"
+              fill={theme.green}
+              // label={{ position: "insideRight", fill: "white" }}
+              stackId="a"
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </StyledAges>
+      <div className="legend">
+        <div className="legend-item male">Male</div>
+        <div className="legend-item female">Female</div>
+      </div>
+    </StyledRegionAgeGenderChart>
   );
 };
 
-export default withTheme(Ages);
+export default withTheme(RegionAgeGenderChart);
 
-const StyledAges = styled.div`
+const StyledRegionAgeGenderChart = styled.div`
   ${({ theme, ...props }) => css`
+    font-size: 0.45em;
     width: 100%;
+    padding: 1em 0;
     .head {
       color: ${theme.dark};
       font-family: ${theme.fontFancy};
@@ -102,16 +95,44 @@ const StyledAges = styled.div`
       padding: 0.6em 0.8em;
       font-size: 1.6em;
       color: ${theme.dark};
-      ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          display: block;
-        }
-      `}
+      ${
+        props.wide &&
+        css`
+          @media (min-width: ${theme.sm}) {
+            display: block;
+          }
+        `
+      }
       strong {
         display: block;
         color: ${theme.green};
       }
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0 0 0px;
+      font-size: 12px;
+      color: black;
+    }
+    .legend-item {
+      margin: 0 6px;
+      /* color: ${theme.navy}; */
+      :before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 4px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    }
+    .male:before {
+      background: ${theme.teal};
+    }
+    .female:before {
+      background: ${theme.green};
     }
   `}
 `;

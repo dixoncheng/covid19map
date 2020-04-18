@@ -18,7 +18,19 @@ import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
 import Reveal from "../components/Reveal";
+import RegionAgeGenderChart from "../components/RegionAgeGenderChart";
+import RegionOverseasChart from "../components/RegionOverseasChart";
 import * as gtag from "../lib/gtag";
+
+import VisibilitySensor from "react-visibility-sensor";
+import {
+  // Link,
+  Element,
+  // Events,
+  animateScroll as scroll,
+  // scrollSpy,
+  scroller,
+} from "react-scroll";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -50,7 +62,10 @@ const MapView = ({ data = {}, error, theme }) => {
     testingData,
     genders,
     ages,
+    regionAgesGenders,
+    regionOverseas,
   } = data;
+  console.log(regionAgesGenders);
   const {
     combinedTotal,
     confirmedTotal,
@@ -64,17 +79,20 @@ const MapView = ({ data = {}, error, theme }) => {
   const [view, setView] = useState("");
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
+  const [lv3Opened, setLv3Opened] = useState(false);
 
   const showLocation = (location) => {
-    if (location) {
-      const loc = locations.find((x) => location === x.name);
-      setLocation(loc);
-      setView("details");
-    } else {
-      setView("");
-    }
+    setLocation(location);
+    // if (location) {
+    //   // const loc = locations.find((x) => location === x.name);
+    //   // setLocation(loc);
+    //   // setView("details");
+    //   setLocation(location);
+    // } else {
+    //   // setView("");
+    // }
 
-    infoRef.current.scrollTop = 0;
+    // infoRef.current.scrollTop = 0;
     // window.scrollTo(0, 0);
   };
 
@@ -86,6 +104,21 @@ const MapView = ({ data = {}, error, theme }) => {
     }
   }, [view]);
 
+  // const refs = locations?.map((item, i) => useRef());
+
+  const locationVisibilityChange = (isVisible) => {
+    // console.log("Element is now %s", isVisible ? "visible" : "hidden");
+    if (!isVisible) {
+      setTimeout(() => {
+        scroller.scrollTo(location, {
+          duration: 800,
+          delay: 0,
+          smooth: "easeInOutQuart",
+          offset: -10,
+        });
+      }, 300);
+    }
+  };
   return (
     <Wrap>
       <Main>
@@ -244,7 +277,8 @@ const MapView = ({ data = {}, error, theme }) => {
                 <Row>
                   <Feature>
                     <Reveal
-                      // full
+                      open={lv3Opened}
+                      toggle={() => setLv3Opened(!lv3Opened)}
                       button={
                         <Heading className="head">
                           What does alert level 3 mean?{" "}
@@ -256,6 +290,9 @@ const MapView = ({ data = {}, error, theme }) => {
                           />
                         </Heading>
                       }
+                      onToggle={() => {
+                        gtag.event("Level 3 slideshow");
+                      }}
                     >
                       <Slider full centerPadding="38px" padding>
                         {[...Array(10)].map((item, i) => (
@@ -334,71 +371,113 @@ const MapView = ({ data = {}, error, theme }) => {
                 {locations?.map((item, i) => (
                   <Location
                     key={i}
-                    onClick={() => {
-                      showLocation(item.location);
-                      gtag.event("View location", "", item.location);
-                    }}
+                    opened={location === item.location}
+                    // ref={refs[i]}
                   >
-                    <div className="body">
-                      <div>
-                        <span className="name">{item.location}</span>
-                        <CaseCounts>
-                          <ul>
-                            <li>
-                              <img src={require(`../public/active.svg`)} />{" "}
-                              {item.totalCases}
-                            </li>
-                            <li>
-                              <img src={require(`../public/recovered.svg`)} />{" "}
-                              {
-                                history[item.name][
-                                  history[item.name].length - 1
-                                ].recovered
-                              }
-                            </li>
-                            <li>
-                              <img src={require(`../public/deaths.svg`)} />{" "}
-                              {
-                                history[item.name][
-                                  history[item.name].length - 1
-                                ].deaths
-                              }
-                            </li>
-                          </ul>
-                        </CaseCounts>
-                      </div>
-                      <div className="num-cases">
-                        <div className="total-cases">
-                          {
-                            history[item.name][history[item.name].length - 1]
-                              .active
-                          }
-                        </div>
-                        {item.newCases > 0 && <small>+{item.newCases}</small>}
-                        {/* <div
+                    <Element name={item.location}>
+                      <VisibilitySensor
+                        scrollCheck={false}
+                        resizeCheck={false}
+                        active={location === item.location}
+                        onChange={locationVisibilityChange}
+                      >
+                        <div
+                          className="head"
+                          onClick={() => {
+                            showLocation(
+                              item.location === location ? "" : item.location
+                            );
+                            gtag.event("View location", "", item.location);
+                          }}
+                        >
+                          <div className="stats">
+                            <div>
+                              <span className="name">{item.location}</span>
+                              <CaseCounts>
+                                <ul>
+                                  <li>
+                                    <img
+                                      src={require(`../public/active.svg`)}
+                                    />{" "}
+                                    {item.totalCases}
+                                  </li>
+                                  <li>
+                                    <img
+                                      src={require(`../public/recovered.svg`)}
+                                    />{" "}
+                                    {
+                                      history[item.name][
+                                        history[item.name].length - 1
+                                      ].recovered
+                                    }
+                                  </li>
+                                  <li>
+                                    <img
+                                      src={require(`../public/deaths.svg`)}
+                                    />{" "}
+                                    {
+                                      history[item.name][
+                                        history[item.name].length - 1
+                                      ].deaths
+                                    }
+                                  </li>
+                                </ul>
+                              </CaseCounts>
+                            </div>
+                            <div className="num-cases">
+                              <div className="total-cases">
+                                {
+                                  history[item.name][
+                                    history[item.name].length - 1
+                                  ].active
+                                }
+                              </div>
+                              {item.newCases > 0 && (
+                                <small>+{item.newCases}</small>
+                              )}
+                              {/* <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
                           __html: require(`../public/arrow.svg?include`),
                         }}
                       /> */}
-                      </div>
-                    </div>
+                            </div>
+                          </div>
 
-                    <InlineChart>
-                      <ResponsiveContainer>
-                        <LineChart data={history[item.name]}>
-                          <XAxis dataKey="date" hide />
-                          <Line
-                            type="monotone"
-                            dataKey="new"
-                            stroke={theme.teal}
-                            strokeWidth={1}
-                            dot={false}
-                            isAnimationActive={false}
+                          <InlineChart>
+                            <ResponsiveContainer>
+                              <LineChart data={history[item.name]}>
+                                <XAxis dataKey="date" hide />
+                                <Line
+                                  type="monotone"
+                                  dataKey="new"
+                                  stroke={theme.teal}
+                                  strokeWidth={1}
+                                  dot={false}
+                                  isAnimationActive={false}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </InlineChart>
+                        </div>
+                      </VisibilitySensor>
+                    </Element>
+                    <Reveal open={location === item.location}>
+                      <div className="details">
+                        {regionAgesGenders[item.location] && (
+                          <RegionAgeGenderChart
+                            data={regionAgesGenders[item.location]}
                           />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </InlineChart>
+                        )}
+                        {regionAgesGenders[item.location] &&
+                          regionOverseas[item.location] && <hr />}
+                        {regionOverseas[item.location] && (
+                          <RegionOverseasChart
+                            data={regionOverseas[item.location]}
+                          />
+                        )}
+                      </div>
+                    </Reveal>
                   </Location>
                 ))}
                 {ages && (
@@ -455,6 +534,10 @@ const Info = styled.div`
     }
     a {
       color: ${theme.dark};
+    }
+    hr {
+      border: solid 1px ${theme.light};
+      border-width: 0 0 1px 0;
     }
   `}
 `;
@@ -682,21 +765,27 @@ const Share = styled.div`
 `;
 
 const Location = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, opened }) => css`
     cursor: pointer;
     font-size: 2.1em;
     background: white;
-    padding: 0.2em 0.5em 0.2em;
+    padding: 0.2em 0.6em 0.2em;
     margin: 5px 0 !important;
-    display: flex;
+
     justify-content: space-between;
     /* align-items: center; */
     transition: 0.3s ease;
+    ${!opened &&
+    css`
+      :hover {
+        background: #bee1dd;
+      }
+    `}
 
-    :hover {
-      background: #bee1dd;
+    .head {
+      display: flex;
     }
-    .body {
+    .stats {
       padding: 6px 0;
       /* width: 50%; */
       flex: 1;
@@ -706,6 +795,7 @@ const Location = styled.div`
     }
     .name {
       color: ${theme.teal};
+      white-space: nowrap;
       /* font-weight: bold; */
     }
     .num-cases {
@@ -745,7 +835,7 @@ const Location = styled.div`
 `;
 
 const InlineChart = styled.div`
-  width: 45%;
+  width: 42%;
   height: 50px;
   /* margin-left: 5px;
   display: inline-block; */
