@@ -3,9 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import { useMeasure } from "react-use";
 
-const Reveal = ({ button, full, open, toggle, onToggle, children }) => {
+const Reveal = ({ button, full, open, toggle, children }) => {
   const defaultHeight = "0px";
+
+  if (!open && !toggle) {
+    [open, toggle] = useState(false);
+  }
   // const [open, toggle] = useState(false);
+
   const [contentHeight, setContentHeight] = useState(defaultHeight);
   const [ref, { height }] = useMeasure();
 
@@ -33,9 +38,9 @@ const Reveal = ({ button, full, open, toggle, onToggle, children }) => {
         <InvisibleButton
           onClick={() => {
             toggle(!open);
-            if (onToggle) {
-              onToggle();
-            }
+            // if (onToggle) {
+            //   onToggle();
+            // }
           }}
           active={open}
         >

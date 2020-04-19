@@ -11,7 +11,7 @@ import styled, { css, withTheme } from "styled-components";
 const RegionAgeGenderChart = ({ data, theme }) => {
   return (
     <StyledRegionAgeGenderChart>
-      <div className="head">Age Groups by district</div>
+      <h3>Age Groups by DHB</h3>
       <div className="chart-wrap">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -56,14 +56,13 @@ const StyledRegionAgeGenderChart = styled.div`
   ${({ theme, ...props }) => css`
     font-size: 0.45em;
     width: 100%;
-    padding: 1em 0;
-    .head {
+    /* padding: 1em 0; */
+    h3 {
       color: ${theme.dark};
-      font-family: ${theme.fontFancy};
-      font-size: 2.1em;
-      text-transform: uppercase;
+      font-size: 2em;
       margin-bottom: 0.5em;
       line-height: 1.1;
+      text-align: center;
     }
     .chart-wrap {
       width: 45em;

@@ -5,7 +5,7 @@ const RegionOverseasChart = ({ data, theme }) => {
   const chartColors = [theme.navy, theme.yellow, "#a6e5e3"];
   return (
     <StyledRegionOverseasChart>
-      <div className="head">Overseas travel</div>
+      <h3>Overseas Travel</h3>
       <div className="row">
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height="100%">
@@ -43,14 +43,12 @@ const StyledRegionOverseasChart = styled.div`
     .row {
       display: flex;
     }
-    .head {
+    h3 {
       color: ${theme.dark};
-      font-family: ${theme.fontFancy};
-      font-size: 2.1em;
-      text-transform: uppercase;
-      margin-top: 1em;
-      margin-bottom: 0.8em;
+      font-size: 2em;
+      margin-bottom: 0.5em;
       line-height: 1.1;
+      text-align: center;
     }
     .row {
       padding: 0;

@@ -108,16 +108,16 @@ const MapView = ({ data = {}, error, theme }) => {
 
   const locationVisibilityChange = (isVisible) => {
     // console.log("Element is now %s", isVisible ? "visible" : "hidden");
-    if (!isVisible) {
-      setTimeout(() => {
-        scroller.scrollTo(location, {
-          duration: 800,
-          delay: 0,
-          smooth: "easeInOutQuart",
-          offset: -10,
-        });
-      }, 300);
-    }
+    // if (!isVisible) {
+    //   setTimeout(() => {
+    //     scroller.scrollTo(location, {
+    //       duration: 800,
+    //       delay: 0,
+    //       smooth: "easeInOutQuart",
+    //       offset: -10,
+    //     });
+    //   }, 300);
+    // }
   };
   return (
     <Wrap>
@@ -271,7 +271,9 @@ const MapView = ({ data = {}, error, theme }) => {
                   </a>
                 </Share>
                 <Row>
-                  <TotalCases combinedTotal={combinedTotal} />
+                  <TotalCases
+                    total={combinedTotal - recoveredTotal - deathsTotal}
+                  />
                 </Row>
 
                 <Row>
@@ -311,13 +313,13 @@ const MapView = ({ data = {}, error, theme }) => {
                   <Cases
                     confirmedTotal={confirmedTotal}
                     probableTotal={probableTotal}
-                    active={combinedTotal - recoveredTotal - deathsTotal}
+                    combinedTotal={combinedTotal}
                   />
                 </Row>
                 <Row>
                   <div className="grid">
                     <NewCases combined={combined} />
-                    <Deaths deathsTotal={deathsTotal} />
+                    <Deaths deathsTotal={deathsTotal + 1} />
                   </div>
                 </Row>
                 <Row>
@@ -462,16 +464,37 @@ const MapView = ({ data = {}, error, theme }) => {
                         </div>
                       </VisibilitySensor>
                     </Element>
-                    <Reveal open={location === item.location}>
+                    <Reveal
+                      open={location === item.location}
+                      toggle={() => {
+                        showLocation(
+                          item.location === location ? "" : item.location
+                        );
+                        gtag.event("View location", "", item.location);
+                      }}
+                    >
                       <div className="details">
-                        {regionAgesGenders[item.location] && (
-                          <RegionAgeGenderChart
-                            data={regionAgesGenders[item.location]}
-                          />
-                        )}
-                        {regionAgesGenders[item.location] &&
+                        {/* <a
+                          href=""
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                            gtag.event("DHB link", "", item.location)
+                          }
+                        >
+                          DHB link
+                        </a>
+                        <hr /> */}
+                        {regionAgesGenders &&
+                          regionAgesGenders[item.location] && (
+                            <RegionAgeGenderChart
+                              data={regionAgesGenders[item.location]}
+                            />
+                          )}
+                        {regionAgesGenders &&
+                          regionAgesGenders[item.location] &&
                           regionOverseas[item.location] && <hr />}
-                        {regionOverseas[item.location] && (
+                        {regionOverseas && regionOverseas[item.location] && (
                           <RegionOverseasChart
                             data={regionOverseas[item.location]}
                           />
@@ -536,8 +559,9 @@ const Info = styled.div`
       color: ${theme.dark};
     }
     hr {
-      border: solid 1px ${theme.light};
+      border: solid 2px ${theme.light};
       border-width: 0 0 1px 0;
+      margin: 1em 0;
     }
   `}
 `;
@@ -766,7 +790,6 @@ const Share = styled.div`
 
 const Location = styled.div`
   ${({ theme, opened }) => css`
-    cursor: pointer;
     font-size: 2.1em;
     background: white;
     padding: 0.2em 0.6em 0.2em;
@@ -779,12 +802,15 @@ const Location = styled.div`
     css`
       :hover {
         background: #bee1dd;
+        cursor: pointer;
       }
     `}
 
     .head {
       display: flex;
+      cursor: pointer;
     }
+
     .stats {
       padding: 6px 0;
       /* width: 50%; */
