@@ -55,8 +55,12 @@ export default withTheme(RegionAgeGenderChart);
 const StyledRegionAgeGenderChart = styled.div`
   ${({ theme, ...props }) => css`
     font-size: 0.45em;
-    width: 100%;
+    /* width: 100%; */
     /* padding: 1em 0; */
+    border-radius: 0.5em;
+    background: white;
+    padding: 2em;
+
     h3 {
       color: ${theme.dark};
       font-size: 2em;

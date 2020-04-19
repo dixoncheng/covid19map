@@ -7,19 +7,21 @@ const RegionOverseasChart = ({ data, theme }) => {
     <StyledRegionOverseasChart>
       <h3>Overseas Travel</h3>
       <div className="row">
-        <div className="chart-wrap">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart isAnimationActive={false}>
-              <Pie dataKey="count" data={data} outerRadius="100%">
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={chartColors[index % chartColors.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+        <div>
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart isAnimationActive={false}>
+                <Pie dataKey="count" data={data} outerRadius="100%">
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={chartColors[index % chartColors.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
         <div>
           {data.map((item, i) => (
@@ -39,10 +41,16 @@ const StyledRegionOverseasChart = styled.div`
   ${({ theme }) => css`
     font-size: 0.45em;
     position: relative;
+    border-radius: 0.5em;
+    background: white;
+    padding: 2em;
 
     .row {
       display: flex;
       justify-content: center;
+      > div {
+        flex: 1;
+      }
     }
     h3 {
       color: ${theme.dark};
@@ -53,8 +61,7 @@ const StyledRegionOverseasChart = styled.div`
     }
     .row {
       padding: 0;
-      border-radius: 0.5em;
-      background: white;
+
       padding: 1.2em;
 
       display: flex;
@@ -69,6 +76,7 @@ const StyledRegionOverseasChart = styled.div`
     .chart-wrap {
       width: 16em;
       height: 16em;
+      margin-left: auto;
       margin-right: 1.5em;
     }
   `}

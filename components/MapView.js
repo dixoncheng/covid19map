@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css, withTheme } from "styled-components";
-import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 import Row from "../components/Row";
 import TotalCases from "../components/TotalCases";
 import Cases from "../components/Cases";
@@ -18,13 +17,14 @@ import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
 import Reveal from "../components/Reveal";
+import LocationBar from "../components/LocationBar";
+import LocationDetails from "../components/LocationDetails";
+import Legend from "../components/Legend";
 
 import * as gtag from "../lib/gtag";
 
-import LocationDetails from "../components/LocationDetails";
-
-import VisibilitySensor from "react-visibility-sensor";
-import { Element, animateScroll as scroll, scroller } from "react-scroll";
+// import VisibilitySensor from "react-visibility-sensor";
+// import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -74,19 +74,27 @@ const MapView = ({ data = {}, error, theme }) => {
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
 
-  const showLocation = (location) => {
-    setLocation(location);
-    // if (location) {
-    //   // const loc = locations.find((x) => location === x.name);
-    //   // setLocation(loc);
+  // console.log(history);
+  // console.log(location);
+
+  const showLocation = (name) => {
+    setLocation(name);
+
+    // // console.log(name);
+    // // setLocation(name);
+    // if (name) {
+    //   // const loc = locations.find((x) => name === x.name);
+    //   setLocation(name);
     //   // setView("details");
-    //   setLocation(location);
+    //   // setLocation(name);
+    //   // console.log(location);
     // } else {
     //   // setView("");
+    //   setLocation("");
     // }
 
-    // infoRef.current.scrollTop = 0;
-    // window.scrollTo(0, 0);
+    // // infoRef.current.scrollTop = 0;
+    // // window.scrollTo(0, 0);
   };
 
   // useEffect(() => {
@@ -155,8 +163,13 @@ const MapView = ({ data = {}, error, theme }) => {
             </BackButton>
 
             <LocationDetails
-              location={location}
-              data={[regionAgesGenders, regionOverseas, location.url]}
+              location={locations.find((x) => x.name === location)}
+              data={[
+                regionAgesGenders[location],
+                regionOverseas[location],
+                location.url,
+                history[location],
+              ]}
             />
 
             {/* <Bar>
@@ -364,117 +377,17 @@ const MapView = ({ data = {}, error, theme }) => {
                 </Bar> */}
 
                 <Heading>Regional data</Heading>
-                <Legend>
-                  <ul>
-                    <li>
-                      <img src={require(`../public/active.svg`)} /> Total Cases
-                    </li>
-                    <li>
-                      <img src={require(`../public/recovered.svg`)} />
-                      Recovered
-                    </li>
-                    <li>
-                      <img src={require(`../public/deaths.svg`)} />
-                      Deaths
-                    </li>
-                  </ul>
-                </Legend>
-                {locations?.map((item, i) => (
-                  <Location
-                    key={i}
-                    // opened={location === item.location}
-                    // ref={refs[i]}
-                    onClick={() => setLocation(item.location)}
-                  >
-                    <Element name={item.location}>
-                      <VisibilitySensor
-                        scrollCheck={false}
-                        resizeCheck={false}
-                        active={location === item.location}
-                        onChange={locationVisibilityChange}
-                      >
-                        <div
-                          className="head"
-                          onClick={() => {
-                            showLocation(
-                              item.location === location ? "" : item.location
-                            );
-                            gtag.event("View location", "", item.location);
-                          }}
-                        >
-                          <div className="stats">
-                            <div>
-                              <span className="name">{item.location}</span>
-                              <CaseCounts>
-                                <ul>
-                                  <li>
-                                    <img
-                                      src={require(`../public/active.svg`)}
-                                    />{" "}
-                                    {item.totalCases}
-                                  </li>
-                                  <li>
-                                    <img
-                                      src={require(`../public/recovered.svg`)}
-                                    />{" "}
-                                    {
-                                      history[item.name][
-                                        history[item.name].length - 1
-                                      ].recovered
-                                    }
-                                  </li>
-                                  <li>
-                                    <img
-                                      src={require(`../public/deaths.svg`)}
-                                    />{" "}
-                                    {
-                                      history[item.name][
-                                        history[item.name].length - 1
-                                      ].deaths
-                                    }
-                                  </li>
-                                </ul>
-                              </CaseCounts>
-                            </div>
-                            <div className="num-cases">
-                              <div className="total-cases">
-                                {
-                                  history[item.name][
-                                    history[item.name].length - 1
-                                  ].active
-                                }
-                              </div>
-                              {item.newCases > 0 && (
-                                <small>+{item.newCases}</small>
-                              )}
-                              {/* <div
-                        className="inline-icon"
-                        dangerouslySetInnerHTML={{
-                          __html: require(`../public/arrow.svg?include`),
-                        }}
-                      /> */}
-                            </div>
-                          </div>
 
-                          <InlineChart>
-                            <ResponsiveContainer>
-                              <LineChart data={history[item.name]}>
-                                <XAxis dataKey="date" hide />
-                                <Line
-                                  type="monotone"
-                                  dataKey="new"
-                                  stroke={theme.teal}
-                                  strokeWidth={1}
-                                  dot={false}
-                                  isAnimationActive={false}
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </InlineChart>
-                        </div>
-                      </VisibilitySensor>
-                    </Element>
-                  </Location>
+                <Legend />
+
+                {locations?.map((item, i) => (
+                  <div key={i} onClick={() => setLocation(item.location)}>
+                    <LocationBar
+                      location={item}
+                      history={history[item.name]}
+                      showLocation={showLocation}
+                    />
+                  </div>
                 ))}
                 {ages && (
                   <Row>
@@ -761,95 +674,6 @@ const Share = styled.div`
   `}
 `;
 
-const Location = styled.div`
-  ${({ theme, opened }) => css`
-    font-size: 2.1em;
-    background: white;
-    padding: 0.2em 0.6em 0.2em;
-    margin: 5px 0 !important;
-
-    justify-content: space-between;
-    /* align-items: center; */
-    transition: 0.3s ease;
-    ${!opened &&
-    css`
-      :hover {
-        background: #bee1dd;
-        cursor: pointer;
-      }
-    `}
-
-    .head {
-      display: flex;
-      cursor: pointer;
-    }
-
-    .stats {
-      padding: 6px 0;
-      /* width: 50%; */
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      /* align-items: center; */
-    }
-    .name {
-      color: ${theme.teal};
-      white-space: nowrap;
-      /* font-weight: bold; */
-    }
-    .num-cases {
-      color: ${theme.teal};
-      font-weight: bold;
-      /* padding-top: 3px;
-      line-height: 1; */
-      margin: 0 10px;
-      text-align: right;
-      /* display: flex;
-      flex-direction: column;
-      justify-content: center; */
-      /* align-items: center; */
-      /* position: relative; */
-      /* top: 1px; */
-    }
-    .inline-icon {
-      /* opacity: 0.3; */
-    }
-    .total-cases {
-      /* font-size: 1em; */
-    }
-    small {
-      display: inline-block;
-      background: ${theme.green};
-      font-size: 0.8em;
-      font-weight: bold;
-      color: white;
-      padding: 0.15em 0.3em;
-      border-radius: 0.3em;
-      text-align: right;
-      position: relative;
-      top: -3px;
-      line-height: 1;
-    }
-    .details {
-      text-align: center;
-      padding: 0 0.5em 1em;
-    }
-    .dhb-link {
-      font-size: 0.7em;
-    }
-    hr:first-child {
-      margin-top: 0;
-    }
-  `}
-`;
-
-const InlineChart = styled.div`
-  width: 42%;
-  height: 50px;
-  /* margin-left: 5px;
-  display: inline-block; */
-`;
-
 const Error = styled.button`
   ${({ theme }) => css`
     font-size: 2em;
@@ -891,62 +715,6 @@ const Heading = styled.div`
     margin-top: 1.6em;
     margin-bottom: 0.3em;
     line-height: 1.1;
-  `}
-`;
-
-const Legend = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 0.3em;
-    font-size: 2.1em;
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    li {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 0.8em;
-      font-size: 0.8em;
-      :nth-child(1) img {
-        height: 1.05em;
-      }
-      :nth-child(2) img {
-        height: 0.85em;
-      }
-    }
-    img {
-      height: 1em;
-      margin-right: 0.3em;
-    }
-  `}
-`;
-
-const CaseCounts = styled.div`
-  ${({ theme }) => css`
-    color: ${theme.navy};
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-    }
-    li {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 0.8em;
-      font-size: 0.8em;
-      :nth-child(1) img {
-        height: 1.05em;
-      }
-      :nth-child(2) img {
-        height: 0.85em;
-      }
-    }
-    img {
-      height: 1em;
-      margin-right: 0.3em;
-    }
   `}
 `;
 
