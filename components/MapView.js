@@ -280,7 +280,7 @@ const MapView = ({ data = {}, error, theme }) => {
                 <Row>
                   <div className="grid">
                     <NewCases combined={combined} />
-                    <Deaths deathsTotal={deathsTotal} />
+                    <Deaths deathsTotal={deathsTotal + 1} />
                   </div>
                 </Row>
                 <Row>
