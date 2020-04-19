@@ -17,7 +17,6 @@ const Map = ({
   markers,
   clusters,
   onMarkerClick,
-  currentView,
   maxCases,
   outerBounds,
   innerBounds,
@@ -32,11 +31,11 @@ const Map = ({
   }, [mapRef.current]);
 
   useEffect(() => {
-    if (currentView === "") {
+    if (location === "") {
       mapRef.current.leafletElement.closePopup();
       setCurrentLocation("");
     }
-  }, [currentView]);
+  }, [location]);
 
   const getRegionIcon = (className, totalCases) => {
     const iconSize = 24;
@@ -58,9 +57,9 @@ const Map = ({
     });
   };
 
-  const onLocationClick = (location) => {
-    setCurrentLocation(location);
-    onMarkerClick(location);
+  const onLocationClick = (name) => {
+    setCurrentLocation(name);
+    onMarkerClick(name);
   };
 
   const onZoomend = () => {
@@ -83,7 +82,7 @@ const Map = ({
         maxBounds={outerBounds}
         center={center}
         zoom={zoom}
-        maxZoom={8}
+        maxZoom={7}
         minZoom={5}
         zoomControl={true}
         doubleClickZoom={true}
@@ -102,7 +101,7 @@ const Map = ({
         {markers?.map(
           (
             {
-              location,
+              name,
               latlng,
               boundary,
               totalCases,
@@ -122,13 +121,13 @@ const Map = ({
                 )}
                 zIndexOffset={100}
                 onClick={() => {
-                  onLocationClick(location);
-                  gtag.event("Marker", "Map", location);
+                  onLocationClick(name);
+                  gtag.event("Marker", "Map", name);
                 }}
               />
               <Popup>
                 <StyledPopup>
-                  <div className="location">{location}</div>
+                  <div className="location">{name}</div>
                   <div className="cases">
                     {active} active case{active > 1 && "s"}
                     <br />
@@ -148,36 +147,39 @@ const Map = ({
                 </StyledPopup>
               </Popup>
               <Polygon
-                color={currentLocation === location ? "white" : "black"}
-                opacity={currentLocation === location ? 1 : 0.2}
-                weight={currentLocation === location ? 3 : 1}
+                color={currentLocation === name ? "white" : "black"}
+                opacity={currentLocation === name ? 1 : 0.2}
+                weight={currentLocation === name ? 3 : 1}
                 fillColor={theme.teal}
                 fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
                 onClick={() => {
-                  onLocationClick(location);
-                  gtag.event("Region", "Map", location);
+                  onLocationClick(name);
+                  gtag.event("Region", "Map", name);
                 }}
               />
             </FeatureGroup>
           )
         )}
         {clusters?.map(
-          ({ latlng, totalCases, location, clusters: clusterItems }, i) => (
+          (
+            { latlng, totalCases, location: name, clusters: clusterItems },
+            i
+          ) => (
             <Marker
               key={i}
               position={latlng}
               icon={getClusterIcon("cluster", totalCases)}
               // zIndexOffset={100}
-              onClick={() => gtag.event("Cluster", "Map", location)}
+              onClick={() => gtag.event("Cluster", "Map", name)}
             >
               <Popup>
                 <StyledPopup>
                   <div className="head">
-                    {location} cluster{clusterItems.length > 1 && "s"}
+                    {name} cluster{clusterItems.length > 1 && "s"}
                   </div>
-                  {clusterItems.map(({ name, totalCases, location }, i) => (
+                  {clusterItems.map(({ name, totalCases }, i) => (
                     <div className="cluster-desc" key={i}>
                       <div className="location">{name}</div>
                       <div className="cases">{totalCases} cases</div>

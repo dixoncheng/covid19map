@@ -2,18 +2,28 @@ import styled, { css } from "styled-components";
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import { useMeasure } from "react-use";
-import * as gtag from "../lib/gtag";
 
-const Reveal = ({ button, full, children }) => {
+const Reveal = ({ button, full, open, toggle, children }) => {
   const defaultHeight = "0px";
-  const [open, toggle] = useState(false);
+
+  if (!open && !toggle) {
+    [open, toggle] = useState(false);
+  }
+  // const [open, toggle] = useState(false);
+
   const [contentHeight, setContentHeight] = useState(defaultHeight);
   const [ref, { height }] = useMeasure();
 
   // Animations
   const expand = useSpring({
-    // config: { friction: 10 },
+    // config: {
+    // friction: 10,
+    // duration: 300,
+    // },
     height: open ? `${contentHeight}px` : defaultHeight,
+    // onRest: () => {
+    //   console.log("rest");
+    // },
   });
 
   useEffect(() => {
@@ -27,15 +37,19 @@ const Reveal = ({ button, full, children }) => {
 
   return (
     <>
-      <InvisibleButton
-        onClick={() => {
-          toggle(!open);
-          gtag.event("Level 3 slideshow");
-        }}
-        active={open}
-      >
-        {button}
-      </InvisibleButton>
+      {button && (
+        <InvisibleButton
+          onClick={() => {
+            toggle(!open);
+            // if (onToggle) {
+            //   onToggle();
+            // }
+          }}
+          active={open}
+        >
+          {button}
+        </InvisibleButton>
+      )}
       <Container full={full}>
         <animated.div style={expand}>
           <div ref={ref}>{children}</div>

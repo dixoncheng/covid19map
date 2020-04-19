@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
 
-const Cases = ({ confirmedTotal, probableTotal, active }) => {
+const Cases = ({ confirmedTotal, probableTotal, combinedTotal }) => {
   return (
     <StyledCases>
       <div>
-        <strong>{active}</strong> Active
+        <strong>{combinedTotal}</strong> Total
       </div>
       <div>
         <strong>{confirmedTotal}</strong> Confirmed

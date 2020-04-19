@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styled, { css, withTheme } from "styled-components";
-import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 import Row from "../components/Row";
 import TotalCases from "../components/TotalCases";
 import Cases from "../components/Cases";
@@ -18,7 +17,11 @@ import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
 import Reveal from "../components/Reveal";
+import LocationBar from "../components/LocationBar";
+import LocationDetails from "../components/LocationDetails";
+import Legend from "../components/Legend";
 import * as gtag from "../lib/gtag";
+// import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -50,6 +53,8 @@ const MapView = ({ data = {}, error, theme }) => {
     testingData,
     genders,
     ages,
+    regionAgesGenders,
+    regionOverseas,
   } = data;
   const {
     combinedTotal,
@@ -61,30 +66,36 @@ const MapView = ({ data = {}, error, theme }) => {
     hospitalTotal,
   } = summary ? summary[summary.length - 1] : {};
 
-  const [view, setView] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("Auckland");
   const [termsOpened, setTermsOpened] = useState(false);
+  const [lv3Opened, setLv3Opened] = useState(false);
 
-  const showLocation = (location) => {
-    if (location) {
-      const loc = locations.find((x) => location === x.name);
-      setLocation(loc);
-      setView("details");
-    } else {
-      setView("");
-    }
-
-    infoRef.current.scrollTop = 0;
-    // window.scrollTo(0, 0);
+  const showLocation = (name) => {
+    setLocation(name);
   };
 
-  useEffect(() => {
-    if (detailsRef.current) {
-      if (window.scrollY > detailsRef.current.offsetTop) {
-        window.scrollTo(0, detailsRef.current.offsetTop - 20);
-      }
-    }
-  }, [view]);
+  // useEffect(() => {
+  //   if (detailsRef.current) {
+  //     if (window.scrollY > detailsRef.current.offsetTop) {
+  //       window.scrollTo(0, detailsRef.current.offsetTop - 20);
+  //     }
+  //   }
+  // }, [view]);
+
+  // useEffect(() => {
+  //   const options = {
+  //     duration: 800,
+  //     delay: 0,
+  //     smooth: "easeInOutQuart",
+  //     offset: -10,
+  //   };
+  //   // mobile
+  //   // scroller.scrollTo(location, options);
+  //   // desktop
+  //   scroller.scrollTo(location, { ...options, containerId: "info" });
+  // }, [location]);
+
+  // const refs = locations?.map((item, i) => useRef());
 
   return (
     <Wrap>
@@ -94,76 +105,40 @@ const MapView = ({ data = {}, error, theme }) => {
           zoom={zoom}
           markers={locations}
           clusters={clusters}
-          currentView={view}
           onMarkerClick={showLocation}
           maxCases={maxCases}
           outerBounds={outerBounds}
           innerBounds={innerBounds}
         />
       </Main>
-      <Info ref={infoRef}>
-        {view === "details" ? (
+      <Info ref={infoRef} id="info">
+        {location ? (
           <Details ref={detailsRef}>
             <BackButton
               type="button"
               onClick={() => {
-                setView("");
-                infoRef.current.scrollTo(0, 0);
+                setLocation("");
+                // infoRef.current.scrollTo(0, 0);
               }}
             >
-              &lt; Back to summary
+              <div
+                className="icon"
+                dangerouslySetInnerHTML={{
+                  __html: require(`../public/arrow.svg?include`),
+                }}
+              />{" "}
+              Back
             </BackButton>
 
-            <Bar>
-              {location.location}
-              <span>
-                {location.totalCases}{" "}
-                {location.totalCases === 1 ? "Case" : "Cases"}
-              </span>
-            </Bar>
-
-            {location?.cases?.map(
-              (
-                { status, date, age, gender, cityBefore, flightNo, dateArrive },
-                i
-              ) => (
-                <Case key={i} status={status}>
-                  <h3>
-                    {status}: {date}
-                  </h3>
-                  <div className="details">
-                    <div className="age">
-                      {age && <>Age {age}</>}
-                      {age && gender ? ", " : ""} {gender}
-                    </div>
-                    {(dateArrive || cityBefore || flightNo) && (
-                      <>
-                        Arrived {dateArrive && <>on {dateArrive}</>}{" "}
-                        {cityBefore && <>from {cityBefore}</>}{" "}
-                        {flightNo && <>({flightNo})</>}
-                      </>
-                    )}
-                    {/* {details.split(/\r?\n/).map((item, i) => (
-                        <div key={i}>{item}</div>
-                      ))} */}
-                  </div>
-                </Case>
-              )
-            )}
-
-            {!location.cases && (
-              <p style={{ textAlign: "center" }}>
-                <small>Details yet to be released</small>
-              </p>
-            )}
-
-            {location.cases.length < location.totalCases && (
-              <p style={{ textAlign: "center" }}>
-                <small>
-                  Note: Some case details have been removed by <br />
-                  the Ministry of Health.
-                </small>
-              </p>
+            {locations && (
+              <LocationDetails
+                location={locations.find((x) => x.name === location)}
+                data={[
+                  regionAgesGenders[location],
+                  regionOverseas[location],
+                  history[location],
+                ]}
+              />
             )}
           </Details>
         ) : (
@@ -183,7 +158,7 @@ const MapView = ({ data = {}, error, theme }) => {
                 <h2>Current Cases in New Zealand</h2>
               </div>
             </Logo>
-            {data.locations && (
+            {locations && (
               <>
                 <div className="meta">
                   <div>
@@ -238,13 +213,16 @@ const MapView = ({ data = {}, error, theme }) => {
                   </a>
                 </Share>
                 <Row>
-                  <TotalCases combinedTotal={combinedTotal} />
+                  <TotalCases
+                    total={combinedTotal - recoveredTotal - deathsTotal}
+                  />
                 </Row>
 
                 <Row>
                   <Feature>
                     <Reveal
-                      // full
+                      open={lv3Opened}
+                      toggle={() => setLv3Opened(!lv3Opened)}
                       button={
                         <Heading className="head">
                           What does alert level 3 mean?{" "}
@@ -256,6 +234,9 @@ const MapView = ({ data = {}, error, theme }) => {
                           />
                         </Heading>
                       }
+                      onToggle={() => {
+                        gtag.event("Level 3 slideshow");
+                      }}
                     >
                       <Slider full centerPadding="38px" padding>
                         {[...Array(10)].map((item, i) => (
@@ -274,13 +255,13 @@ const MapView = ({ data = {}, error, theme }) => {
                   <Cases
                     confirmedTotal={confirmedTotal}
                     probableTotal={probableTotal}
-                    active={combinedTotal - recoveredTotal - deathsTotal}
+                    combinedTotal={combinedTotal}
                   />
                 </Row>
                 <Row>
                   <div className="grid">
                     <NewCases combined={combined} />
-                    <Deaths deathsTotal={deathsTotal + 1} />
+                    <Deaths deathsTotal={deathsTotal} />
                   </div>
                 </Row>
                 <Row>
@@ -316,90 +297,17 @@ const MapView = ({ data = {}, error, theme }) => {
                 </Bar> */}
 
                 <Heading>Regional data</Heading>
-                <Legend>
-                  <ul>
-                    <li>
-                      <img src={require(`../public/active.svg`)} /> Total Cases
-                    </li>
-                    <li>
-                      <img src={require(`../public/recovered.svg`)} />
-                      Recovered
-                    </li>
-                    <li>
-                      <img src={require(`../public/deaths.svg`)} />
-                      Deaths
-                    </li>
-                  </ul>
-                </Legend>
-                {locations?.map((item, i) => (
-                  <Location
-                    key={i}
-                    onClick={() => {
-                      showLocation(item.location);
-                      gtag.event("View location", "", item.location);
-                    }}
-                  >
-                    <div className="body">
-                      <div>
-                        <span className="name">{item.location}</span>
-                        <CaseCounts>
-                          <ul>
-                            <li>
-                              <img src={require(`../public/active.svg`)} />{" "}
-                              {item.totalCases}
-                            </li>
-                            <li>
-                              <img src={require(`../public/recovered.svg`)} />{" "}
-                              {
-                                history[item.name][
-                                  history[item.name].length - 1
-                                ].recovered
-                              }
-                            </li>
-                            <li>
-                              <img src={require(`../public/deaths.svg`)} />{" "}
-                              {
-                                history[item.name][
-                                  history[item.name].length - 1
-                                ].deaths
-                              }
-                            </li>
-                          </ul>
-                        </CaseCounts>
-                      </div>
-                      <div className="num-cases">
-                        <div className="total-cases">
-                          {
-                            history[item.name][history[item.name].length - 1]
-                              .active
-                          }
-                        </div>
-                        {item.newCases > 0 && <small>+{item.newCases}</small>}
-                        {/* <div
-                        className="inline-icon"
-                        dangerouslySetInnerHTML={{
-                          __html: require(`../public/arrow.svg?include`),
-                        }}
-                      /> */}
-                      </div>
-                    </div>
 
-                    <InlineChart>
-                      <ResponsiveContainer>
-                        <LineChart data={history[item.name]}>
-                          <XAxis dataKey="date" hide />
-                          <Line
-                            type="monotone"
-                            dataKey="new"
-                            stroke={theme.teal}
-                            strokeWidth={1}
-                            dot={false}
-                            isAnimationActive={false}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </InlineChart>
-                  </Location>
+                <Legend />
+
+                {locations?.map((item, i) => (
+                  <div key={i} onClick={() => setLocation(item.location)}>
+                    <LocationBar
+                      location={item}
+                      history={history[item.name]}
+                      showLocation={showLocation}
+                    />
+                  </div>
                 ))}
                 {ages && (
                   <Row>
@@ -456,6 +364,11 @@ const Info = styled.div`
     a {
       color: ${theme.dark};
     }
+    hr {
+      border: solid 2px ${theme.light};
+      border-width: 0 0 1px 0;
+      margin: 1em 0;
+    }
   `}
 `;
 
@@ -504,18 +417,13 @@ const Logo = styled.div`
     img {
       width: 6em;
       margin-right: 1.5em;
-      /* @media (min-width: ${theme.md}) {
-        width: 60px;
-      } */
     }
     h1 {
       white-space: nowrap;
       font-size: 4.5em;
       color: ${theme.teal};
       margin: 0;
-      /* @media (min-width: ${theme.md}) {
-        font-size: 36px;
-      } */
+
     }
     h2 {
       white-space: nowrap;
@@ -530,112 +438,8 @@ const Logo = styled.div`
   `}
 `;
 
-const SummaryTable = styled.table`
-  ${({ theme, cols }) => css`
-    width: 100%;
-    border-collapse: collapse;
-
-    tr:hover td {
-      transition: 0.3s ease;
-      background: #bee1dd;
-    }
-    td,
-    th {
-      line-height: 1.2;
-      text-align: center;
-      font-size: 16px;
-      padding: 7px;
-      &:first-child {
-        text-align: left;
-        padding-left: 15px;
-      }
-      ${cols === 2 &&
-      css`
-        /* font-size: 20px; */
-        &:last-child {
-          text-align: right;
-          padding-right: 15px;
-        }
-      `}
-    }
-    th {
-      background: ${theme.green};
-      color: white;
-    }
-    td {
-      cursor: pointer;
-      background: white;
-      border-top: solid ${theme.light} 4px;
-      padding-top: 0;
-      padding-bottom: 0;
-      white-space: nowrap;
-      small {
-        color: ${theme.green};
-        margin-right: 1em;
-      }
-    }
-    .name-wrap {
-      display: flex;
-      align-items: center;
-    }
-    .inline-icon {
-      /* opacity: 0.3; */
-    }
-    small {
-      font-weight: bold;
-    }
-  `}
-`;
-
 const Details = styled.div`
   font-size: 2em;
-`;
-
-const Bar = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    background: ${theme.green};
-    color: white;
-    padding: 7px 10px;
-    margin: 0 !important;
-    /* @media (min-width: ${theme.md}) {
-      font-size: 20px;
-    } */
-    span {
-      text-align: right;
-    }
-  `}
-`;
-
-const Case = styled.div`
-  ${({ theme, status }) => css`
-    font-size: 14px;
-    margin-top: 4px;
-    h3 {
-      margin: 0;
-      font-size: 14px;
-      color: white;
-      background: ${theme.teal};
-      padding: 2px 15px;
-      ${status === "Probable" &&
-      css`
-        background: ${theme.green};
-      `}
-    }
-    .age {
-      color: ${theme.teal};
-      ${status === "Probable" &&
-      css`
-        color: ${theme.green};
-      `}
-    }
-    .details {
-      background: white;
-      padding: 10px 15px;
-    }
-  `}
 `;
 
 const BackButton = styled.button`
@@ -645,7 +449,15 @@ const BackButton = styled.button`
     color: ${theme.dark};
     margin-bottom: 1.5em;
     padding: 0;
-    font-size: 14px;
+    font-size: 0.8em;
+    .icon {
+      transform: rotate(180deg);
+      display: inline-block;
+      /* height: 1.5em; */
+      width: 0.5em;
+      position: relative;
+      top: -0.15em;
+    }
   `}
 `;
 
@@ -679,76 +491,6 @@ const Share = styled.div`
       top: -1px;
     }
   `}
-`;
-
-const Location = styled.div`
-  ${({ theme }) => css`
-    cursor: pointer;
-    font-size: 2.1em;
-    background: white;
-    padding: 0.2em 0.5em 0.2em;
-    margin: 5px 0 !important;
-    display: flex;
-    justify-content: space-between;
-    /* align-items: center; */
-    transition: 0.3s ease;
-
-    :hover {
-      background: #bee1dd;
-    }
-    .body {
-      padding: 6px 0;
-      /* width: 50%; */
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      /* align-items: center; */
-    }
-    .name {
-      color: ${theme.teal};
-      /* font-weight: bold; */
-    }
-    .num-cases {
-      color: ${theme.teal};
-      font-weight: bold;
-      /* padding-top: 3px;
-      line-height: 1; */
-      margin: 0 10px;
-      text-align: right;
-      /* display: flex;
-      flex-direction: column;
-      justify-content: center; */
-      /* align-items: center; */
-      /* position: relative; */
-      /* top: 1px; */
-    }
-    .inline-icon {
-      /* opacity: 0.3; */
-    }
-    .total-cases {
-      /* font-size: 1em; */
-    }
-    small {
-      display: inline-block;
-      background: ${theme.green};
-      font-size: 0.8em;
-      font-weight: bold;
-      color: white;
-      padding: 0.15em 0.3em;
-      border-radius: 0.3em;
-      text-align: right;
-      position: relative;
-      top: -3px;
-      line-height: 1;
-    }
-  `}
-`;
-
-const InlineChart = styled.div`
-  width: 45%;
-  height: 50px;
-  /* margin-left: 5px;
-  display: inline-block; */
 `;
 
 const Error = styled.button`
@@ -795,62 +537,6 @@ const Heading = styled.div`
   `}
 `;
 
-const Legend = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 0.3em;
-    font-size: 2.1em;
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    li {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 0.8em;
-      font-size: 0.8em;
-      :nth-child(1) img {
-        height: 1.05em;
-      }
-      :nth-child(2) img {
-        height: 0.85em;
-      }
-    }
-    img {
-      height: 1em;
-      margin-right: 0.3em;
-    }
-  `}
-`;
-
-const CaseCounts = styled.div`
-  ${({ theme }) => css`
-    color: ${theme.navy};
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-    }
-    li {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 0.8em;
-      font-size: 0.8em;
-      :nth-child(1) img {
-        height: 1.05em;
-      }
-      :nth-child(2) img {
-        height: 0.85em;
-      }
-    }
-    img {
-      height: 1em;
-      margin-right: 0.3em;
-    }
-  `}
-`;
-
 const Feature = styled.div`
   ${({ theme }) => css`
     border: solid ${theme.green} 0.4em;
@@ -861,6 +547,9 @@ const Feature = styled.div`
       color: white;
       font-size: 2em;
       margin: 0 0.8em;
+    }
+    .slick-dots li.slick-active button:before {
+      color: white;
     }
   `}
 `;

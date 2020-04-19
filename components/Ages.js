@@ -36,6 +36,7 @@ const Ages = ({ ages, theme }) => {
               left: 0,
               bottom: 10,
             }}
+            isAnimationActive={false}
           >
             <XAxis type="number" hide />
             <YAxis type="category" dataKey="age" interval={0} width={90} />

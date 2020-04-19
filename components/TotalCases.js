@@ -1,14 +1,14 @@
 import styled, { css } from "styled-components";
 
-const Totals = ({ combinedTotal }) => {
+const Totals = ({ total }) => {
   return (
     <Total>
       <h1>
-        Total cases <br />
+        Active cases <br />
         in New Zealand
       </h1>
-      <TotalNumber num={combinedTotal}>
-        {combinedTotal
+      <TotalNumber num={total}>
+        {total
           .toString()
           .split("")
           .map((digit, i) => (
