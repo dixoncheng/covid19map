@@ -20,10 +20,7 @@ import Reveal from "../components/Reveal";
 import LocationBar from "../components/LocationBar";
 import LocationDetails from "../components/LocationDetails";
 import Legend from "../components/Legend";
-
 import * as gtag from "../lib/gtag";
-
-// import VisibilitySensor from "react-visibility-sensor";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
 const Map = dynamic(() => import("./Map"), {
@@ -69,32 +66,12 @@ const MapView = ({ data = {}, error, theme }) => {
     hospitalTotal,
   } = summary ? summary[summary.length - 1] : {};
 
-  const [view, setView] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("Auckland");
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
 
-  // console.log(history);
-  // console.log(location);
-
   const showLocation = (name) => {
     setLocation(name);
-
-    // // console.log(name);
-    // // setLocation(name);
-    // if (name) {
-    //   // const loc = locations.find((x) => name === x.name);
-    //   setLocation(name);
-    //   // setView("details");
-    //   // setLocation(name);
-    //   // console.log(location);
-    // } else {
-    //   // setView("");
-    //   setLocation("");
-    // }
-
-    // // infoRef.current.scrollTop = 0;
-    // // window.scrollTo(0, 0);
   };
 
   // useEffect(() => {
@@ -120,20 +97,6 @@ const MapView = ({ data = {}, error, theme }) => {
 
   // const refs = locations?.map((item, i) => useRef());
 
-  const locationVisibilityChange = (isVisible) => {
-    // console.log("Element is now %s", isVisible ? "visible" : "hidden");
-    // if (!isVisible) {
-    //   console.log(`${location} invisible`);
-    //   setTimeout(() => {
-    //     scroller.scrollTo(location, {
-    //       duration: 800,
-    //       delay: 0,
-    //       smooth: "easeInOutQuart",
-    //       offset: -10,
-    //     });
-    //   }, 300);
-    // }
-  };
   return (
     <Wrap>
       <Main>
@@ -142,7 +105,6 @@ const MapView = ({ data = {}, error, theme }) => {
           zoom={zoom}
           markers={locations}
           clusters={clusters}
-          currentView={view}
           onMarkerClick={showLocation}
           maxCases={maxCases}
           outerBounds={outerBounds}
@@ -159,67 +121,25 @@ const MapView = ({ data = {}, error, theme }) => {
                 // infoRef.current.scrollTo(0, 0);
               }}
             >
-              &lt; Back
+              <div
+                className="icon"
+                dangerouslySetInnerHTML={{
+                  __html: require(`../public/arrow.svg?include`),
+                }}
+              />{" "}
+              Back
             </BackButton>
 
-            <LocationDetails
-              location={locations.find((x) => x.name === location)}
-              data={[
-                regionAgesGenders[location],
-                regionOverseas[location],
-                location.url,
-                history[location],
-              ]}
-            />
-
-            {/* <Bar>
-              {location.location}
-              <span>
-                {location.totalCases}{" "}
-                {location.totalCases === 1 ? "Case" : "Cases"}
-              </span>
-            </Bar> */}
-
-            {/* {location?.cases?.map(
-              (
-                { status, date, age, gender, cityBefore, flightNo, dateArrive },
-                i
-              ) => (
-                <Case key={i} status={status}>
-                  <h3>
-                    {status}: {date}
-                  </h3>
-                  <div className="details">
-                    <div className="age">
-                      {age && <>Age {age}</>}
-                      {age && gender ? ", " : ""} {gender}
-                    </div>
-                    {(dateArrive || cityBefore || flightNo) && (
-                      <>
-                        Arrived {dateArrive && <>on {dateArrive}</>}{" "}
-                        {cityBefore && <>from {cityBefore}</>}{" "}
-                        {flightNo && <>({flightNo})</>}
-                      </>
-                    )}
-                  </div>
-                </Case>
-              )
+            {locations && (
+              <LocationDetails
+                location={locations.find((x) => x.name === location)}
+                data={[
+                  regionAgesGenders[location],
+                  regionOverseas[location],
+                  history[location],
+                ]}
+              />
             )}
-
-            {!location.cases && (
-              <p style={{ textAlign: "center" }}>
-                <small>Details yet to be released</small>
-              </p>
-            )}
-
-            {location.cases.length < location.totalCases && (
-              <p style={{ textAlign: "center" }}>
-                <small>
-                  Note: Some case details have been removed by <br />
-                  the Ministry of Health.
-                </small>
-              </p>
-            )} */}
           </Details>
         ) : (
           <Summary>
@@ -238,7 +158,7 @@ const MapView = ({ data = {}, error, theme }) => {
                 <h2>Current Cases in New Zealand</h2>
               </div>
             </Logo>
-            {data.locations && (
+            {locations && (
               <>
                 <div className="meta">
                   <div>
@@ -341,7 +261,7 @@ const MapView = ({ data = {}, error, theme }) => {
                 <Row>
                   <div className="grid">
                     <NewCases combined={combined} />
-                    <Deaths deathsTotal={deathsTotal + 1} />
+                    <Deaths deathsTotal={deathsTotal} />
                   </div>
                 </Row>
                 <Row>
@@ -497,18 +417,13 @@ const Logo = styled.div`
     img {
       width: 6em;
       margin-right: 1.5em;
-      /* @media (min-width: ${theme.md}) {
-        width: 60px;
-      } */
     }
     h1 {
       white-space: nowrap;
       font-size: 4.5em;
       color: ${theme.teal};
       margin: 0;
-      /* @media (min-width: ${theme.md}) {
-        font-size: 36px;
-      } */
+
     }
     h2 {
       white-space: nowrap;
@@ -523,112 +438,8 @@ const Logo = styled.div`
   `}
 `;
 
-const SummaryTable = styled.table`
-  ${({ theme, cols }) => css`
-    width: 100%;
-    border-collapse: collapse;
-
-    tr:hover td {
-      transition: 0.3s ease;
-      background: #bee1dd;
-    }
-    td,
-    th {
-      line-height: 1.2;
-      text-align: center;
-      font-size: 16px;
-      padding: 7px;
-      &:first-child {
-        text-align: left;
-        padding-left: 15px;
-      }
-      ${cols === 2 &&
-      css`
-        /* font-size: 20px; */
-        &:last-child {
-          text-align: right;
-          padding-right: 15px;
-        }
-      `}
-    }
-    th {
-      background: ${theme.green};
-      color: white;
-    }
-    td {
-      cursor: pointer;
-      background: white;
-      border-top: solid ${theme.light} 4px;
-      padding-top: 0;
-      padding-bottom: 0;
-      white-space: nowrap;
-      small {
-        color: ${theme.green};
-        margin-right: 1em;
-      }
-    }
-    .name-wrap {
-      display: flex;
-      align-items: center;
-    }
-    .inline-icon {
-      /* opacity: 0.3; */
-    }
-    small {
-      font-weight: bold;
-    }
-  `}
-`;
-
 const Details = styled.div`
   font-size: 2em;
-`;
-
-const Bar = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    background: ${theme.green};
-    color: white;
-    padding: 7px 10px;
-    margin: 0 !important;
-    /* @media (min-width: ${theme.md}) {
-      font-size: 20px;
-    } */
-    span {
-      text-align: right;
-    }
-  `}
-`;
-
-const Case = styled.div`
-  ${({ theme, status }) => css`
-    font-size: 14px;
-    margin-top: 4px;
-    h3 {
-      margin: 0;
-      font-size: 14px;
-      color: white;
-      background: ${theme.teal};
-      padding: 2px 15px;
-      ${status === "Probable" &&
-      css`
-        background: ${theme.green};
-      `}
-    }
-    .age {
-      color: ${theme.teal};
-      ${status === "Probable" &&
-      css`
-        color: ${theme.green};
-      `}
-    }
-    .details {
-      background: white;
-      padding: 10px 15px;
-    }
-  `}
 `;
 
 const BackButton = styled.button`
@@ -638,7 +449,15 @@ const BackButton = styled.button`
     color: ${theme.dark};
     margin-bottom: 1.5em;
     padding: 0;
-    font-size: 14px;
+    font-size: 0.8em;
+    .icon {
+      transform: rotate(180deg);
+      display: inline-block;
+      /* height: 1.5em; */
+      width: 0.5em;
+      position: relative;
+      top: -0.15em;
+    }
   `}
 `;
 

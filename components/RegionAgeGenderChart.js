@@ -54,12 +54,12 @@ export default withTheme(RegionAgeGenderChart);
 
 const StyledRegionAgeGenderChart = styled.div`
   ${({ theme, ...props }) => css`
-    font-size: 0.45em;
+    font-size: 0.5em;
     /* width: 100%; */
     /* padding: 1em 0; */
-    border-radius: 0.5em;
+    /* border-radius: 0.5em;
     background: white;
-    padding: 2em;
+    padding: 2em; */
 
     h3 {
       color: ${theme.dark};
@@ -68,8 +68,9 @@ const StyledRegionAgeGenderChart = styled.div`
       line-height: 1.1;
       text-align: center;
     }
+    
     .chart-wrap {
-      width: 45em;
+      /* width: 45em; */
       height: 24em;
     }
     .recharts-cartesian-axis-tick-value tspan {

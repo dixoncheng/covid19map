@@ -39,11 +39,11 @@ export default withTheme(RegionOverseasChart);
 
 const StyledRegionOverseasChart = styled.div`
   ${({ theme }) => css`
-    font-size: 0.45em;
+    font-size: 0.5em;
     position: relative;
-    border-radius: 0.5em;
+    /* border-radius: 0.5em;
     background: white;
-    padding: 2em;
+    padding: 2em; */
 
     .row {
       display: flex;

@@ -17,7 +17,6 @@ const Map = ({
   markers,
   clusters,
   onMarkerClick,
-  currentView,
   maxCases,
   outerBounds,
   innerBounds,
@@ -164,7 +163,10 @@ const Map = ({
           )
         )}
         {clusters?.map(
-          ({ latlng, totalCases, name, clusters: clusterItems }, i) => (
+          (
+            { latlng, totalCases, location: name, clusters: clusterItems },
+            i
+          ) => (
             <Marker
               key={i}
               position={latlng}
