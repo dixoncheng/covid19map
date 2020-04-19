@@ -66,7 +66,7 @@ const MapView = ({ data = {}, error, theme }) => {
     hospitalTotal,
   } = summary ? summary[summary.length - 1] : {};
 
-  const [location, setLocation] = useState("Auckland");
+  const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
 
