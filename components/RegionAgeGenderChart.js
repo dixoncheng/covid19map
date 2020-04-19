@@ -60,13 +60,13 @@ const StyledRegionAgeGenderChart = styled.div`
     h3 {
       color: ${theme.dark};
       font-size: 2em;
-      margin-bottom: 0.5em;
+      margin: 0 0 0.5em 0;
       line-height: 1.1;
       text-align: center;
     }
     .chart-wrap {
       width: 45em;
-      height: 34em;
+      height: 24em;
     }
     .recharts-cartesian-axis-tick-value tspan {
       font-size: 1.4em;

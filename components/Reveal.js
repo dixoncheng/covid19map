@@ -16,11 +16,14 @@ const Reveal = ({ button, full, open, toggle, children }) => {
 
   // Animations
   const expand = useSpring({
-    // config: {
-    // friction: 10,
-    // duration: 800,
-    // },
+    config: {
+      // friction: 10,
+      duration: 300,
+    },
     height: open ? `${contentHeight}px` : defaultHeight,
+    // onRest: () => {
+    //   console.log("rest");
+    // },
   });
 
   useEffect(() => {

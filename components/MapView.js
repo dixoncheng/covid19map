@@ -18,19 +18,13 @@ import TransmissionChart from "../components/TransmissionChart";
 import Tests from "../components/Tests";
 import Slider from "../components/Slider";
 import Reveal from "../components/Reveal";
-import RegionAgeGenderChart from "../components/RegionAgeGenderChart";
-import RegionOverseasChart from "../components/RegionOverseasChart";
+
 import * as gtag from "../lib/gtag";
 
+import LocationDetails from "../components/LocationDetails";
+
 import VisibilitySensor from "react-visibility-sensor";
-import {
-  // Link,
-  Element,
-  // Events,
-  animateScroll as scroll,
-  // scrollSpy,
-  scroller,
-} from "react-scroll";
+import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -65,7 +59,6 @@ const MapView = ({ data = {}, error, theme }) => {
     regionAgesGenders,
     regionOverseas,
   } = data;
-  console.log(regionAgesGenders);
   const {
     combinedTotal,
     confirmedTotal,
@@ -96,19 +89,33 @@ const MapView = ({ data = {}, error, theme }) => {
     // window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    if (detailsRef.current) {
-      if (window.scrollY > detailsRef.current.offsetTop) {
-        window.scrollTo(0, detailsRef.current.offsetTop - 20);
-      }
-    }
-  }, [view]);
+  // useEffect(() => {
+  //   if (detailsRef.current) {
+  //     if (window.scrollY > detailsRef.current.offsetTop) {
+  //       window.scrollTo(0, detailsRef.current.offsetTop - 20);
+  //     }
+  //   }
+  // }, [view]);
+
+  // useEffect(() => {
+  //   const options = {
+  //     duration: 800,
+  //     delay: 0,
+  //     smooth: "easeInOutQuart",
+  //     offset: -10,
+  //   };
+  //   // mobile
+  //   // scroller.scrollTo(location, options);
+  //   // desktop
+  //   scroller.scrollTo(location, { ...options, containerId: "info" });
+  // }, [location]);
 
   // const refs = locations?.map((item, i) => useRef());
 
   const locationVisibilityChange = (isVisible) => {
     // console.log("Element is now %s", isVisible ? "visible" : "hidden");
     // if (!isVisible) {
+    //   console.log(`${location} invisible`);
     //   setTimeout(() => {
     //     scroller.scrollTo(location, {
     //       duration: 800,
@@ -134,28 +141,33 @@ const MapView = ({ data = {}, error, theme }) => {
           innerBounds={innerBounds}
         />
       </Main>
-      <Info ref={infoRef}>
-        {view === "details" ? (
+      <Info ref={infoRef} id="info">
+        {location ? (
           <Details ref={detailsRef}>
             <BackButton
               type="button"
               onClick={() => {
-                setView("");
-                infoRef.current.scrollTo(0, 0);
+                setLocation("");
+                // infoRef.current.scrollTo(0, 0);
               }}
             >
-              &lt; Back to summary
+              &lt; Back
             </BackButton>
 
-            <Bar>
+            <LocationDetails
+              location={location}
+              data={[regionAgesGenders, regionOverseas, location.url]}
+            />
+
+            {/* <Bar>
               {location.location}
               <span>
                 {location.totalCases}{" "}
                 {location.totalCases === 1 ? "Case" : "Cases"}
               </span>
-            </Bar>
+            </Bar> */}
 
-            {location?.cases?.map(
+            {/* {location?.cases?.map(
               (
                 { status, date, age, gender, cityBefore, flightNo, dateArrive },
                 i
@@ -176,9 +188,6 @@ const MapView = ({ data = {}, error, theme }) => {
                         {flightNo && <>({flightNo})</>}
                       </>
                     )}
-                    {/* {details.split(/\r?\n/).map((item, i) => (
-                        <div key={i}>{item}</div>
-                      ))} */}
                   </div>
                 </Case>
               )
@@ -197,7 +206,7 @@ const MapView = ({ data = {}, error, theme }) => {
                   the Ministry of Health.
                 </small>
               </p>
-            )}
+            )} */}
           </Details>
         ) : (
           <Summary>
@@ -373,8 +382,9 @@ const MapView = ({ data = {}, error, theme }) => {
                 {locations?.map((item, i) => (
                   <Location
                     key={i}
-                    opened={location === item.location}
+                    // opened={location === item.location}
                     // ref={refs[i]}
+                    onClick={() => setLocation(item.location)}
                   >
                     <Element name={item.location}>
                       <VisibilitySensor
@@ -464,43 +474,6 @@ const MapView = ({ data = {}, error, theme }) => {
                         </div>
                       </VisibilitySensor>
                     </Element>
-                    <Reveal
-                      open={location === item.location}
-                      toggle={() => {
-                        showLocation(
-                          item.location === location ? "" : item.location
-                        );
-                        gtag.event("View location", "", item.location);
-                      }}
-                    >
-                      <div className="details">
-                        {/* <a
-                          href=""
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() =>
-                            gtag.event("DHB link", "", item.location)
-                          }
-                        >
-                          DHB link
-                        </a>
-                        <hr /> */}
-                        {regionAgesGenders &&
-                          regionAgesGenders[item.location] && (
-                            <RegionAgeGenderChart
-                              data={regionAgesGenders[item.location]}
-                            />
-                          )}
-                        {regionAgesGenders &&
-                          regionAgesGenders[item.location] &&
-                          regionOverseas[item.location] && <hr />}
-                        {regionOverseas && regionOverseas[item.location] && (
-                          <RegionOverseasChart
-                            data={regionOverseas[item.location]}
-                          />
-                        )}
-                      </div>
-                    </Reveal>
                   </Location>
                 ))}
                 {ages && (
@@ -857,6 +830,16 @@ const Location = styled.div`
       top: -3px;
       line-height: 1;
     }
+    .details {
+      text-align: center;
+      padding: 0 0.5em 1em;
+    }
+    .dhb-link {
+      font-size: 0.7em;
+    }
+    hr:first-child {
+      margin-top: 0;
+    }
   `}
 `;
 
@@ -977,6 +960,9 @@ const Feature = styled.div`
       color: white;
       font-size: 2em;
       margin: 0 0.8em;
+    }
+    .slick-dots li.slick-active button:before {
+      color: white;
     }
   `}
 `;

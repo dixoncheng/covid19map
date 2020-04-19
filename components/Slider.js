@@ -334,7 +334,7 @@ const StyledSlider = styled.div`
     }
     .slick-dots li.slick-active button:before {
       opacity: 0.75;
-      color: white;
+      color: ${theme.navy};
     }
 
     .slick-left,

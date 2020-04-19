@@ -42,11 +42,12 @@ const StyledRegionOverseasChart = styled.div`
 
     .row {
       display: flex;
+      justify-content: center;
     }
     h3 {
       color: ${theme.dark};
       font-size: 2em;
-      margin-bottom: 0.5em;
+      margin: 0 0 0.5em 0;
       line-height: 1.1;
       text-align: center;
     }
@@ -66,8 +67,8 @@ const StyledRegionOverseasChart = styled.div`
       width: 11em;
     }
     .chart-wrap {
-      width: 18em;
-      height: 18em;
+      width: 16em;
+      height: 16em;
       margin-right: 1.5em;
     }
   `}
