@@ -44,6 +44,7 @@ const Ages = ({ ages, theme }) => {
               dataKey="count"
               fill="#8884d8"
               label={{ position: "insideRight", fill: "white" }}
+              minPointSize={2}
             >
               {ages.map((entry, index) => (
                 <Cell
