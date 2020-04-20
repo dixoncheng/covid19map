@@ -149,7 +149,7 @@ const MapView = ({ data = {}, error, theme }) => {
             // rel="noopener noreferrer"
             // onClick={() => gtag.event("Alert", "", "")}
             >
-              NZ will move to alert level 3 Next Tuesday
+              NZ will move to Alert Level 3 on Tuesday 28 April
             </Alert>
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
