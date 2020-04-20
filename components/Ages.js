@@ -22,6 +22,24 @@ const Ages = ({ ages, theme }) => {
     "#833f24",
   ];
 
+  const CustomizedLabel = (props) => {
+    const { x, y, value, width, height } = props;
+    const small = value < 20;
+    return (
+      <text
+        x={small ? x : x + width - 5}
+        y={y + height / 2}
+        dx={small ? "1.2em" : 0}
+        dy="0.355em"
+        class="recharts-text recharts-label"
+        fill={small ? theme.navy : "white"}
+        textAnchor="end"
+      >
+        {value}
+      </text>
+    );
+  };
+
   return (
     <StyledAges>
       <div className="head">Age Groups</div>
@@ -43,7 +61,10 @@ const Ages = ({ ages, theme }) => {
             <Bar
               dataKey="count"
               fill="#8884d8"
-              label={{ position: "insideRight", fill: "white" }}
+              // label={{ position: "insideRight", fill: "white" }}
+              // label={({ name, value }) => `${name}: ${value}`}
+              // label={({ name, value }) => "test"}
+              label={<CustomizedLabel />}
               minPointSize={2}
             >
               {ages.map((entry, index) => (

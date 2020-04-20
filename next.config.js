@@ -11,9 +11,10 @@ module.exports = withOptimizedImages(
       GA: process.env.ENV === "development" ? "UA-93113-29" : "UA-93113-28",
     },
     pwa: {
+      disable: process.env.ENV === "development",
       dest: "public",
     },
-    optimizeImagesInDev: true,
+    // optimizeImagesInDev: true,
 
     webpack: (config, { isServer }) => {
       // Fixes npm packages that depend on `fs` module
