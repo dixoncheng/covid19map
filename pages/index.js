@@ -8,6 +8,9 @@ const Home = () => {
   const url = `${process.env.API}/main.json`;
   const { data, error } = useSWR(url, fetcher);
 
+  const newsUrl = `${process.env.API}/news.json`;
+  const { data: news } = useSWR(newsUrl, fetcher, { refreshInterval: 30000 });
+
   return (
     <div className="container">
       <Head>
@@ -16,7 +19,7 @@ const Home = () => {
           in New Zealand
         </title>
       </Head>
-      <MapView data={data} error={error} />
+      <MapView data={data} news={news} error={error} />
     </div>
   );
 };

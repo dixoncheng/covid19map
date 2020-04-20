@@ -20,6 +20,7 @@ import Reveal from "../components/Reveal";
 import LocationBar from "../components/LocationBar";
 import LocationDetails from "../components/LocationDetails";
 import Legend from "../components/Legend";
+import Alert from "../components/Alert";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
@@ -38,7 +39,7 @@ const innerBounds = [
   [-47.30251579, 177.66849518],
 ];
 
-const MapView = ({ data = {}, error, theme }) => {
+const MapView = ({ data = {}, news = {}, error, theme }) => {
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -143,14 +144,8 @@ const MapView = ({ data = {}, error, theme }) => {
           </Details>
         ) : (
           <Summary>
-            <Alert
-            // href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-detailed.pdf"
-            // target="_blank"
-            // rel="noopener noreferrer"
-            // onClick={() => gtag.event("Alert", "", "")}
-            >
-              NZ will move to Alert Level 3 on Tuesday 28 April
-            </Alert>
+            <Alert data={news.news} />
+
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
               <div>
@@ -459,16 +454,6 @@ const BackButton = styled.button`
       top: -0.15em;
     }
   `}
-`;
-
-const Alert = styled.div`
-  padding: 3px 20px;
-  color: white !important;
-  font-size: 14px;
-  background: #ffcd38;
-  /* url(/alert.svg) 100% 50% no-repeat; */
-  margin: -20px -20px 10px;
-  display: block;
 `;
 
 const Share = styled.div`

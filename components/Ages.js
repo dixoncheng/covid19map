@@ -31,7 +31,7 @@ const Ages = ({ ages, theme }) => {
         y={y + height / 2}
         dx={small ? "1.2em" : 0}
         dy="0.355em"
-        class="recharts-text recharts-label"
+        className="recharts-text recharts-label"
         fill={small ? theme.navy : "white"}
         textAnchor="end"
       >
