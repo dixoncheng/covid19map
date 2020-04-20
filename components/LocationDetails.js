@@ -1,11 +1,12 @@
 import styled, { css, withTheme } from "styled-components";
 import RegionAgeGenderChart from "../components/RegionAgeGenderChart";
 import RegionOverseasChart from "../components/RegionOverseasChart";
+import Recovered from "../components/Recovered";
+import RegionDailyCasesChart from "../components/RegionDailyCasesChart";
+import * as gtag from "../lib/gtag";
 
 const LocationDetails = ({ location, data }) => {
   const [regionAgesGenders, regionOverseas, history] = data;
-  // console.log(data);
-
   const { name, url } = location;
   const { active, recovered, deaths, total } = history[history.length - 1];
 
@@ -36,6 +37,22 @@ const LocationDetails = ({ location, data }) => {
             </div>
           </div>
         </Stats>
+        <hr />
+        <Row>
+          <Hospital>
+            <div>
+              <img src="/hospitalbed.svg" />
+            </div>
+            <div>
+              <strong>2</strong> <span>in hospital</span>
+            </div>
+          </Hospital>
+          <Recovered recovered={recovered} combined={total} regional />
+        </Row>
+
+        <hr />
+
+        <RegionDailyCasesChart history={history} />
 
         <hr />
         {regionAgesGenders && <RegionAgeGenderChart data={regionAgesGenders} />}
@@ -232,3 +249,32 @@ const Stats = styled.div`
 //     }
 //   `}
 // `;
+
+const Hospital = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    border-right: solid 2px ${theme.light};
+    img {
+      width: 4em;
+      margin-right: 0.8em;
+    }
+    strong {
+      font-size: 1.5em;
+      color: ${theme.green};
+      font-family: ${theme.fontFancy};
+      display: block;
+    }
+    span {
+      font-size: 0.9em;
+    }
+  `}
+`;
+
+const Row = styled.div`
+  ${({ theme }) => css`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  `}
+`;

@@ -1,12 +1,14 @@
 import styled, { css } from "styled-components";
 
-const Recovered = ({ recoveredTotal, combinedTotal }) => {
-  const recoveryRate = Math.round((recoveredTotal / combinedTotal) * 100);
+const Recovered = ({ recovered, combined, regional }) => {
+  const recoveryRate = Math.round((recovered / combined) * 100);
   return (
-    <StyledRecovered>
-      <div>
-        <strong>{recoveredTotal}</strong> Recovered
-      </div>
+    <StyledRecovered regional={regional}>
+      {!regional && (
+        <div>
+          <strong>{recovered}</strong> Recovered
+        </div>
+      )}
       <div>
         Recovery
         <br />
@@ -15,7 +17,7 @@ const Recovered = ({ recoveredTotal, combinedTotal }) => {
         <strong>{recoveryRate}%</strong>
       </div>
       <div>
-        <People percent={recoveryRate} />
+        <People percent={recoveryRate} regional={regional} />
       </div>
     </StyledRecovered>
   );
@@ -42,14 +44,35 @@ const StyledRecovered = styled.div`
         margin: 0 0 0 1em;
       }
     `}
+
+    ${props.regional &&
+    css`
+      font-size: 0.65em;
+      padding: 0 0 0 1em;
+      background: none;
+      grid-template-columns: 6.5em auto;
+      grid-gap: 0 0.2em;
+    `}
+
     > div:first-child {
       border-right: solid ${theme.dark} 0.1em;
       padding-right: 0.6em;
+
+      ${props.regional &&
+      css`
+        line-height: 1;
+        border-right: none;
+      `}
       strong {
         display: block;
         line-height: 1;
         font-size: 2.3em;
         color: white;
+        ${props.regional &&
+        css`
+          margin-top: 0.1em;
+          color: ${theme.green};
+        `}
       }
     }
     > div:nth-child(2) {
@@ -70,7 +93,7 @@ const StyledRecovered = styled.div`
   `}
 `;
 
-const People = ({ percent }) => {
+const People = ({ percent, regional }) => {
   const peopleToFill = Math.floor(percent / 10);
   const partPersonToFill = (percent % 10) / 10;
   return (
@@ -84,9 +107,8 @@ const People = ({ percent }) => {
         } else {
           fill = 0;
         }
-        // console.log(fill);
         return (
-          <Person key={i} fill={fill}>
+          <Person key={i} fill={fill} regional={regional}>
             <div
               dangerouslySetInnerHTML={{
                 __html: require(`../public/infographic/person.svg?original&include`),
@@ -100,11 +122,15 @@ const People = ({ percent }) => {
 };
 
 const Person = styled.div`
-  ${({ theme, fill }) => css`
+  ${({ theme, fill, regional }) => css`
     display: inline;
     width: 18%;
     margin: 0.06em;
     position: relative;
+    ${regional &&
+    css`
+      margin: 0.25em 0.1em;
+    `}
     svg {
       position: relative;
       z-index: 2;
@@ -114,6 +140,10 @@ const Person = styled.div`
       display: block;
       rect {
         y: ${16.8 - 16.8 * fill};
+        ${regional &&
+        css`
+          fill: ${theme.green};
+        `}
       }
     }
   `}

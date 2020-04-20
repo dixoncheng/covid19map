@@ -98,6 +98,13 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
 
   // const refs = locations?.map((item, i) => useRef());
 
+  useEffect(() => {
+    if (location) {
+      window.scrollTo(0, 0);
+      infoRef.current.scrollTo(0, 0);
+    }
+  }, [location]);
+
   return (
     <Wrap>
       <Main>
@@ -119,7 +126,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               type="button"
               onClick={() => {
                 setLocation("");
-                // infoRef.current.scrollTo(0, 0);
               }}
             >
               <div
@@ -261,8 +267,8 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 </Row>
                 <Row>
                   <Recovered
-                    recoveredTotal={recoveredTotal}
-                    combinedTotal={combinedTotal}
+                    recovered={recoveredTotal}
+                    combined={combinedTotal}
                   />
                 </Row>
                 <Row>

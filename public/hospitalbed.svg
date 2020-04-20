@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 171 115.7" style="enable-background:new 0 0 171 115.7;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#A0CD5E;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#025064;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st3{fill:#025064;}
+</style>
+<g>
+	<path class="st0" d="M11.7,1.3L11.7,1.3C7.8,3.8,6.6,9,9.1,13l23,36.1c2.5,3.9,7.7,5.1,11.6,2.6h0c3.9-2.5,5.1-7.7,2.6-11.6
+		l-23-36.1C20.9,0,15.6-1.2,11.7,1.3z"/>
+	<rect x="0" y="69.8" class="st1" width="171" height="7"/>
+	<path class="st1" d="M0,6.8l0,66.5c0,1.9,1.6,3.5,3.5,3.5h0c1.9,0,3.5-1.6,3.5-3.5V6.8c0-1.9-1.6-3.5-3.5-3.5h0
+		C1.6,3.3,0,4.8,0,6.8z"/>
+	<path class="st0" d="M7,61.3L7,61.3c0,4.6,3.8,8.4,8.4,8.4h126.7c4.6,0,8.4-3.8,8.4-8.4l0,0c0-4.6-3.8-8.4-8.4-8.4l-126.7,0
+		C10.8,52.9,7,56.7,7,61.3z"/>
+	<g>
+		<g>
+			<rect x="116.5" y="72.2" class="st1" width="4.2" height="37.5"/>
+			<rect x="50.3" y="72.2" class="st1" width="4.2" height="37.5"/>
+		</g>
+		<rect x="50.3" y="101.8" class="st1" width="70.5" height="4.3"/>
+		<path class="st0" d="M118.6,115.7c-4.3,0-7.8-3.5-7.8-7.8c0-4.3,3.5-7.8,7.8-7.8c4.3,0,7.8,3.5,7.8,7.8
+			C126.4,112.2,122.9,115.7,118.6,115.7z"/>
+		<circle class="st2" cx="118.6" cy="108" r="3.6"/>
+		<path class="st0" d="M52.4,115.7c-4.3,0-7.8-3.5-7.8-7.8c0-4.3,3.5-7.8,7.8-7.8c4.3,0,7.8,3.5,7.8,7.8
+			C60.2,112.2,56.7,115.7,52.4,115.7z"/>
+		<path class="st2" d="M52.4,111.5c-2,0-3.6-1.6-3.6-3.6c0-2,1.6-3.6,3.6-3.6c2,0,3.6,1.6,3.6,3.6C56,109.9,54.4,111.5,52.4,111.5z"
+			/>
+	</g>
+	<path class="st1" d="M164,41.4v32c0,1.9,1.6,3.5,3.5,3.5l0,0c1.9,0,3.5-1.6,3.5-3.5v-32c0-1.9-1.6-3.5-3.5-3.5l0,0
+		C165.6,37.8,164,39.4,164,41.4z"/>
+	<path class="st0" d="M85.2,35.9v33.9l78.8,0v-21c0-6.4-13.1-12.8-21.3-12.8H85.2z"/>
+	<path class="st3" d="M133.8,38H77c-3.8,0-7.2,1.5-9.7,4c-2.5,2.5-4,5.9-4,9.7v21.4H68V51.7c0-2.5,1-4.7,2.6-6.4
+		c1.6-1.6,3.9-2.6,6.4-2.6h56.8c2.5,0,4.7,1,6.4,2.6c1.6,1.6,2.6,3.9,2.6,6.4v21.4h4.7V51.7c0-3.8-1.5-7.2-4-9.7
+		C141,39.5,137.6,38,133.8,38z"/>
+	<rect x="132.9" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="122.9" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="113" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="103.1" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="93.1" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="83.2" y="40.6" class="st3" width="4.7" height="32.4"/>
+	<rect x="73.3" y="40.6" class="st3" width="4.7" height="32.4"/>
+</g>
+</svg>
