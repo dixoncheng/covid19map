@@ -144,12 +144,12 @@ const MapView = ({ data = {}, error, theme }) => {
         ) : (
           <Summary>
             <Alert
-              href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-detailed.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => gtag.event("Alert", "", "")}
+            // href="https://covid19.govt.nz/assets/resources/tables/COVID-19-alert-levels-detailed.pdf"
+            // target="_blank"
+            // rel="noopener noreferrer"
+            // onClick={() => gtag.event("Alert", "", "")}
             >
-              Alert Level 4
+              NZ will move to alert level 3 Next Tuesday
             </Alert>
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
@@ -461,11 +461,12 @@ const BackButton = styled.button`
   `}
 `;
 
-const Alert = styled.a`
+const Alert = styled.div`
   padding: 3px 20px;
   color: white !important;
   font-size: 14px;
-  background: #ffcd38 url(/alert.svg) 100% 50% no-repeat;
+  background: #ffcd38;
+  /* url(/alert.svg) 100% 50% no-repeat; */
   margin: -20px -20px 10px;
   display: block;
 `;
