@@ -40,6 +40,7 @@ const innerBounds = [
 ];
 
 const MapView = ({ data = {}, news = {}, error, theme }) => {
+  // console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -56,6 +57,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     ages,
     regionAgesGenders,
     regionOverseas,
+    regionGenders,
   } = data;
   const {
     combinedTotal,
@@ -143,7 +145,9 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 data={[
                   regionAgesGenders[location],
                   regionOverseas[location],
+                  regionGenders[location],
                   history[location],
+                  clusters[location],
                 ]}
               />
             )}
@@ -368,7 +372,7 @@ const Info = styled.div`
     hr {
       border: solid 2px ${theme.light};
       border-width: 0 0 1px 0;
-      margin: 1em 0;
+      margin: 0.9em 0;
     }
   `}
 `;

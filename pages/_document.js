@@ -40,7 +40,7 @@ export default class MyDocument extends Document {
           />
           <meta
             name="description"
-            content="Live map and infographic of the current Covid-19 cases in New Zealand. Data sourced from the Ministry of Health NZ."
+            content="Live map and infographics of the current Covid-19 cases in New Zealand. Data sourced from the Ministry of Health NZ."
           />
           <link rel="manifest" href="/manifest.json" />
 
@@ -94,7 +94,7 @@ export default class MyDocument extends Document {
           <meta property="og:title" content="Covid-19 Map NZ" />
           <meta
             property="og:description"
-            content="A visual look at the current Covid-19 cases in New Zealand"
+            content="Live map and infographics of the current Covid-19 cases in New Zealand"
           />
           <meta
             property="og:image"

@@ -3,10 +3,17 @@ import RegionAgeGenderChart from "../components/RegionAgeGenderChart";
 import RegionOverseasChart from "../components/RegionOverseasChart";
 import Recovered from "../components/Recovered";
 import RegionDailyCasesChart from "../components/RegionDailyCasesChart";
+import Genders from "../components/Genders";
 import * as gtag from "../lib/gtag";
 
 const LocationDetails = ({ location, data }) => {
-  const [regionAgesGenders, regionOverseas, history] = data;
+  const [
+    regionAgesGenders,
+    regionOverseas,
+    regionGenders,
+    history,
+    clusters,
+  ] = data;
   const { name, url } = location;
   const { active, recovered, deaths, total } = history[history.length - 1];
 
@@ -41,16 +48,36 @@ const LocationDetails = ({ location, data }) => {
         <Row>
           <Hospital>
             <div>
-              <img src="/hospitalbed.svg" />
-            </div>
-            <div>
               <strong>2</strong> <span>in hospital</span>
             </div>
+            <div>
+              <img src="/hospitalbed.svg" />
+            </div>
           </Hospital>
+          <Genders genders={regionGenders} regional />
           <Recovered recovered={recovered} combined={total} regional />
         </Row>
 
-        <hr />
+        {clusters ? (
+          <Clusters>
+            <h3>Significant clusters</h3>
+            <ul>
+              {Object.keys(clusters).map((clustLocName, i) => {
+                const { items } = clusters[clustLocName];
+                return items.map(({ name, totalCases }, i) => (
+                  <li key={i}>
+                    <strong>{totalCases}</strong>{" "}
+                    <span>
+                      {name}, {clustLocName}
+                    </span>
+                  </li>
+                ));
+              })}
+            </ul>
+          </Clusters>
+        ) : (
+          <hr />
+        )}
 
         <RegionDailyCasesChart history={history} />
 
@@ -134,10 +161,21 @@ export default withTheme(LocationDetails);
 
 const StyledLocationDetails = styled.div`
   ${({ theme, ...props }) => css`
-    /* font-size: 1rem; */
     border-radius: 0.35em;
     background: white;
-    padding: 1em;
+    padding: 2.5em 1em 1em;
+    position: relative;
+    :before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 11em;
+      height: 3em;
+      background: url(${require(`../public/clip.svg`)}) center center no-repeat;
+      background-size: contain;
+      transform: translate(-50%, -50%);
+    }
     h2 {
       font-family: ${theme.fontFancy};
       text-transform: uppercase;
@@ -252,10 +290,10 @@ const Stats = styled.div`
 
 const Hospital = styled.div`
   ${({ theme }) => css`
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     line-height: 1;
-    border-right: solid 2px ${theme.light};
+
     img {
       width: 4em;
       margin-right: 0.8em;
@@ -275,6 +313,67 @@ const Hospital = styled.div`
 const Row = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr 1fr;
+    grid-gap: 1em;
+    align-items: center;
+    > div {
+      position: relative;
+    }
+    > div + div:after {
+      content: "";
+      position: absolute;
+      left: -0.9em;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background-color: ${theme.light};
+    }
+  `}
+`;
+
+const Clusters = styled.div`
+  ${({ theme }) => css`
+    background-color: #ddf3f2;
+    padding: 0.9em;
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+    border-radius: 0.2em;
+    h3 {
+      font-family: ${theme.fontFancy};
+      margin: 0 0 0.5em;
+      text-transform: uppercase;
+      color: ${theme.teal};
+      font-size: 1em;
+      line-height: 1;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      margin: 1em 0 0 0;
+      position: relative;
+      padding-left: 2.5em;
+      line-height: 1.15;
+      strong {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.8em;
+        height: 1.8em;
+        background-color: white;
+        border-radius: 50%;
+        color: ${theme.green};
+        margin-right: 0.6em;
+      }
+      span {
+        font-size: 0.9em;
+      }
+    }
   `}
 `;
