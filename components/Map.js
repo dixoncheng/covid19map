@@ -15,7 +15,7 @@ const Map = ({
   center,
   zoom,
   markers = [],
-  clusters,
+  clusters = {},
   onMarkerClick,
   maxCases,
   outerBounds,
@@ -98,7 +98,7 @@ const Map = ({
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {markers?.map(
+        {markers.map(
           (
             {
               name,
