@@ -5,10 +5,11 @@ import Recovered from "../components/Recovered";
 import RegionDailyCasesChart from "../components/RegionDailyCasesChart";
 import * as gtag from "../lib/gtag";
 
-const LocationDetails = ({ location, data }) => {
-  const [regionAgesGenders, regionOverseas, history] = data;
-  const { name, url } = location;
-  const { active, recovered, deaths, total } = history[history.length - 1];
+const LocationDetails = ({ location = {}, data }) => {
+  const [regionAgesGenders, regionOverseas, history = []] = data;
+  const { name = "", url } = location;
+  const { active, recovered, deaths, total } =
+    history[history.length - 1] || {};
 
   return (
     <StyledLocationDetails>
