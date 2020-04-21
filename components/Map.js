@@ -14,7 +14,7 @@ import * as gtag from "../lib/gtag";
 const Map = ({
   center,
   zoom,
-  markers,
+  markers = [],
   clusters,
   onMarkerClick,
   maxCases,
@@ -98,71 +98,70 @@ const Map = ({
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {markers &&
-          markers.map(
-            (
-              {
-                name,
-                latlng,
-                boundary,
-                totalCases,
-                active,
-                recovered,
-                deaths,
-                inHospital,
-              },
-              i
-            ) => (
-              <FeatureGroup key={i}>
-                <Marker
-                  position={latlng}
-                  icon={getRegionIcon(
-                    `region ${inHospital > 0 ? "hospital" : ""}`,
-                    active
-                  )}
-                  zIndexOffset={100}
-                  onClick={() => {
-                    onLocationClick(name);
-                    gtag.event("Marker", "Map", name);
-                  }}
-                />
-                <Popup>
-                  <StyledPopup>
-                    <div className="location">{name}</div>
-                    <div className="cases">
-                      {active} active case{active > 1 && "s"}
-                      <br />
-                      {recovered} recovered
-                      <br />
-                      {totalCases} total case{totalCases > 1 && "s"}
-                      {deaths > 0 && (
-                        <>
-                          <br />
-                          {deaths} death{deaths > 1 && "s"}
-                        </>
-                      )}
-                    </div>
-                    {inHospital > 0 && (
-                      <div className="cases">{inHospital} in hospital</div>
+        {markers?.map(
+          (
+            {
+              name,
+              latlng,
+              boundary,
+              totalCases,
+              active,
+              recovered,
+              deaths,
+              inHospital,
+            },
+            i
+          ) => (
+            <FeatureGroup key={i}>
+              <Marker
+                position={latlng}
+                icon={getRegionIcon(
+                  `region ${inHospital > 0 ? "hospital" : ""}`,
+                  active
+                )}
+                zIndexOffset={100}
+                onClick={() => {
+                  onLocationClick(name);
+                  gtag.event("Marker", "Map", name);
+                }}
+              />
+              <Popup>
+                <StyledPopup>
+                  <div className="location">{name}</div>
+                  <div className="cases">
+                    {active} active case{active > 1 && "s"}
+                    <br />
+                    {recovered} recovered
+                    <br />
+                    {totalCases} total case{totalCases > 1 && "s"}
+                    {deaths > 0 && (
+                      <>
+                        <br />
+                        {deaths} death{deaths > 1 && "s"}
+                      </>
                     )}
-                  </StyledPopup>
-                </Popup>
-                <Polygon
-                  color={currentLocation === name ? "white" : "black"}
-                  opacity={currentLocation === name ? 1 : 0.2}
-                  weight={currentLocation === name ? 3 : 1}
-                  fillColor={theme.teal}
-                  fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
-                  positions={boundary[0]}
-                  // smoothFactor={10}
-                  onClick={() => {
-                    onLocationClick(name);
-                    gtag.event("Region", "Map", name);
-                  }}
-                />
-              </FeatureGroup>
-            )
-          )}
+                  </div>
+                  {inHospital > 0 && (
+                    <div className="cases">{inHospital} in hospital</div>
+                  )}
+                </StyledPopup>
+              </Popup>
+              <Polygon
+                color={currentLocation === name ? "white" : "black"}
+                opacity={currentLocation === name ? 1 : 0.2}
+                weight={currentLocation === name ? 3 : 1}
+                fillColor={theme.teal}
+                fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
+                positions={boundary[0]}
+                // smoothFactor={10}
+                onClick={() => {
+                  onLocationClick(name);
+                  gtag.event("Region", "Map", name);
+                }}
+              />
+            </FeatureGroup>
+          )
+        )}
         {Object.keys(clusters).map((regionName, i) =>
           Object.keys(clusters[regionName]).map((clustLocName, i) => {
             const { latlng, count, items } = clusters[regionName][clustLocName];
