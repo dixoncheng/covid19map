@@ -46,14 +46,14 @@ const LocationDetails = ({ location, data }) => {
         </Stats>
         <hr />
         <Row>
-          <Hospital>
+          {/* <Hospital>
             <div>
               <strong>2</strong> <span>in hospital</span>
             </div>
             <div>
               <img src="/hospitalbed.svg" />
             </div>
-          </Hospital>
+          </Hospital> */}
           <Genders genders={regionGenders} regional />
           <Recovered recovered={recovered} combined={total} regional />
         </Row>
@@ -313,7 +313,8 @@ const Hospital = styled.div`
 const Row = styled.div`
   ${({ theme }) => css`
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    /* grid-template-columns: auto 1fr 1fr; */
+    grid-template-columns: 1fr 1fr;
     grid-gap: 1em;
     align-items: center;
     > div {
