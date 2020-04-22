@@ -1,14 +1,14 @@
 import styled, { css } from "styled-components";
 
-const Genders = ({ genders }) => {
-  const male = genders.find((x) => x.gender === "Male");
-  const female = genders.find((x) => x.gender === "Female");
+const Genders = ({ genders, regional }) => {
+  const male = genders.find((x) => x.gender === "male");
+  const female = genders.find((x) => x.gender === "female");
   const total = genders.reduce((prev, cur) => prev + cur.count, 0);
   const percentWomen = Math.round((female.count / total) * 100);
   const percentMen = Math.round((male.count / total) * 100);
   return (
-    <StyledGenders>
-      <div className="head">Patient genders</div>
+    <StyledGenders regional={regional}>
+      {!regional && <div className="head">Patient genders</div>}
       <div className="genders">
         <div className="female">
           <div>
@@ -32,6 +32,10 @@ export default Genders;
 const StyledGenders = styled.div`
   ${({ theme, ...props }) => css`
     color: ${theme.dark};
+    ${props.regional &&
+    css`
+      font-size: 0.32em;
+    `}
     ${props.wide &&
     css`
       @media (min-width: ${theme.sm}) {
@@ -48,6 +52,7 @@ const StyledGenders = styled.div`
     }
     .genders {
       display: flex;
+      justify-content: center;
     }
     .female,
     .male {

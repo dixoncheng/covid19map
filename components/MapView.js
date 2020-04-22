@@ -24,8 +24,6 @@ import Alert from "../components/Alert";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
-// import { useTransition, animated } from "react-spring";
-
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
 });
@@ -42,6 +40,7 @@ const innerBounds = [
 ];
 
 const MapView = ({ data = {}, news = {}, error, theme }) => {
+  // console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -58,6 +57,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     ages,
     regionAgesGenders,
     regionOverseas,
+    regionGenders,
   } = data;
   const {
     combinedTotal,
@@ -69,22 +69,12 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     hospitalTotal,
   } = summary ? summary[summary.length - 1] : {};
 
-  const [detailsOpened, setDetailsOpened] = useState(false);
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
 
   const showLocation = (name) => {
-    if (name) {
-      setLocation(name);
-    }
-    setDetailsOpened(name);
-  };
-
-  const locationBarClick = (name) => {
-    showLocation(name);
-    window.scrollTo(0, 0);
-    infoRef.current.scrollTo(0, 0);
+    setLocation(name);
   };
 
   // useEffect(() => {
@@ -110,20 +100,12 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
 
   // const refs = locations?.map((item, i) => useRef());
 
-  // useEffect(() => {
-  //   if (location) {
-  //     window.scrollTo(0, 0);
-  //     infoRef.current.scrollTo(0, 0);
-  //   }
-  // }, [location]);
-
-  // const transitions = useTransition(location, null, {
-  //   from: { position: "absolute", opacity: 0 },
-  //   enter: { opacity: 1 },
-  //   leave: { opacity: 0 },
-  // });
-
-  // console.log(transitions);
+  useEffect(() => {
+    if (location) {
+      window.scrollTo(0, 0);
+      infoRef.current.scrollTo(0, 0);
+    }
+  }, [location]);
 
   return (
     <Wrap>
@@ -137,12 +119,41 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
           maxCases={maxCases}
           outerBounds={outerBounds}
           innerBounds={innerBounds}
-          location={location}
         />
       </Main>
       <Info ref={infoRef} id="info">
-        <div style={{ width: "100%", overflow: "hidden" }}>
-          <Summary visible={!detailsOpened}>
+        {location ? (
+          <Details ref={detailsRef}>
+            <BackButton
+              type="button"
+              onClick={() => {
+                setLocation("");
+              }}
+            >
+              <div
+                className="icon"
+                dangerouslySetInnerHTML={{
+                  __html: require(`../public/arrow.svg?include`),
+                }}
+              />{" "}
+              Back
+            </BackButton>
+
+            {locations && (
+              <LocationDetails
+                location={locations.find((x) => x.name === location)}
+                data={[
+                  regionAgesGenders[location],
+                  regionOverseas[location],
+                  regionGenders[location],
+                  history[location],
+                  clusters[location],
+                ]}
+              />
+            )}
+          </Details>
+        ) : (
+          <Summary>
             <Alert data={news.news} />
 
             <Logo>
@@ -299,7 +310,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                     <LocationBar
                       location={item}
                       history={history[item.name]}
-                      onClick={locationBarClick}
+                      showLocation={showLocation}
                     />
                   </div>
                 ))}
@@ -320,35 +331,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               </Error>
             )}
           </Summary>
-          <Details ref={detailsRef} visible={detailsOpened}>
-            <BackButton
-              type="button"
-              onClick={() => {
-                showLocation("");
-              }}
-            >
-              <div
-                className="icon"
-                dangerouslySetInnerHTML={{
-                  __html: require(`../public/arrow.svg?include`),
-                }}
-              />{" "}
-              Back
-            </BackButton>
-
-            {locations && (
-              <LocationDetails
-                // potential performance impact
-                location={locations.find((x) => x.name === location)}
-                data={[
-                  regionAgesGenders[location],
-                  regionOverseas[location],
-                  history[location],
-                ]}
-              />
-            )}
-          </Details>
-        </div>
+        )}
       </Info>
     </Wrap>
   );
@@ -370,11 +353,11 @@ const Main = styled.div`
 
 const Info = styled.div`
   ${({ theme }) => css`
-    position: relative;
     font-size: 2vw;
+
     color: ${theme.dark};
     box-sizing: border-box;
-
+    padding: 20px;
     background: ${theme.light};
     @media (min-width: ${theme.sm}) {
       font-size: 0.55em;
@@ -389,16 +372,13 @@ const Info = styled.div`
     hr {
       border: solid 2px ${theme.light};
       border-width: 0 0 1px 0;
-      margin: 1em 0;
+      margin: 0.9em 0;
     }
   `}
 `;
 
 const Summary = styled.div`
-  ${({ theme, visible }) => css`
-    transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-    padding: 20px;
-    opacity: ${visible ? 1 : 0.5};
+  ${({ theme }) => css`
     h2 {
       font-size: 18px;
       color: ${theme.teal};
@@ -464,19 +444,7 @@ const Logo = styled.div`
 `;
 
 const Details = styled.div`
-  ${({ theme, visible }) => css`
-    padding: 20px;
-    transition: 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
-    transform: translateX(${visible ? "0%" : "-100%"});
-    min-height: 100vh;
-    background: ${theme.light};
-    padding: 1em;
-    font-size: 2em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-  `}
+  font-size: 2em;
 `;
 
 const BackButton = styled.button`

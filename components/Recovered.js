@@ -9,11 +9,12 @@ const Recovered = ({ recovered, combined, regional }) => {
           <strong>{recovered}</strong> Recovered
         </div>
       )}
-      <div>
-        Recovery
-        <br />
-        Rate
-        <br />
+      <div className="rate-text">
+        <div>
+          Recovery
+          <br />
+          Rate
+        </div>
         <strong>{recoveryRate}%</strong>
       </div>
       <div>
@@ -47,11 +48,13 @@ const StyledRecovered = styled.div`
 
     ${props.regional &&
     css`
+      display: block;
       font-size: 0.65em;
-      padding: 0 0 0 1em;
+      /* padding: 0 0 0 1em; */
       background: none;
-      grid-template-columns: 6.5em auto;
-      grid-gap: 0 0.2em;
+      /* grid-template-columns: 6.5em auto;
+      grid-gap: 0 0.2em; */
+      padding: 0 0 0 0.8em;
     `}
 
     > div:first-child {
@@ -90,6 +93,20 @@ const StyledRecovered = styled.div`
       display: flex;
       flex-wrap: wrap;
     }
+    ${props.regional &&
+    css`
+      .rate-text {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-gap: 0.5em;
+        align-items: center;
+        > :first-child {
+          order: 2;
+          position: relative;
+          top: 0.1em;
+        }
+      }
+    `}
   `}
 `;
 

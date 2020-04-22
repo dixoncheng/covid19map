@@ -14,8 +14,8 @@ import * as gtag from "../lib/gtag";
 const Map = ({
   center,
   zoom,
-  markers,
-  clusters,
+  markers = [],
+  clusters = {},
   onMarkerClick,
   maxCases,
   outerBounds,
@@ -99,7 +99,7 @@ const Map = ({
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {markers?.map(
+        {markers.map(
           (
             {
               name,
@@ -163,33 +163,33 @@ const Map = ({
             </FeatureGroup>
           )
         )}
-        {clusters?.map(
-          (
-            { latlng, totalCases, location: name, clusters: clusterItems },
-            i
-          ) => (
-            <Marker
-              key={i}
-              position={latlng}
-              icon={getClusterIcon("cluster", totalCases)}
-              // zIndexOffset={100}
-              onClick={() => gtag.event("Cluster", "Map", name)}
-            >
-              <Popup>
-                <StyledPopup>
-                  <div className="head">
-                    {name} cluster{clusterItems.length > 1 && "s"}
-                  </div>
-                  {clusterItems.map(({ name, totalCases }, i) => (
-                    <div className="cluster-desc" key={i}>
-                      <div className="location">{name}</div>
-                      <div className="cases">{totalCases} cases</div>
+        {Object.keys(clusters).map((regionName, i) =>
+          Object.keys(clusters[regionName]).map((clustLocName, i) => {
+            const { latlng, count, items } = clusters[regionName][clustLocName];
+            return (
+              <Marker
+                key={i}
+                position={latlng}
+                icon={getClusterIcon("cluster", count)}
+                // zIndexOffset={100}
+                onClick={() => gtag.event("Cluster", "Map", clustLocName)}
+              >
+                <Popup>
+                  <StyledPopup>
+                    <div className="head">
+                      {clustLocName} cluster{items.length > 1 && "s"}
                     </div>
-                  ))}
-                </StyledPopup>
-              </Popup>
-            </Marker>
-          )
+                    {items.map(({ name, totalCases }, i) => (
+                      <div className="cluster-desc" key={i}>
+                        <div className="location">{name}</div>
+                        <div className="cases">{totalCases} cases</div>
+                      </div>
+                    ))}
+                  </StyledPopup>
+                </Popup>
+              </Marker>
+            );
+          })
         )}
       </LeafletMap>
       <Styles currentZoom={currentZoom} />
