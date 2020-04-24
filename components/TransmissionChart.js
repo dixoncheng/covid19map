@@ -82,11 +82,16 @@ const LegendItem = styled.div`
   ${({ theme, typeColor }) => css`
     font-size: 1.5em;
     margin: 0.2em 0;
+    position: relative;
+    padding-left: 1.15em;
     :before {
+      position: absolute;
+      left: 0em;
+      top: 0.25em;
       content: "";
       width: 0.8em;
       height: 0.8em;
-      display: inline-block;
+      /* display: inline-block; */
       border-radius: 50%;
       margin-right: 0.5em;
     }
