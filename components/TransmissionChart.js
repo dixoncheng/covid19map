@@ -2,7 +2,13 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styled, { css, withTheme } from "styled-components";
 
 const TransmissionChart = ({ data = [], theme }) => {
-  const chartColors = [theme.teal, theme.green, theme.navy, theme.yellow];
+  const chartColors = [
+    theme.teal,
+    theme.green,
+    theme.navy,
+    theme.yellow,
+    "#956828",
+  ];
 
   return (
     <StyledTransmissionChart>
