@@ -24,6 +24,9 @@ import Alert from "../components/Alert";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
+import InternationalLineChart from "../components/InternationalLineChart";
+import InternationalBarChart from "../components/InternationalBarChart";
+
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
 });
@@ -40,7 +43,7 @@ const innerBounds = [
 ];
 
 const MapView = ({ data = {}, news = {}, error, theme }) => {
-  // console.log(data);
+  console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -58,6 +61,8 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     regionAgesGenders,
     regionOverseas,
     regionGenders,
+    timeseries,
+    casesPer1m,
   } = data;
   const {
     combinedTotal,
@@ -155,6 +160,10 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
         ) : (
           <Summary>
             <Alert data={news.news} />
+
+            {casesPer1m && <InternationalBarChart data={casesPer1m} />}
+
+            {timeseries && <InternationalLineChart data={timeseries} />}
 
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
