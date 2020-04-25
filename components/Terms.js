@@ -82,7 +82,7 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
         </div>
       )}
       <p className="made-by">
-        <small>Made by</small>{" "}
+        <small>Made by Concept &amp; Code</small>{" "}
         <a
           href="https://www.linkedin.com/in/emilywongnz/"
           target="_blank"
@@ -114,8 +114,10 @@ const StyledTerms = styled.div`
     }
     .made-by {
       img {
-        width: 1em;
+        width: 1.2em;
         vertical-align: middle;
+        position: relative;
+        top: -0.1em;
       }
     }
   `}

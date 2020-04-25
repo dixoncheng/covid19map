@@ -2,7 +2,13 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styled, { css, withTheme } from "styled-components";
 
 const TransmissionChart = ({ data = [], theme }) => {
-  const chartColors = [theme.teal, theme.green, theme.navy, theme.yellow];
+  const chartColors = [
+    theme.teal,
+    theme.green,
+    theme.navy,
+    theme.yellow,
+    "#956828",
+  ];
 
   return (
     <StyledTransmissionChart>
@@ -76,11 +82,16 @@ const LegendItem = styled.div`
   ${({ theme, typeColor }) => css`
     font-size: 1.5em;
     margin: 0.2em 0;
+    position: relative;
+    padding-left: 1.15em;
     :before {
+      position: absolute;
+      left: 0em;
+      top: 0.25em;
       content: "";
       width: 0.8em;
       height: 0.8em;
-      display: inline-block;
+      /* display: inline-block; */
       border-radius: 50%;
       margin-right: 0.5em;
     }
