@@ -167,7 +167,9 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               <>
                 <div className="meta">
                   <div>
-                    <small>{asAt}</small>
+                    {/* <small>{asAt}</small> */}
+                    <small>As at 9.00 am, 26 April 2020</small>
+
                     <br />
                     <small>
                       Source:{" "}
