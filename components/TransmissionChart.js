@@ -13,7 +13,7 @@ const TransmissionChart = ({ data = [], theme }) => {
   return (
     <StyledTransmissionChart>
       <div className="head">Transmission type</div>
-      <img src={require(`../public/infographic/commtrans.svg`)} />
+      {/* <img src={require(`../public/infographic/commtrans.svg`)} /> */}
       <div className="row">
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height="100%">
@@ -46,33 +46,38 @@ export default withTheme(TransmissionChart);
 const StyledTransmissionChart = styled.div`
   ${({ theme }) => css`
     position: relative;
+    background: white;
+    border-radius: 0.5em;
+    padding: 2.5em 2em;
+    box-sizing: border-box;
+    min-height: 36em;
 
     .head {
       color: ${theme.dark};
       font-family: ${theme.fontFancy};
       font-size: 2.1em;
       text-transform: uppercase;
-      margin-top: 2.6em;
-      margin-bottom: 0.8em;
+      margin-bottom: 0.5em;
       line-height: 1.1;
+      text-align: center;
     }
     .row {
-      border-radius: 0.5em;
+      /* border-radius: 0.5em;
       background: white;
-      padding: 1.2em;
+      padding: 1.2em; */
 
       display: flex;
       align-items: center;
     }
-    img {
+    /* img {
       position: absolute;
       top: -4.3em;
       right: 2em;
       width: 11em;
-    }
+    } */
     .chart-wrap {
-      width: 14em;
-      height: 14em;
+      width: 28em;
+      height: 26em;
       margin-right: 1.5em;
     }
   `}

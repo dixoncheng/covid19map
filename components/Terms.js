@@ -6,20 +6,6 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
     <StyledTerms>
       <p>
         <small>
-          We are working with the official information released by the{" "}
-          <a
-            href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Ministry of Health
-          </a>
-          . Confirmed cases are listed by District Health Board regions.
-        </small>
-      </p>
-
-      <p>
-        <small>
           Any feedback, ideas, or if you'd like to help, please contact{" "}
           <a
             href="mailto:contact@covid19map.nz"
@@ -35,8 +21,8 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
             onClick={() => gtag.event("Github")}
           >
             Github
-          </a>
-          <br />
+          </a>{" "}
+          |{" "}
           <LinkButton
             type="button"
             onClick={() => {
@@ -108,7 +94,7 @@ export default Terms;
 
 const StyledTerms = styled.div`
   ${({ theme, ...props }) => css`
-    font-size: 2em;
+    font-size: 1.8em;
     button {
       font-size: 1em;
     }

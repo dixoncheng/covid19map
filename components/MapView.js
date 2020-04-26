@@ -54,10 +54,11 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     transmissions,
     testingData,
     genders,
-    ages,
+    // ages,
     regionAgesGenders,
     regionOverseas,
     regionGenders,
+    ageRows,
   } = data;
   const {
     combinedTotal,
@@ -296,12 +297,11 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 </Row>
 
                 <Row>
-                  <TransmissionChart data={transmissions} />
+                  <Slider full>
+                    <TransmissionChart data={transmissions} />
+                    <Ages ages={ageRows} />
+                  </Slider>
                 </Row>
-                {/* <Bar>
-                  Location
-                  <span>Daily cases</span>
-                </Bar> */}
 
                 <Heading>Regional data</Heading>
 
@@ -316,11 +316,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                     />
                   </div>
                 ))}
-                {ages && (
-                  <Row>
-                    <Ages ages={ages} />
-                  </Row>
-                )}
+
                 <Terms
                   termsOpened={termsOpened}
                   setTermsOpened={setTermsOpened}

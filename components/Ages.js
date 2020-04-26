@@ -1,48 +1,50 @@
 import {
   BarChart,
   Bar,
-  Cell,
+  // Cell,
   XAxis,
   YAxis,
   ResponsiveContainer,
 } from "recharts";
 import styled, { css, withTheme } from "styled-components";
+import ChartLegend from "./ChartLegend";
 
 const Ages = ({ ages, theme }) => {
-  const chartColors = [
-    theme.teal,
-    theme.green,
-    theme.navy,
-    "#317c3f",
-    "#956828",
-    "#d4b074",
-    theme.yellow,
-    "#e98e23",
-    "#af5434",
-    "#833f24",
-  ];
+  // console.log(ages);
+  // const chartColors = [
+  //   theme.teal,
+  //   theme.green,
+  //   theme.navy,
+  //   "#317c3f",
+  //   "#956828",
+  //   "#d4b074",
+  //   theme.yellow,
+  //   "#e98e23",
+  //   "#af5434",
+  //   "#833f24",
+  // ];
 
-  const CustomizedLabel = (props) => {
-    const { x, y, value, width, height } = props;
-    const small = value < 20;
-    return (
-      <text
-        x={small ? x : x + width - 5}
-        y={y + height / 2}
-        dx={small ? "1.2em" : 0}
-        dy="0.355em"
-        className="recharts-text recharts-label"
-        fill={small ? theme.navy : "white"}
-        textAnchor="end"
-      >
-        {value}
-      </text>
-    );
-  };
+  // const CustomizedLabel = (props) => {
+  //   const { x, y, value, width, height } = props;
+  //   const small = value < 20;
+  //   return (
+  //     <text
+  //       x={small ? x : x + width - 5}
+  //       y={y + height / 2}
+  //       dx={small ? "1.2em" : 0}
+  //       dy="0.355em"
+  //       className="recharts-text recharts-label"
+  //       fill={small ? theme.navy : "white"}
+  //       textAnchor="end"
+  //     >
+  //       {value}
+  //     </text>
+  //   );
+  // };
 
   return (
     <StyledAges>
-      <div className="head">Age Groups</div>
+      <div className="head">Cases by Age</div>
       <div className="chart-wrap">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -57,9 +59,9 @@ const Ages = ({ ages, theme }) => {
             isAnimationActive={false}
           >
             <XAxis type="number" hide />
-            <YAxis type="category" dataKey="age" interval={0} width={90} />
-            <Bar
-              dataKey="count"
+            <YAxis type="category" dataKey="group" interval={0} width={90} />
+            {/* <Bar
+              dataKey="total"
               fill="#8884d8"
               // label={{ position: "insideRight", fill: "white" }}
               // label={({ name, value }) => `${name}: ${value}`}
@@ -73,10 +75,39 @@ const Ages = ({ ages, theme }) => {
                   fill={chartColors[index % chartColors.length]}
                 />
               ))}
-            </Bar>
+            </Bar> */}
+
+            <Bar
+              dataKey="active"
+              fill={theme.teal}
+              // label={{ position: "insideRight", fill: "white" }}
+              // minPointSize={2}
+              stackId="a"
+            />
+            <Bar
+              dataKey="recovered"
+              fill={theme.green}
+              // label={{ position: "insideRight", fill: "white" }}
+              // minPointSize={2}
+              stackId="a"
+            />
+            <Bar
+              dataKey="deaths"
+              fill={theme.navy}
+              // label={{ position: "insideRight", fill: "white" }}
+              // minPointSize={2}
+              stackId="a"
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
+      <ChartLegend
+        items={[
+          { title: "Active", color: theme.teal },
+          { title: "Recovered", color: theme.green },
+          { title: "Deaths", color: theme.navy },
+        ]}
+      />
     </StyledAges>
   );
 };
@@ -85,7 +116,12 @@ export default withTheme(Ages);
 
 const StyledAges = styled.div`
   ${({ theme, ...props }) => css`
-    width: 100%;
+    background: white;
+    border-radius: 0.5em;
+    padding: 2.5em 2em;
+    box-sizing: border-box;
+    min-height: 36em;
+
     .head {
       color: ${theme.dark};
       font-family: ${theme.fontFancy};
@@ -93,10 +129,11 @@ const StyledAges = styled.div`
       text-transform: uppercase;
       margin-bottom: 0.5em;
       line-height: 1.1;
+      text-align: center;
     }
     .chart-wrap {
-      width: 45em;
-      height: 34em;
+      width: 42em;
+      height: 25em;
     }
     .recharts-cartesian-axis-tick-value tspan {
       font-size: 1.4em;
