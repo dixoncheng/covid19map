@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, withTheme } from "styled-components";
 import {
   LineChart,
   Line,
@@ -7,8 +7,9 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import ChartLegend from "./ChartLegend";
 
-const TotalChart = ({ summary }) => {
+const TotalChart = ({ summary, theme }) => {
   return (
     <Chart>
       <div className="head">Daily cases</div>
@@ -21,6 +22,7 @@ const TotalChart = ({ summary }) => {
             <XAxis
               dataKey="date"
               label={{
+                fill: theme.navy,
                 fontSize: 12,
                 value: "Days since first case detected",
                 position: "bottom",
@@ -50,17 +52,19 @@ const TotalChart = ({ summary }) => {
           </LineChart>
         </ResponsiveContainer>
 
-        <div className="legend">
-          <div className="legend-item daily">New</div>
-          <div className="legend-item recovered">Recovered</div>
-          <div className="legend-item lockdown">Lv4 lockdown</div>
-        </div>
+        <ChartLegend
+          items={[
+            { title: "New", color: theme.yellow },
+            { title: "Recovered", color: theme.green },
+            { title: "Lv4 lockdown", color: theme.navy },
+          ]}
+        />
       </div>
     </Chart>
   );
 };
 
-export default TotalChart;
+export default withTheme(TotalChart);
 
 const Chart = styled.div`
   ${({ theme, ...props }) => css`
@@ -86,33 +90,6 @@ const Chart = styled.div`
           width: 40em;
         }
       `}
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      margin: 5px 0 0 10px;
-      font-size: 12px;
-      color: black;
-    }
-    .legend-item {
-      margin: 0 6px;
-      :before {
-        content: "";
-        display: inline-block;
-        width: 20px;
-        height: 4px;
-        margin-right: 5px;
-        vertical-align: middle;
-      }
-    }
-    .daily:before {
-      background: ${theme.yellow};
-    }
-    .recovered:before {
-      background: ${theme.green};
-    }
-    .lockdown:before {
-      background: ${theme.navy};
     }
   `}
 `;

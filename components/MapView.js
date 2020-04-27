@@ -21,6 +21,7 @@ import LocationBar from "../components/LocationBar";
 import LocationDetails from "../components/LocationDetails";
 import Legend from "../components/Legend";
 import Alert from "../components/Alert";
+import Tabs from "../components/Tabs";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
@@ -57,12 +58,13 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     transmissions,
     testingData,
     genders,
-    ages,
+    // ages,
     regionAgesGenders,
     regionOverseas,
     regionGenders,
     timeseries,
     casesPer1m,
+    ageRows,
   } = data;
   const {
     combinedTotal,
@@ -77,6 +79,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   const showLocation = (name) => {
     setLocation(name);
@@ -162,7 +165,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
             <Alert data={news.news} />
 
             {casesPer1m && <InternationalBarChart data={casesPer1m} />}
-
             {timeseries && <InternationalLineChart data={timeseries} />}
 
             <Logo>
@@ -176,7 +178,9 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               <>
                 <div className="meta">
                   <div>
-                    <small>{asAt}</small>
+                    {/* <small>{asAt}</small> */}
+                    <small>As at 9.00 am, 26 April 2020</small>
+
                     <br />
                     <small>
                       Source:{" "}
@@ -303,31 +307,42 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 </Row>
 
                 <Row>
-                  <TransmissionChart data={transmissions} />
+                  <Slider full>
+                    <TransmissionChart data={transmissions} />
+                    <Ages ages={ageRows} />
+                  </Slider>
                 </Row>
-                {/* <Bar>
-                  Location
-                  <span>Daily cases</span>
-                </Bar> */}
 
-                <Heading>Regional data</Heading>
+                <Tabs
+                  items={[
+                    { title: "Regional", icon: "nz.svg" },
+                    {
+                      title: "World",
+                      icon: "world.svg",
+                    },
+                  ]}
+                  active={activeTab}
+                  setActive={setActiveTab}
+                />
 
-                <Legend />
+                {activeTab === 0 ? (
+                  <>
+                    <Legend />
 
-                {locations?.map((item, i) => (
-                  <div key={i} onClick={() => setLocation(item.location)}>
-                    <LocationBar
-                      location={item}
-                      history={history[item.name]}
-                      showLocation={showLocation}
-                    />
-                  </div>
-                ))}
-                {ages && (
-                  <Row>
-                    <Ages ages={ages} />
-                  </Row>
+                    {locations?.map((item, i) => (
+                      <div key={i} onClick={() => setLocation(item.location)}>
+                        <LocationBar
+                          location={item}
+                          history={history[item.name]}
+                          showLocation={showLocation}
+                        />
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>World</>
                 )}
+
                 <Terms
                   termsOpened={termsOpened}
                   setTermsOpened={setTermsOpened}
