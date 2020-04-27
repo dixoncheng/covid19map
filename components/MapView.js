@@ -21,6 +21,7 @@ import LocationBar from "../components/LocationBar";
 import LocationDetails from "../components/LocationDetails";
 import Legend from "../components/Legend";
 import Alert from "../components/Alert";
+import Tabs from "../components/Tabs";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
@@ -303,7 +304,17 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                   </Slider>
                 </Row>
 
-                <Heading>Regional data</Heading>
+                <Tabs
+                  items={[
+                    { title: "Regional", icon: "nz.svg" },
+                    {
+                      title: "World",
+                      icon: "world.svg",
+                    },
+                  ]}
+                />
+
+                {/* <Heading>Regional data</Heading> */}
 
                 <Legend />
 
