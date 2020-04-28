@@ -1,5 +1,5 @@
-// import { useEffect } from "react";
 import styled from "styled-components";
+import * as gtag from "../lib/gtag";
 
 const Alert = ({ data }) => {
   // useEffect(() => {
@@ -35,6 +35,6 @@ const StyledAlert = styled.div`
   margin: -20px -20px 10px;
   display: block;
   a {
-    color: white;
+    color: white !important;
   }
 `;
