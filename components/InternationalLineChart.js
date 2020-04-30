@@ -5,23 +5,24 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
-  ReferenceLine,
+  // ReferenceLine,
 } from "recharts";
-
-const lines = [
-  // "NZL",
-  "AUS",
-  "USA",
-  "CHN",
-  // "ESP",
-  "ITA",
-  "GBR",
-  // "SGP",
-  "KOR",
-  // "TWN",
-];
+import ChartLegend from "./ChartLegend";
 
 const TotalChart = ({ data, theme }) => {
+  const countries = {
+    // NZL: "NZ",
+    AUS: "AU",
+    USA: "USA",
+    CHN: "CHINA",
+    ITA: "ITALY",
+    GBR: "UK",
+    KOR: "S.KOREA",
+  };
+  // const dataWithNames = data.map((item) => {
+  //   return { ...item, country: countries[item.country] };
+  // });
+
   const chartColors = [
     // theme.teal,
     theme.green,
@@ -37,12 +38,12 @@ const TotalChart = ({ data, theme }) => {
 
   return (
     <Chart>
-      {/* <div className="head">Total cases</div> */}
+      <div className="head">Total cases</div>
       <div className="chart-wrap">
         <ResponsiveContainer>
           <LineChart
             data={data}
-            margin={{ top: 10, left: -10, right: 10, bottom: 20 }}
+            margin={{ top: 10, left: -5, right: 10, bottom: 20 }}
           >
             <XAxis
               dataKey="day"
@@ -55,13 +56,13 @@ const TotalChart = ({ data, theme }) => {
             />
             <YAxis scale="log" domain={["auto", "auto"]} />
 
-            {lines.map((item, i) => (
+            {Object.keys(countries).map((countryName, i) => (
               <Line
                 key={i}
                 type="monotone"
-                dataKey={item}
+                dataKey={countryName}
                 stroke={chartColors[i % chartColors.length]}
-                strokeWidth={item === "NZL" ? 4 : 3}
+                strokeWidth={countryName === "NZL" ? 4 : 3}
                 dot={false}
               />
             ))}
@@ -76,14 +77,15 @@ const TotalChart = ({ data, theme }) => {
           </LineChart>
         </ResponsiveContainer>
 
-        <div className="legend">
-          <LegendItem legendColor={theme.teal}>NZL</LegendItem>
-          {lines.map((item, i) => (
-            <LegendItem legendColor={chartColors[i % chartColors.length]}>
-              {item}
-            </LegendItem>
-          ))}
-        </div>
+        <ChartLegend
+          items={[
+            { title: "NZ", color: theme.teal },
+            ...Object.keys(countries).map((countryName, i) => ({
+              title: countries[countryName],
+              color: chartColors[i % chartColors.length],
+            })),
+          ]}
+        />
       </div>
     </Chart>
   );
@@ -107,7 +109,7 @@ const Chart = styled.div`
       line-height: 1.1;
     }
     .chart-wrap {
-      height: 25em;
+      height: 30em;
       padding-bottom: 20px;
       ${props.wide &&
       css`

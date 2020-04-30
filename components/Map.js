@@ -152,7 +152,7 @@ const Map = ({
                 opacity={currentLocation === name ? 1 : 0.2}
                 weight={currentLocation === name ? 3 : 1}
                 fillColor={theme.teal}
-                fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
+                fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
                 onClick={() => {

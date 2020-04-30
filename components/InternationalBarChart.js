@@ -9,6 +9,21 @@ import {
 import styled, { css, withTheme } from "styled-components";
 
 const Ages = ({ data, theme }) => {
+  const countries = {
+    NZL: "NZ",
+    AUS: "AU",
+    USA: "USA",
+    CHN: "CHINA",
+    ITA: "ITALY",
+    GBR: "UK",
+    KOR: "S.KOREA",
+  };
+  const dataWithNames = data.map((item) => {
+    return { ...item, country: countries[item.country] };
+  });
+
+  dataWithNames.sort((x, y) => (x.per1m > y.per1m ? -1 : 1));
+
   const chartColors = [
     theme.teal,
     theme.green,
@@ -46,11 +61,11 @@ const Ages = ({ data, theme }) => {
       <div className="chart-wrap">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={data}
+            data={dataWithNames}
             layout="vertical"
             margin={{
               top: 10,
-              right: 50,
+              right: 60,
               left: 0,
               bottom: 10,
             }}
@@ -83,8 +98,11 @@ export default withTheme(Ages);
 
 const StyledAges = styled.div`
   ${({ theme, ...props }) => css`
-    width: 100%;
+    background: white;
+    border-radius: 0.5em;
+    padding: 2.5em 2em;
     .head {
+      text-align: center;
       color: ${theme.dark};
       font-family: ${theme.fontFancy};
       font-size: 2.1em;
@@ -94,7 +112,7 @@ const StyledAges = styled.div`
     }
     .chart-wrap {
       width: 45em;
-      height: 34em;
+      height: 30em;
     }
     .recharts-cartesian-axis-tick-value tspan {
       font-size: 1.4em;

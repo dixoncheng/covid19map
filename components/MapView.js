@@ -44,7 +44,6 @@ const innerBounds = [
 ];
 
 const MapView = ({ data = {}, news = {}, error, theme }) => {
-  console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -163,10 +162,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
         ) : (
           <Summary>
             <Alert data={news.news} />
-
-            {casesPer1m && <InternationalBarChart data={casesPer1m} />}
-            {timeseries && <InternationalLineChart data={timeseries} />}
-
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
               <div>
@@ -338,7 +333,11 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                     ))}
                   </>
                 ) : (
-                  <>World</>
+                  <>
+                    {timeseries && <InternationalLineChart data={timeseries} />}
+                    <hr />
+                    {casesPer1m && <InternationalBarChart data={casesPer1m} />}
+                  </>
                 )}
 
                 <Terms
@@ -387,6 +386,7 @@ const Info = styled.div`
       -webkit-overflow-scrolling: touch;
       height: 100vh;
       width: 450px;
+      border-left: solid 1px white;
     }
     a {
       color: ${theme.dark};
