@@ -21,8 +21,12 @@ import LocationBar from "../components/LocationBar";
 import LocationDetails from "../components/LocationDetails";
 import Legend from "../components/Legend";
 import Alert from "../components/Alert";
+import Tabs from "../components/Tabs";
 import * as gtag from "../lib/gtag";
 // import { Element, animateScroll as scroll, scroller } from "react-scroll";
+
+import InternationalLineChart from "../components/InternationalLineChart";
+import InternationalBarChart from "../components/InternationalBarChart";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -40,7 +44,6 @@ const innerBounds = [
 ];
 
 const MapView = ({ data = {}, news = {}, error, theme }) => {
-  // console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -58,6 +61,8 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
     regionAgesGenders,
     regionOverseas,
     regionGenders,
+    timeseries,
+    casesPer1m,
     ageRows,
   } = data;
   const {
@@ -73,6 +78,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
   const [lv3Opened, setLv3Opened] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   const showLocation = (name) => {
     setLocation(name);
@@ -156,7 +162,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
         ) : (
           <Summary>
             <Alert data={news.news} />
-
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
               <div>
@@ -301,19 +306,39 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                   </Slider>
                 </Row>
 
-                <Heading>Regional data</Heading>
+                <Tabs
+                  items={[
+                    { title: "Regional", icon: "nz.svg" },
+                    {
+                      title: "World",
+                      icon: "world.svg",
+                    },
+                  ]}
+                  active={activeTab}
+                  setActive={setActiveTab}
+                />
 
-                <Legend />
+                {activeTab === 0 ? (
+                  <>
+                    <Legend />
 
-                {locations?.map((item, i) => (
-                  <div key={i} onClick={() => setLocation(item.location)}>
-                    <LocationBar
-                      location={item}
-                      history={history[item.name]}
-                      showLocation={showLocation}
-                    />
-                  </div>
-                ))}
+                    {locations?.map((item, i) => (
+                      <div key={i} onClick={() => setLocation(item.location)}>
+                        <LocationBar
+                          location={item}
+                          history={history[item.name]}
+                          showLocation={showLocation}
+                        />
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {timeseries && <InternationalLineChart data={timeseries} />}
+                    <hr />
+                    {casesPer1m && <InternationalBarChart data={casesPer1m} />}
+                  </>
+                )}
 
                 <Terms
                   termsOpened={termsOpened}
@@ -361,6 +386,7 @@ const Info = styled.div`
       -webkit-overflow-scrolling: touch;
       height: 100vh;
       width: 450px;
+      border-left: solid 1px white;
     }
     a {
       color: ${theme.dark};

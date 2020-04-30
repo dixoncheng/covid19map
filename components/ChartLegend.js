@@ -23,7 +23,7 @@ const StyledChartLegend = styled.div`
 const LegendItem = styled.div`
   ${({ theme, typeColor }) => css`
     font-size: 1.2em;
-    margin: 0 0.5em;
+    margin: 0 0.6em;
     :before {
       content: "";
       width: 0.8em;

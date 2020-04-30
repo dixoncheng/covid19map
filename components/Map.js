@@ -21,6 +21,7 @@ const Map = ({
   outerBounds,
   innerBounds,
   theme,
+  location,
 }) => {
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
@@ -31,10 +32,10 @@ const Map = ({
   }, [mapRef.current]);
 
   useEffect(() => {
-    if (location === "") {
-      mapRef.current.leafletElement.closePopup();
-      setCurrentLocation("");
-    }
+    // if (location === "") {
+    mapRef.current.leafletElement.closePopup();
+    setCurrentLocation("");
+    // }
   }, [location]);
 
   const getRegionIcon = (className, totalCases) => {
@@ -48,7 +49,7 @@ const Map = ({
 
   const getClusterIcon = (className, totalCases) => {
     const normalise = totalCases / 100;
-    const iconSize = 24 + normalise * 30;
+    const iconSize = 24 + normalise * 15;
     // const iconSize = 28;
     return L.divIcon({
       className: `marker ${className}`,
@@ -151,7 +152,7 @@ const Map = ({
                 opacity={currentLocation === name ? 1 : 0.2}
                 weight={currentLocation === name ? 3 : 1}
                 fillColor={theme.teal}
-                fillOpacity={((active || 0) - -20) / (maxCases + 10 - 1)}
+                fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
                 positions={boundary[0]}
                 // smoothFactor={10}
                 onClick={() => {

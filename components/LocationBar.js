@@ -2,7 +2,7 @@ import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
 import styled, { css, withTheme } from "styled-components";
 import * as gtag from "../lib/gtag";
 
-const LocationBar = ({ location, history, showLocation, theme }) => {
+const LocationBar = ({ location, history, onClick, theme }) => {
   if (!location || !history) {
     return <div />;
   }
@@ -12,8 +12,8 @@ const LocationBar = ({ location, history, showLocation, theme }) => {
       <div
         className="head"
         onClick={() => {
-          if (showLocation) {
-            showLocation(location.name);
+          if (onClick) {
+            onClick(location.name);
             gtag.event("View location", "", location.name);
           }
         }}
