@@ -1,40 +1,26 @@
 import styled, { css, withTheme } from "styled-components";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  // ReferenceLine,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import ChartLegend from "./ChartLegend";
 
 const TotalChart = ({ data, theme }) => {
   const countries = {
-    // NZL: "NZ",
-    AUS: "AU",
-    USA: "USA",
-    CHN: "CHINA",
-    ITA: "ITALY",
-    GBR: "UK",
-    KOR: "S.KOREA",
-  };
-  // const dataWithNames = data.map((item) => {
-  //   return { ...item, country: countries[item.country] };
-  // });
+    NZL: { name: "NZ", color: theme.teal },
 
-  const chartColors = [
-    // theme.teal,
-    theme.green,
-    theme.navy,
-    "#317c3f",
-    "#956828",
-    "#d4b074",
-    theme.yellow,
-    "#e98e23",
-    "#af5434",
-    "#833f24",
-  ];
+    AUS: { name: "AU", color: theme.green },
+    USA: { name: "USA", color: theme.navy },
+    CHN: { name: "CHINA", color: "#317c3f" },
+    ITA: { name: "ITALY", color: "#956828" },
+    GBR: { name: "UK", color: "#d4b074" },
+    KOR: { name: "S.KOREA", color: theme.yellow },
+  };
+
+  const countriesArray = Object.keys(countries).map((countryName, i) => {
+    return { key: countryName, ...countries[countryName] };
+  });
+
+  const countriesSortedArray = [...countriesArray].sort((x, y) =>
+    x.name === "NZ" ? 1 : -1
+  );
 
   return (
     <Chart>
@@ -52,37 +38,27 @@ const TotalChart = ({ data, theme }) => {
                 value: "Days since 50 confirmed cases detected",
                 position: "bottom",
               }}
-              // tickFormatter={(tick) => data.findIndex((x) => x.date === tick)}
             />
             <YAxis scale="log" domain={["auto", "auto"]} />
 
-            {Object.keys(countries).map((countryName, i) => (
+            {countriesSortedArray.map((item, i) => (
               <Line
                 key={i}
                 type="monotone"
-                dataKey={countryName}
-                stroke={chartColors[i % chartColors.length]}
-                strokeWidth={countryName === "NZL" ? 4 : 3}
+                dataKey={item.key}
+                stroke={item.color}
+                strokeWidth={item.name === "NZ" ? 5 : 3}
                 dot={false}
               />
             ))}
-
-            <Line
-              type="monotone"
-              dataKey="NZL"
-              stroke={theme.teal}
-              strokeWidth={4}
-              dot={false}
-            />
           </LineChart>
         </ResponsiveContainer>
 
         <ChartLegend
           items={[
-            { title: "NZ", color: theme.teal },
-            ...Object.keys(countries).map((countryName, i) => ({
-              title: countries[countryName],
-              color: chartColors[i % chartColors.length],
+            ...countriesArray.map(({ name: title, color }, i) => ({
+              title,
+              color,
             })),
           ]}
         />
@@ -95,7 +71,6 @@ export default withTheme(TotalChart);
 
 const Chart = styled.div`
   ${({ theme, ...props }) => css`
-    /* margin: 0 1em; */
     background: white;
     border-radius: 0.5em;
     padding: 2.5em 2em;
@@ -125,29 +100,5 @@ const Chart = styled.div`
       font-size: 12px;
       color: black;
     }
-  `}
-`;
-
-const LegendItem = styled.div`
-  ${({ theme, legendColor }) => css`
-    margin: 0 6px;
-    :before {
-      content: "";
-      display: inline-block;
-      width: 20px;
-      height: 4px;
-      margin-right: 5px;
-      vertical-align: middle;
-      background-color: ${legendColor};
-    }
-  /* .total:before {
-    background: ${theme.teal};
-  }
-  .recovered:before {
-    background: ${theme.green};
-  }
-  .lockdown:before {
-    background: ${theme.navy};
-  } */
   `}
 `;

@@ -10,50 +10,23 @@ import styled, { css, withTheme } from "styled-components";
 
 const Ages = ({ data, theme }) => {
   const countries = {
-    NZL: "NZ",
-    AUS: "AU",
-    USA: "USA",
-    CHN: "CHINA",
-    ITA: "ITALY",
-    GBR: "UK",
-    KOR: "S.KOREA",
+    NZL: { name: "NZ", color: theme.teal },
+    AUS: { name: "AU", color: theme.green },
+    USA: { name: "USA", color: theme.navy },
+    CHN: { name: "CHINA", color: "#317c3f" },
+    ITA: { name: "ITALY", color: "#956828" },
+    GBR: { name: "UK", color: "#d4b074" },
+    KOR: { name: "S.KOREA", color: theme.yellow },
   };
   const dataWithNames = data.map((item) => {
-    return { ...item, country: countries[item.country] };
+    return {
+      ...item,
+      name: countries[item.country].name,
+      country: countries[item.country],
+    };
   });
 
   dataWithNames.sort((x, y) => (x.per1m > y.per1m ? -1 : 1));
-
-  const chartColors = [
-    theme.teal,
-    theme.green,
-    theme.navy,
-    "#317c3f",
-    "#956828",
-    "#d4b074",
-    theme.yellow,
-    "#e98e23",
-    "#af5434",
-    "#833f24",
-  ];
-
-  const CustomizedLabel = (props) => {
-    const { x, y, value, width, height } = props;
-    const small = value < 20;
-    return (
-      <text
-        x={small ? x : x + width - 5}
-        y={y + height / 2}
-        dx={small ? "1.2em" : 0}
-        dy="0.355em"
-        className="recharts-text recharts-label"
-        fill={small ? theme.navy : "white"}
-        textAnchor="end"
-      >
-        {value}
-      </text>
-    );
-  };
 
   return (
     <StyledAges>
@@ -72,19 +45,15 @@ const Ages = ({ data, theme }) => {
             isAnimationActive={false}
           >
             <XAxis type="number" hide />
-            <YAxis type="category" dataKey="country" interval={0} width={90} />
+            <YAxis type="category" dataKey="name" interval={0} width={90} />
             <Bar
               dataKey="per1m"
               fill="#8884d8"
               label={{ position: "right", fill: theme.dark }}
-              // label={<CustomizedLabel />}
               minPointSize={2}
             >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={chartColors[index % chartColors.length]}
-                />
+              {dataWithNames.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.country.color} />
               ))}
             </Bar>
           </BarChart>

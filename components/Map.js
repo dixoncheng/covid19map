@@ -191,7 +191,7 @@ const Map = ({
                 </Popup>
               </Marker>
             ) : (
-              <></>
+              <div key={i} />
             );
           })
         )}
