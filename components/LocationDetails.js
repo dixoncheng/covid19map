@@ -64,11 +64,12 @@ const LocationDetails = ({ location, data }) => {
             <ul>
               {Object.keys(clusters).map((clustLocName, i) => {
                 const { items } = clusters[clustLocName];
-                return items.map(({ name, totalCases }, i) => (
+                return items.map(({ name, totalCases, ongoing }, i) => (
                   <li key={i}>
                     <strong>{totalCases}</strong>{" "}
                     <span>
-                      {name}, {clustLocName}
+                      {name}, {clustLocName}{" "}
+                      {ongoing === "Closed" && <em>CLOSED</em>}
                     </span>
                   </li>
                 ));
@@ -373,6 +374,17 @@ const Clusters = styled.div`
       }
       span {
         font-size: 0.9em;
+      }
+      em {
+        font-style: normal;
+        color: white;
+        background: ${theme.navy};
+        padding: 0.1em 0.3em;
+        margin-left: 0.2em;
+        border-radius: 0.2em;
+        font-size: 0.7em;
+        position: relative;
+        top: -0.1em;
       }
     }
   `}

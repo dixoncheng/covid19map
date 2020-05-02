@@ -166,12 +166,12 @@ const Map = ({
         {Object.keys(clusters).map((regionName, i) =>
           Object.keys(clusters[regionName]).map((clustLocName, i) => {
             const { latlng, count, items } = clusters[regionName][clustLocName];
-            return (
+
+            return items.filter((x) => x.ongoing === "Yes").length > 0 ? (
               <Marker
                 key={i}
                 position={latlng}
                 icon={getClusterIcon("cluster", count)}
-                // zIndexOffset={100}
                 onClick={() => gtag.event("Cluster", "Map", clustLocName)}
               >
                 <Popup>
@@ -179,15 +179,19 @@ const Map = ({
                     <div className="head">
                       {clustLocName} cluster{items.length > 1 && "s"}
                     </div>
-                    {items.map(({ name, totalCases }, i) => (
-                      <div className="cluster-desc" key={i}>
-                        <div className="location">{name}</div>
-                        <div className="cases">{totalCases} cases</div>
-                      </div>
-                    ))}
+                    {items
+                      .filter((x) => x.ongoing === "Yes")
+                      .map(({ name, totalCases }, i) => (
+                        <div className="cluster-desc" key={i}>
+                          <div className="location">{name}</div>
+                          <div className="cases">{totalCases} cases</div>
+                        </div>
+                      ))}
                   </StyledPopup>
                 </Popup>
               </Marker>
+            ) : (
+              <></>
             );
           })
         )}
