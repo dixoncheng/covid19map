@@ -1,8 +1,6 @@
 import styled, { css } from "styled-components";
 
 const Genders = ({ genders, regional }) => {
-// console.log(genders);
-  return <div />;
   const male = genders.find((x) => x.gender === "male");
   const female = genders.find((x) => x.gender === "female");
   const total = genders.reduce((prev, cur) => prev + cur.count, 0);

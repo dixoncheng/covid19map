@@ -284,7 +284,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 <Row>
                   <div className="grid">
                     <Hospital hospitalTotal={hospitalTotal} />
-                    {genders && <Genders genders={genders} />}
+                    {genders.length > 0 && <Genders genders={genders} />}
                   </div>
                 </Row>
                 {testingData && (
