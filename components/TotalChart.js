@@ -62,7 +62,7 @@ const TotalChart = ({ summary, theme }) => {
 
         <ChartLegend
           items={[
-            { title: "New", color: theme.yellow },
+            { title: "Total", color: theme.teal },
             { title: "Recovered", color: theme.green },
             { title: "Lv4 lockdown", color: theme.navy },
           ]}
