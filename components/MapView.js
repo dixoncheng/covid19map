@@ -77,7 +77,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
 
   const [location, setLocation] = useState("");
   const [termsOpened, setTermsOpened] = useState(false);
-  const [lv3Opened, setLv3Opened] = useState(false);
+  const [featureOpened, setFeatureOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
   const showLocation = (name) => {
@@ -232,11 +232,11 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 <Row>
                   <Feature>
                     <Reveal
-                      open={lv3Opened}
-                      toggle={() => setLv3Opened(!lv3Opened)}
+                      open={featureOpened}
+                      toggle={() => setFeatureOpened(!featureOpened)}
                       button={
                         <Heading className="head">
-                          What does alert level 3 mean?{" "}
+                          What does alert level 2 mean?{" "}
                           <div
                             className="icon"
                             dangerouslySetInnerHTML={{
@@ -246,15 +246,16 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                         </Heading>
                       }
                       onToggle={() => {
-                        gtag.event("Level 3 slideshow");
+                        gtag.event("Level 2 slideshow");
                       }}
                     >
                       <Slider full centerPadding="38px" padding>
-                        {[...Array(10)].map((item, i) => (
-                          // <img key={i} src={`/What L3 means/Lv3 ${i}.svg`} />
+                        {[...Array(11)].map((item, i) => (
                           <img
                             key={i}
-                            src={require(`../public/What L3 means/Lv3 ${i}.svg`)}
+                            src={require(`../public/What L2 means/Lv2Web${
+                              i + 1
+                            }.png`)}
                           />
                         ))}
                       </Slider>
