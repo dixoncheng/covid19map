@@ -173,7 +173,8 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               <>
                 <div className="meta">
                   <div>
-                    <small>{asAt}</small>
+                    {/* <small>{asAt}</small> */}
+                    <small>As at 9.00 am, 30 May 2020</small>
                     <br />
                     <small>
                       Source:{" "}
@@ -290,7 +291,8 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 </Row>
                 {testingData && (
                   <Row>
-                    <Tests tests={testingData.yesterdayTotal} />
+                    {/* <Tests tests={testingData.yesterdayTotal} /> */}
+                    <Tests tests="3020" />
                   </Row>
                 )}
                 <Row>
