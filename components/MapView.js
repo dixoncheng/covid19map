@@ -150,9 +150,9 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
               <LocationDetails
                 location={locations.find((x) => x.name === location)}
                 data={[
-                  regionAgesGenders[location],
-                  regionOverseas[location],
-                  regionGenders[location],
+                  (regionAgesGenders && regionAgesGenders[location]) || null,
+                  (regionOverseas && regionOverseas[location]) || null,
+                  (regionGenders && regionGenders[location]) || null,
                   history[location],
                   clusters[location],
                 ]}
@@ -285,7 +285,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                 <Row>
                   <div className="grid">
                     <Hospital hospitalTotal={hospitalTotal} />
-                    {genders.length > 0 && <Genders genders={genders} />}
+                    {genders?.length > 0 && <Genders genders={genders} />}
                   </div>
                 </Row>
                 {testingData && (

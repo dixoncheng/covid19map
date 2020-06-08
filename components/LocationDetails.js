@@ -54,7 +54,7 @@ const LocationDetails = ({ location, data }) => {
               <img src="/hospitalbed.svg" />
             </div>
           </Hospital>
-          <Genders genders={regionGenders} regional />
+          {regionGenders && <Genders genders={regionGenders} regional />}
           <Recovered recovered={recovered} combined={total} regional />
         </Row>
 
@@ -82,12 +82,19 @@ const LocationDetails = ({ location, data }) => {
 
         <RegionDailyCasesChart history={history} />
 
-        <hr />
-        {regionAgesGenders && <RegionAgeGenderChart data={regionAgesGenders} />}
+        {regionAgesGenders && (
+          <>
+            <hr />
+            <RegionAgeGenderChart data={regionAgesGenders} />
+          </>
+        )}
 
-        {regionAgesGenders && regionOverseas && <hr />}
-
-        {regionOverseas && <RegionOverseasChart data={regionOverseas} />}
+        {regionOverseas && (
+          <>
+            <hr />
+            <RegionOverseasChart data={regionOverseas} />
+          </>
+        )}
 
         {url && (
           <>
