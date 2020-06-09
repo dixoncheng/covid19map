@@ -229,7 +229,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                   />
                 </Row>
 
-                <Row>
+                {/* <Row>
                   <Feature>
                     <Reveal
                       open={featureOpened}
@@ -261,7 +261,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
                       </Slider>
                     </Reveal>
                   </Feature>
-                </Row>
+                </Row> */}
 
                 <Row>
                   <Cases
