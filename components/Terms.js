@@ -68,7 +68,17 @@ const Terms = ({ termsOpened, setTermsOpened }) => {
         </div>
       )}
       <p className="made-by">
-        <small>Made by Concept &amp; Code</small>{" "}
+        <small>
+          Made by{" "}
+          <a
+            href="https://conceptandcode.nz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => gtag.event("Footer link", "", "Concept & Code")}
+          >
+            Concept &amp; Code
+          </a>
+        </small>{" "}
         <a
           href="https://www.linkedin.com/in/emilywongnz/"
           target="_blank"
