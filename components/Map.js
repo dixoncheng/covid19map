@@ -113,54 +113,58 @@ const Map = ({
             },
             i
           ) => (
-            <FeatureGroup key={i}>
-              <Marker
-                position={latlng}
-                icon={getRegionIcon(
-                  `region ${inHospital > 0 ? "hospital" : ""}`,
-                  active
-                )}
-                zIndexOffset={100}
-                onClick={() => {
-                  onLocationClick(name);
-                  gtag.event("Marker", "Map", name);
-                }}
-              />
-              <Popup>
-                <StyledPopup>
-                  <div className="location">{name}</div>
-                  <div className="cases">
-                    {active} active case{active > 1 && "s"}
-                    <br />
-                    {recovered} recovered
-                    <br />
-                    {totalCases} total case{totalCases > 1 && "s"}
-                    {deaths > 0 && (
-                      <>
-                        <br />
-                        {deaths} death{deaths > 1 && "s"}
-                      </>
+            <>
+              {latlng && boundary && (
+                <FeatureGroup key={i}>
+                  <Marker
+                    position={latlng}
+                    icon={getRegionIcon(
+                      `region ${inHospital > 0 ? "hospital" : ""}`,
+                      active
                     )}
-                  </div>
-                  {inHospital > 0 && (
-                    <div className="cases">{inHospital} in hospital</div>
-                  )}
-                </StyledPopup>
-              </Popup>
-              <Polygon
-                color={currentLocation === name ? "white" : "black"}
-                opacity={currentLocation === name ? 1 : 0.2}
-                weight={currentLocation === name ? 3 : 1}
-                fillColor={theme.teal}
-                fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
-                positions={boundary[0]}
-                // smoothFactor={10}
-                onClick={() => {
-                  onLocationClick(name);
-                  gtag.event("Region", "Map", name);
-                }}
-              />
-            </FeatureGroup>
+                    zIndexOffset={100}
+                    onClick={() => {
+                      onLocationClick(name);
+                      gtag.event("Marker", "Map", name);
+                    }}
+                  />
+                  <Popup>
+                    <StyledPopup>
+                      <div className="location">{name}</div>
+                      <div className="cases">
+                        {active} active case{active > 1 && "s"}
+                        <br />
+                        {recovered} recovered
+                        <br />
+                        {totalCases} total case{totalCases > 1 && "s"}
+                        {deaths > 0 && (
+                          <>
+                            <br />
+                            {deaths} death{deaths > 1 && "s"}
+                          </>
+                        )}
+                      </div>
+                      {inHospital > 0 && (
+                        <div className="cases">{inHospital} in hospital</div>
+                      )}
+                    </StyledPopup>
+                  </Popup>
+                  <Polygon
+                    color={currentLocation === name ? "white" : "black"}
+                    opacity={currentLocation === name ? 1 : 0.2}
+                    weight={currentLocation === name ? 3 : 1}
+                    fillColor={theme.teal}
+                    fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
+                    positions={boundary[0]}
+                    // smoothFactor={10}
+                    onClick={() => {
+                      onLocationClick(name);
+                      gtag.event("Region", "Map", name);
+                    }}
+                  />
+                </FeatureGroup>
+              )}
+            </>
           )
         )}
         {Object.keys(clusters).map((regionName, i) =>
