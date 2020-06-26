@@ -48,7 +48,7 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
   const detailsRef = useRef();
 
   const {
-    locations = [],
+    locations,
     clusters,
     asAt,
     maxCases,
@@ -121,7 +121,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
           center={center}
           zoom={zoom}
           markers={locations}
-          // markers={locations.filter((x) => x.boundary)}
           clusters={clusters}
           onMarkerClick={showLocation}
           maxCases={maxCases}
