@@ -1,13 +1,11 @@
 import styled, { css } from "styled-components";
 
-const Tests = ({ tests }) => {
-  return (
-    <StyledTests>
-      <strong>{tests}</strong> <span>tests processed yesterday</span>
-      <img src={require(`../public/infographic/testing.svg`)} />
-    </StyledTests>
-  );
-};
+const Tests = ({ tests }) => (
+  <StyledTests>
+    <strong>{tests}</strong> <span>tests processed yesterday</span>
+    <img src={require(`../public/infographic/testing.svg`)} />
+  </StyledTests>
+);
 
 export default Tests;
 

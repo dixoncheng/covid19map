@@ -1,33 +1,11 @@
 import styled, { css } from "styled-components";
 
-const Totals = ({ total }) => {
-  return (
-    <Total>
-      <h1>
-        Active cases <br />
-        in New Zealand
-      </h1>
-      <TotalNumber num={total}>
-        {total
-          .toString()
-          .split("")
-          .map((digit, i) => (
-            <span key={i}>{digit}</span>
-          ))}
-      </TotalNumber>
-    </Total>
-  );
-};
-
-export default Totals;
-
 const Total = styled.div`
   ${({ theme, ...props }) => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 0.94em;
-    /* padding-top: 14em; */
     ${props.wide &&
     css`
       @media (min-width: ${theme.sm}) {
@@ -76,3 +54,22 @@ const TotalNumber = styled.div`
     `}
   `}
 `;
+
+const Totals = ({ total }) => (
+  <Total>
+    <h1>
+      Active cases <br />
+      in New Zealand
+    </h1>
+    <TotalNumber num={total}>
+      {total
+        .toString()
+        .split("")
+        .map((digit, i) => (
+          <span key={i}>{digit}</span>
+        ))}
+    </TotalNumber>
+  </Total>
+);
+
+export default Totals;

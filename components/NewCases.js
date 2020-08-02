@@ -1,17 +1,15 @@
 import styled, { css } from "styled-components";
 
-const NewCases = ({ combined }) => {
-  return (
-    <StyledNewCases>
-      <strong>+{combined}</strong> New cases
-      <br />
-      in the last
-      <br />
-      24 hours
-      <img src={require(`../public/infographic/nznewcases.svg`)} />
-    </StyledNewCases>
-  );
-};
+const NewCases = ({ combined }) => (
+  <StyledNewCases>
+    <strong>+{combined}</strong> New cases
+    <br />
+    in the last
+    <br />
+    24 hours
+    <img src={require(`../public/infographic/nznewcases.svg`)} />
+  </StyledNewCases>
+);
 
 export default NewCases;
 

@@ -6,64 +6,7 @@ import {
   YAxis,
   ResponsiveContainer,
 } from "recharts";
-import styled, { css, withTheme } from "styled-components";
-
-const Ages = ({ data, theme }) => {
-  const countries = {
-    NZL: { name: "NZ", color: theme.teal },
-    AUS: { name: "AU", color: theme.green },
-    USA: { name: "USA", color: theme.navy },
-    CHN: { name: "CHINA", color: "#317c3f" },
-    ITA: { name: "ITALY", color: "#956828" },
-    GBR: { name: "UK", color: "#d4b074" },
-    KOR: { name: "S.KOREA", color: theme.yellow },
-  };
-  const dataWithNames = data.map((item) => {
-    return {
-      ...item,
-      name: countries[item.country].name,
-      country: countries[item.country],
-    };
-  });
-
-  dataWithNames.sort((x, y) => (x.per1m > y.per1m ? -1 : 1));
-
-  return (
-    <StyledAges>
-      <div className="head">Cases per 1 million</div>
-      <div className="chart-wrap">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={dataWithNames}
-            layout="vertical"
-            margin={{
-              top: 10,
-              right: 60,
-              left: 0,
-              bottom: 10,
-            }}
-            isAnimationActive={false}
-          >
-            <XAxis type="number" hide />
-            <YAxis type="category" dataKey="name" interval={0} width={90} />
-            <Bar
-              dataKey="per1m"
-              fill="#8884d8"
-              label={{ position: "right", fill: theme.dark }}
-              minPointSize={2}
-            >
-              {dataWithNames.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.country.color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </StyledAges>
-  );
-};
-
-export default withTheme(Ages);
+import styled, { css, useTheme } from "styled-components";
 
 const StyledAges = styled.div`
   ${({ theme, ...props }) => css`
@@ -122,3 +65,61 @@ const StyledAges = styled.div`
     }
   `}
 `;
+
+const Ages = ({ data }) => {
+  const theme = useTheme();
+  const countries = {
+    NZL: { name: "NZ", color: theme.teal },
+    AUS: { name: "AU", color: theme.green },
+    USA: { name: "USA", color: theme.navy },
+    CHN: { name: "CHINA", color: "#317c3f" },
+    ITA: { name: "ITALY", color: "#956828" },
+    GBR: { name: "UK", color: "#d4b074" },
+    KOR: { name: "S.KOREA", color: theme.yellow },
+  };
+  const dataWithNames = data.map((item) => {
+    return {
+      ...item,
+      name: countries[item.country].name,
+      country: countries[item.country],
+    };
+  });
+
+  dataWithNames.sort((x, y) => (x.per1m > y.per1m ? -1 : 1));
+
+  return (
+    <StyledAges>
+      <div className="head">Cases per 1 million</div>
+      <div className="chart-wrap">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={dataWithNames}
+            layout="vertical"
+            margin={{
+              top: 10,
+              right: 60,
+              left: 0,
+              bottom: 10,
+            }}
+            isAnimationActive={false}
+          >
+            <XAxis type="number" hide />
+            <YAxis type="category" dataKey="name" interval={0} width={90} />
+            <Bar
+              dataKey="per1m"
+              fill="#8884d8"
+              label={{ position: "right", fill: theme.dark }}
+              minPointSize={2}
+            >
+              {dataWithNames.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.country.color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </StyledAges>
+  );
+};
+
+export default Ages;

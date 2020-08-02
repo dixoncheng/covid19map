@@ -1,25 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Hospital = ({ hospitalTotal }) => {
-  return (
-    <StyledHospital>
-      <div className="head">
-        <strong>{hospitalTotal}</strong>
-        <span>
-          Cases in
-          <br /> hospital
-        </span>
-      </div>
-      <div className="row">
-        <img src={require(`../public/infographic/hospital.svg`)} />
-        {/* <div>are in Intensive Care Unit</div> */}
-      </div>
-    </StyledHospital>
-  );
-};
-
-export default Hospital;
-
 const StyledHospital = styled.div`
   ${({ theme, ...props }) => css`
     background: white;
@@ -58,3 +38,21 @@ const StyledHospital = styled.div`
     }
   `}
 `;
+
+const Hospital = ({ hospitalTotal }) => (
+  <StyledHospital>
+    <div className="head">
+      <strong>{hospitalTotal}</strong>
+      <span>
+        Cases in
+        <br /> hospital
+      </span>
+    </div>
+    <div className="row">
+      <img src={require(`../public/infographic/hospital.svg`)} />
+      {/* <div>are in Intensive Care Unit</div> */}
+    </div>
+  </StyledHospital>
+);
+
+export default Hospital;

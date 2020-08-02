@@ -1,34 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Genders = ({ genders, regional }) => {
-  const male = genders.find((x) => x.gender === "male");
-  const female = genders.find((x) => x.gender === "female");
-  const total = genders.reduce((prev, cur) => prev + cur.count, 0);
-  const percentWomen = Math.round((female.count / total) * 100);
-  const percentMen = Math.round((male.count / total) * 100);
-  return (
-    <StyledGenders regional={regional}>
-      {!regional && <div className="head">Patient genders</div>}
-      <div className="genders">
-        <div className="female">
-          <div>
-            <strong>{percentWomen}</strong> women
-          </div>
-          <img src={require(`../public/infographic/female.svg`)} />
-        </div>
-        <div className="male">
-          <div>
-            <strong>{percentMen}</strong> men
-          </div>
-          <img src={require(`../public/infographic/male.svg`)} />
-        </div>
-      </div>
-    </StyledGenders>
-  );
-};
-
-export default Genders;
-
 const StyledGenders = styled.div`
   ${({ theme, ...props }) => css`
     color: ${theme.dark};
@@ -105,3 +76,32 @@ const StyledGenders = styled.div`
     }
   `}
 `;
+
+const Genders = ({ genders, regional }) => {
+  const male = genders.find((x) => x.gender === "male");
+  const female = genders.find((x) => x.gender === "female");
+  const total = genders.reduce((prev, cur) => prev + cur.count, 0);
+  const percentWomen = Math.round((female.count / total) * 100);
+  const percentMen = Math.round((male.count / total) * 100);
+  return (
+    <StyledGenders regional={regional}>
+      {!regional && <div className="head">Patient genders</div>}
+      <div className="genders">
+        <div className="female">
+          <div>
+            <strong>{percentWomen}</strong> women
+          </div>
+          <img src={require(`../public/infographic/female.svg`)} />
+        </div>
+        <div className="male">
+          <div>
+            <strong>{percentMen}</strong> men
+          </div>
+          <img src={require(`../public/infographic/male.svg`)} />
+        </div>
+      </div>
+    </StyledGenders>
+  );
+};
+
+export default Genders;

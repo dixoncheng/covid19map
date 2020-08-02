@@ -5,6 +5,39 @@ import * as gtag from "../lib/gtag";
 
 Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 
+const Styles = createGlobalStyle`
+  ${({ theme }) => css`
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: "Nunito", sans-serif;
+      background: ${theme.light};
+    }
+    button,
+    a {
+      font-family: "Nunito", sans-serif;
+      transition: all 0.3s ease;
+    }
+    button:hover,
+    a:hover {
+      opacity: 0.7;
+    }
+    button {
+      cursor: pointer;
+      outline: none;
+    }
+    .inline-icon {
+      display: inline-block;
+      svg {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  `}
+`;
+
 function MyApp({ Component, pageProps, ...props }) {
   const theme = {
     font: '"Nunito", sans-serif',
@@ -47,39 +80,3 @@ function MyApp({ Component, pageProps, ...props }) {
 // };
 
 export default MyApp;
-
-const Styles = createGlobalStyle`
-  ${({ theme }) => css`
-    html,
-    body {
-      padding: 0;
-      margin: 0;
-      font-family: "Nunito", sans-serif;
-      background: ${theme.light};
-    }
-    button,
-    a {
-      font-family: "Nunito", sans-serif;
-      transition: all 0.3s ease;
-    }
-    button:hover,
-    a:hover {
-      opacity: 0.7;
-    }
-    button {
-      cursor: pointer;
-      outline: none;
-    }
-    .inline-icon {
-      display: inline-block;
-      /* height: 12px;
-      width: 12px;
-      margin-right: 3px; */
-      svg {
-        display: block;
-        height: 100%;
-        width: 100%;
-      }
-    }
-  `}
-`;

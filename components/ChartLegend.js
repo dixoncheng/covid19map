@@ -1,19 +1,5 @@
 import styled, { css } from "styled-components";
 
-const ChartLegend = ({ items }) => {
-  return (
-    <StyledChartLegend>
-      {items.map((item, i) => (
-        <LegendItem key={i} typeColor={item.color}>
-          <span>{item.title}</span>
-        </LegendItem>
-      ))}
-    </StyledChartLegend>
-  );
-};
-
-export default ChartLegend;
-
 const StyledChartLegend = styled.div`
   margin-top: 1em;
   display: flex;
@@ -40,3 +26,15 @@ const LegendItem = styled.div`
     }
   `}
 `;
+
+const ChartLegend = ({ items }) => (
+  <StyledChartLegend>
+    {items.map((item, i) => (
+      <LegendItem key={i} typeColor={item.color}>
+        <span>{item.title}</span>
+      </LegendItem>
+    ))}
+  </StyledChartLegend>
+);
+
+export default ChartLegend;

@@ -1,78 +1,6 @@
 import { LineChart, Line, XAxis, ResponsiveContainer } from "recharts";
-import styled, { css, withTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import * as gtag from "../lib/gtag";
-
-const LocationBar = ({ location, history, onClick, theme }) => {
-  if (!location || !history) {
-    return <div />;
-  }
-
-  return (
-    <StyledLocationBar>
-      <div
-        className="head"
-        onClick={() => {
-          if (onClick) {
-            onClick(location.name);
-            gtag.event("View location", "", location.name);
-          }
-        }}
-      >
-        <div className="stats">
-          <div>
-            <span className="name">{location.name}</span>
-            <CaseCounts>
-              <ul>
-                <li>
-                  <img src={require(`../public/active.svg`)} />{" "}
-                  {location.totalCases}
-                </li>
-                <li>
-                  <img src={require(`../public/recovered.svg`)} />{" "}
-                  {history[history.length - 1].recovered}
-                </li>
-                <li>
-                  <img src={require(`../public/deaths.svg`)} />{" "}
-                  {history[history.length - 1].deaths}
-                </li>
-              </ul>
-            </CaseCounts>
-          </div>
-          <div className="num-cases">
-            <div className="total-cases">
-              {history[history.length - 1].active}
-            </div>
-            {location.newCases > 0 && <small>+{location.newCases}</small>}
-            {/* <div
-                        className="inline-icon"
-                        dangerouslySetInnerHTML={{
-                          __html: require(`../public/arrow.svg?include`),
-                        }}
-                      /> */}
-          </div>
-        </div>
-
-        <InlineChart>
-          <ResponsiveContainer>
-            <LineChart data={history}>
-              <XAxis dataKey="date" hide />
-              <Line
-                type="monotone"
-                dataKey="new"
-                stroke={theme.teal}
-                strokeWidth={1}
-                dot={false}
-                isAnimationActive={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </InlineChart>
-      </div>
-    </StyledLocationBar>
-  );
-};
-
-export default withTheme(LocationBar);
 
 const StyledLocationBar = styled.div`
   ${({ theme, opened }) => css`
@@ -82,7 +10,6 @@ const StyledLocationBar = styled.div`
     margin: 5px 0 !important;
 
     justify-content: space-between;
-    /* align-items: center; */
     transition: 0.3s ease;
     ${!opened &&
     css`
@@ -99,36 +26,19 @@ const StyledLocationBar = styled.div`
 
     .stats {
       padding: 6px 0;
-      /* width: 50%; */
       flex: 1;
       display: flex;
       justify-content: space-between;
-      /* align-items: center; */
     }
     .name {
       color: ${theme.teal};
       white-space: nowrap;
-      /* font-weight: bold; */
     }
     .num-cases {
       color: ${theme.teal};
       font-weight: bold;
-      /* padding-top: 3px;
-      line-height: 1; */
       margin: 0 10px;
       text-align: right;
-      /* display: flex;
-      flex-direction: column;
-      justify-content: center; */
-      /* align-items: center; */
-      /* position: relative; */
-      /* top: 1px; */
-    }
-    .inline-icon {
-      /* opacity: 0.3; */
-    }
-    .total-cases {
-      /* font-size: 1em; */
     }
     small {
       display: inline-block;
@@ -159,8 +69,6 @@ const StyledLocationBar = styled.div`
 const InlineChart = styled.div`
   width: 42%;
   height: 50px;
-  /* margin-left: 5px;
-  display: inline-block; */
 `;
 
 const CaseCounts = styled.div`
@@ -190,3 +98,68 @@ const CaseCounts = styled.div`
     }
   `}
 `;
+
+const LocationBar = ({ location, history, onClick }) => {
+  const theme = useTheme();
+  if (!location || !history) {
+    return <div />;
+  }
+
+  return (
+    <StyledLocationBar>
+      <div
+        className="head"
+        onClick={() => {
+          if (onClick) {
+            onClick(location.name);
+            gtag.event("View location", "", location.name);
+          }
+        }}
+      >
+        <div className="stats">
+          <div>
+            <span className="name">{location.name}</span>
+            <CaseCounts>
+              <ul>
+                <li>
+                  <img src={require(`../public/active.svg`)} />{" "}
+                  {location.totalCases}
+                </li>
+                <li>
+                  <img src={require(`../public/recovered.svg`)} />{" "}
+                  {location.recovered}
+                </li>
+                <li>
+                  <img src={require(`../public/deaths.svg`)} />{" "}
+                  {location.deaths}
+                </li>
+              </ul>
+            </CaseCounts>
+          </div>
+          <div className="num-cases">
+            <div className="total-cases">{location.active}</div>
+            {location.newCases > 0 && <small>+{location.newCases}</small>}
+          </div>
+        </div>
+
+        <InlineChart>
+          <ResponsiveContainer>
+            <LineChart data={history}>
+              <XAxis dataKey="date" hide />
+              <Line
+                type="monotone"
+                dataKey="new"
+                stroke={theme.teal}
+                strokeWidth={1}
+                dot={false}
+                isAnimationActive={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </InlineChart>
+      </div>
+    </StyledLocationBar>
+  );
+};
+
+export default LocationBar;

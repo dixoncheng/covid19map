@@ -1,7 +1,24 @@
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import styled, { css, withTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 
-const RegionDailyCasesChart = ({ history, theme }) => {
+const StyledRegionDailyCasesChart = styled.div`
+  ${({ theme }) => css`
+    font-size: 0.5em;
+    h3 {
+      color: ${theme.dark};
+      font-size: 2em;
+      margin: 0 0 0.5em 0;
+      line-height: 1.1;
+      text-align: center;
+    }
+    .chart-wrap {
+      height: 20em;
+    }
+  `}
+`;
+
+const RegionDailyCasesChart = ({ history }) => {
+  const theme = useTheme();
   return (
     <StyledRegionDailyCasesChart>
       <h3>Daily Cases</h3>
@@ -38,20 +55,4 @@ const RegionDailyCasesChart = ({ history, theme }) => {
   );
 };
 
-export default withTheme(RegionDailyCasesChart);
-
-const StyledRegionDailyCasesChart = styled.div`
-  ${({ theme }) => css`
-    font-size: 0.5em;
-    h3 {
-      color: ${theme.dark};
-      font-size: 2em;
-      margin: 0 0 0.5em 0;
-      line-height: 1.1;
-      text-align: center;
-    }
-    .chart-wrap {
-      height: 20em;
-    }
-  `}
-`;
+export default RegionDailyCasesChart;

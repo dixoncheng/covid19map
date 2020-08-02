@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import styled, { css, withTheme } from "styled-components";
+import styled, { css } from "styled-components";
 import Row from "../components/Row";
 import TotalCases from "../components/TotalCases";
 import Cases from "../components/Cases";
@@ -23,7 +23,6 @@ import Legend from "../components/Legend";
 import Alert from "../components/Alert";
 import Tabs from "../components/Tabs";
 import * as gtag from "../lib/gtag";
-// import { Element, animateScroll as scroll, scroller } from "react-scroll";
 
 import InternationalLineChart from "../components/InternationalLineChart";
 import InternationalBarChart from "../components/InternationalBarChart";
@@ -43,7 +42,216 @@ const innerBounds = [
   [-47.30251579, 177.66849518],
 ];
 
+const Wrap = styled.div`
+  ${({ theme }) => css`
+    @media (min-width: ${theme.sm}) {
+      display: flex;
+    }
+  `}
+`;
+
+const Main = styled.div`
+  flex: 1;
+`;
+
+const Info = styled.div`
+  ${({ theme }) => css`
+    font-size: 2vw;
+
+    color: ${theme.dark};
+    box-sizing: border-box;
+    padding: 20px;
+    background: ${theme.light};
+    @media (min-width: ${theme.sm}) {
+      font-size: 0.55em;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      height: 100vh;
+      width: 450px;
+      border-left: solid 1px white;
+    }
+    a {
+      color: ${theme.dark};
+    }
+    hr {
+      border: solid 2px ${theme.light};
+      border-width: 0 0 1px 0;
+      margin: 0.9em 0;
+    }
+  `}
+`;
+
+const Summary = styled.div`
+  ${({ theme }) => css`
+    h2 {
+      font-size: 18px;
+      color: ${theme.teal};
+      margin: 0;
+      line-height: 1.1;
+      @media (min-width: ${theme.md}) {
+        font-size: 23px;
+      }
+    }
+    .total {
+      margin-bottom: 1.5em;
+    }
+    h2 + .cases-breakdown {
+      margin-top: 1px;
+    }
+    .cases-breakdown + h2 {
+      margin-top: 0.5em;
+    }
+    .cases-breakdown {
+      display: flex;
+      justify-content: space-between;
+    }
+    h2.split {
+      display: flex;
+      justify-content: space-between;
+    }
+    .meta {
+      font-size: 2em;
+      margin: 0.5em 0;
+      display: flex;
+      justify-content: space-between;
+    }
+  `}
+`;
+
+const Logo = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 6em;
+      margin-right: 1.5em;
+    }
+    h1 {
+      white-space: nowrap;
+      font-size: 4.5em;
+      color: ${theme.teal};
+      margin: 0;
+    }
+    h2 {
+      white-space: nowrap;
+      font-size: 2em;
+      color: ${theme.teal};
+      margin: 0;
+      line-height: 1.1;
+    }
+  `}
+`;
+
+const Details = styled.div`
+  font-size: 2em;
+`;
+
+const BackButton = styled.button`
+  ${({ theme }) => css`
+    background: none;
+    border: none;
+    color: ${theme.dark};
+    margin-bottom: 1.5em;
+    padding: 0;
+    font-size: 0.8em;
+    .icon {
+      transform: rotate(180deg);
+      display: inline-block;
+      /* height: 1.5em; */
+      width: 0.5em;
+      position: relative;
+      top: -0.15em;
+    }
+  `}
+`;
+
+const Share = styled.div`
+  ${({ theme }) => css`
+    margin-bottom: 0.8em;
+    font-size: 2em;
+    a {
+      font-size: 0.8em;
+      text-decoration: none;
+      color: white;
+      background: ${theme.navy};
+      border-radius: 2em;
+      padding: 0.26em 0.5em;
+      margin-left: 0.5em;
+    }
+    img {
+      height: 1.2em;
+      vertical-align: middle;
+      margin: 0 3px;
+      position: relative;
+      top: -1px;
+    }
+  `}
+`;
+
+const Error = styled.button`
+  ${({ theme }) => css`
+    font-size: 2em;
+    margin-top: 50px;
+    text-align: center;
+    padding: 0 40px;
+    border: none;
+    background: none;
+    strong {
+      color: ${theme.teal};
+    }
+  `}
+`;
+
+const Refresh = styled.button`
+  ${({ theme }) => css`
+    border: none;
+    background: ${theme.green};
+    color: white;
+    font-size: 0.8em;
+    padding: 0.1em 0.5em;
+    border-radius: 1em;
+    .inline-icon {
+      position: relative;
+      top: 1px;
+      width: 1em;
+      height: 1em;
+      margin-right: 0.2em;
+    }
+  `}
+`;
+
+const Heading = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.dark};
+    font-family: ${theme.fontFancy};
+    font-size: 2.1em;
+    text-transform: uppercase;
+    margin-top: 1.6em;
+    margin-bottom: 0.3em;
+    line-height: 1.1;
+  `}
+`;
+
+const Feature = styled.div`
+  ${({ theme }) => css`
+    border: solid ${theme.green} 0.4em;
+    border-radius: 0.5em;
+    padding: 1.3em 0 1.1em;
+    background-color: ${theme.green};
+    .head {
+      color: white;
+      font-size: 2em;
+      margin: 0 0.8em;
+    }
+    .slick-dots li.slick-active button:before {
+      color: white;
+    }
+  `}
+`;
+
 const MapView = ({ data = {}, news = {}, error, theme }) => {
+  // console.log(data);
   const infoRef = useRef();
   const detailsRef = useRef();
 
@@ -83,29 +291,6 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
   const showLocation = (name) => {
     setLocation(name);
   };
-
-  // useEffect(() => {
-  //   if (detailsRef.current) {
-  //     if (window.scrollY > detailsRef.current.offsetTop) {
-  //       window.scrollTo(0, detailsRef.current.offsetTop - 20);
-  //     }
-  //   }
-  // }, [view]);
-
-  // useEffect(() => {
-  //   const options = {
-  //     duration: 800,
-  //     delay: 0,
-  //     smooth: "easeInOutQuart",
-  //     offset: -10,
-  //   };
-  //   // mobile
-  //   // scroller.scrollTo(location, options);
-  //   // desktop
-  //   scroller.scrollTo(location, { ...options, containerId: "info" });
-  // }, [location]);
-
-  // const refs = locations?.map((item, i) => useRef());
 
   useEffect(() => {
     if (location) {
@@ -359,216 +544,4 @@ const MapView = ({ data = {}, news = {}, error, theme }) => {
   );
 };
 
-export default withTheme(MapView);
-
-const Wrap = styled.div`
-  ${({ theme }) => css`
-    @media (min-width: ${theme.sm}) {
-      display: flex;
-    }
-  `}
-`;
-
-const Main = styled.div`
-  flex: 1;
-`;
-
-const Info = styled.div`
-  ${({ theme }) => css`
-    font-size: 2vw;
-
-    color: ${theme.dark};
-    box-sizing: border-box;
-    padding: 20px;
-    background: ${theme.light};
-    @media (min-width: ${theme.sm}) {
-      font-size: 0.55em;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      height: 100vh;
-      width: 450px;
-      border-left: solid 1px white;
-    }
-    a {
-      color: ${theme.dark};
-    }
-    hr {
-      border: solid 2px ${theme.light};
-      border-width: 0 0 1px 0;
-      margin: 0.9em 0;
-    }
-  `}
-`;
-
-const Summary = styled.div`
-  ${({ theme }) => css`
-    h2 {
-      font-size: 18px;
-      color: ${theme.teal};
-      margin: 0;
-      line-height: 1.1;
-      @media (min-width: ${theme.md}) {
-        font-size: 23px;
-      }
-    }
-    .total {
-      margin-bottom: 1.5em;
-    }
-    h2 + .cases-breakdown {
-      margin-top: 1px;
-    }
-    .cases-breakdown + h2 {
-      margin-top: 0.5em;
-    }
-    .cases-breakdown {
-      display: flex;
-      justify-content: space-between;
-    }
-    h2.split {
-      display: flex;
-      justify-content: space-between;
-    }
-    .meta {
-      font-size: 2em;
-      margin: 0.5em 0;
-      display: flex;
-      justify-content: space-between;
-    }
-  `}
-`;
-
-const Logo = styled.div`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 6em;
-      margin-right: 1.5em;
-    }
-    h1 {
-      white-space: nowrap;
-      font-size: 4.5em;
-      color: ${theme.teal};
-      margin: 0;
-
-    }
-    h2 {
-      white-space: nowrap;
-      font-size: 2em;
-      color: ${theme.teal};
-      margin: 0;
-      line-height: 1.1;
-      /* @media (min-width: ${theme.md}) {
-        font-size: 18px;
-      } */
-    }
-  `}
-`;
-
-const Details = styled.div`
-  font-size: 2em;
-`;
-
-const BackButton = styled.button`
-  ${({ theme }) => css`
-    background: none;
-    border: none;
-    color: ${theme.dark};
-    margin-bottom: 1.5em;
-    padding: 0;
-    font-size: 0.8em;
-    .icon {
-      transform: rotate(180deg);
-      display: inline-block;
-      /* height: 1.5em; */
-      width: 0.5em;
-      position: relative;
-      top: -0.15em;
-    }
-  `}
-`;
-
-const Share = styled.div`
-  ${({ theme }) => css`
-    margin-bottom: 0.8em;
-    font-size: 2em;
-    a {
-      font-size: 0.8em;
-      text-decoration: none;
-      color: white;
-      background: ${theme.navy};
-      border-radius: 2em;
-      padding: 0.26em 0.5em;
-      margin-left: 0.5em;
-    }
-    img {
-      height: 1.2em;
-      vertical-align: middle;
-      margin: 0 3px;
-      position: relative;
-      top: -1px;
-    }
-  `}
-`;
-
-const Error = styled.button`
-  ${({ theme }) => css`
-    font-size: 2em;
-    margin-top: 50px;
-    text-align: center;
-    padding: 0 40px;
-    border: none;
-    background: none;
-    strong {
-      color: ${theme.teal};
-    }
-  `}
-`;
-
-const Refresh = styled.button`
-  ${({ theme }) => css`
-    border: none;
-    background: ${theme.green};
-    color: white;
-    font-size: 0.8em;
-    padding: 0.1em 0.5em;
-    border-radius: 1em;
-    .inline-icon {
-      position: relative;
-      top: 1px;
-      width: 1em;
-      height: 1em;
-      margin-right: 0.2em;
-    }
-  `}
-`;
-
-const Heading = styled.div`
-  ${({ theme }) => css`
-    color: ${theme.dark};
-    font-family: ${theme.fontFancy};
-    font-size: 2.1em;
-    text-transform: uppercase;
-    margin-top: 1.6em;
-    margin-bottom: 0.3em;
-    line-height: 1.1;
-  `}
-`;
-
-const Feature = styled.div`
-  ${({ theme }) => css`
-    border: solid ${theme.green} 0.4em;
-    border-radius: 0.5em;
-    padding: 1.3em 0 1.1em;
-    background-color: ${theme.green};
-    .head {
-      color: white;
-      font-size: 2em;
-      margin: 0 0.8em;
-    }
-    .slick-dots li.slick-active button:before {
-      color: white;
-    }
-  `}
-`;
+export default MapView;

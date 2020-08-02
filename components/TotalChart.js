@@ -1,4 +1,4 @@
-import styled, { css, withTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import {
   LineChart,
   Line,
@@ -9,7 +9,35 @@ import {
 } from "recharts";
 import ChartLegend from "./ChartLegend";
 
-const TotalChart = ({ summary, theme }) => {
+const Chart = styled.div`
+  ${({ theme, ...props }) => css`
+    background: white;
+    border-radius: 0.5em;
+    padding: 2.5em 2em;
+    .head {
+      text-align: center;
+      color: ${theme.dark};
+      font-family: ${theme.fontFancy};
+      font-size: 2.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2em;
+      line-height: 1.1;
+    }
+    .chart-wrap {
+      height: 25em;
+      padding-bottom: 20px;
+      ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          width: 40em;
+        }
+      `}
+    }
+  `}
+`;
+
+const TotalChart = ({ summary }) => {
+  const theme = useTheme();
   return (
     <Chart>
       <div className="head">Total cases</div>
@@ -72,32 +100,4 @@ const TotalChart = ({ summary, theme }) => {
   );
 };
 
-export default withTheme(TotalChart);
-
-const Chart = styled.div`
-  ${({ theme, ...props }) => css`
-    /* margin: 0 1em; */
-    background: white;
-    border-radius: 0.5em;
-    padding: 2.5em 2em;
-    .head {
-      text-align: center;
-      color: ${theme.dark};
-      font-family: ${theme.fontFancy};
-      font-size: 2.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.2em;
-      line-height: 1.1;
-    }
-    .chart-wrap {
-      height: 25em;
-      padding-bottom: 20px;
-      ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          width: 40em;
-        }
-      `}
-    }
-  `}
-`;
+export default TotalChart;

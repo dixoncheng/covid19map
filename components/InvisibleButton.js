@@ -13,9 +13,6 @@ const InvisibleButton = styled.button`
     .icon {
       display: inline-block;
       width: 0.5em;
-      /* height: 0.6em; */
-      /* position: relative; */
-      /* top: 1px; */
       transition: all 0.3s ease;
       transform: rotate(${active ? "90deg" : "0deg"});
     }

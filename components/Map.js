@@ -8,8 +8,125 @@ import {
   FeatureGroup,
 } from "react-leaflet";
 import L from "leaflet";
-import styled, { css, createGlobalStyle, withTheme } from "styled-components";
+import styled, { css, createGlobalStyle, useTheme } from "styled-components";
 import * as gtag from "../lib/gtag";
+
+const StyledPopup = styled.div`
+  ${({ theme }) => css`
+    color: ${theme.dark};
+    .head {
+      color: ${theme.teal};
+    }
+    .location {
+      font-weight: bold;
+      font-size: 16px;
+      font-family: ${theme.font};
+    }
+    .cluster-desc {
+      .location {
+        font-size: 14px;
+      }
+    }
+    .cluster-desc + .cluster-desc {
+      margin-top: 0.5em;
+    }
+  `}
+`;
+
+const Styles = createGlobalStyle`
+  ${({ theme, currentZoom }) => css`
+    .leaflet-container {
+      height: 50vh;
+      width: 100%;
+    }
+    @media (min-width: 700px) {
+      .leaflet-container {
+        height: 100vh;
+      }
+    }
+    .marker {
+      transition: all 0.2s;
+      font-family: "Nunito", sans-serif;
+      color: #204e61;
+      border-radius: 50%;
+      font-size: 12px;
+
+      ${currentZoom >= 6 &&
+      css`
+        font-size: 16px;
+      `}
+      ${currentZoom >= 7 &&
+      css`
+        font-size: 18px;
+      `}
+
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .region {
+      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
+        1px 1px 0 white;
+      pointer-events: none !important;
+    }
+    .cluster {
+      color: #204e61;
+      background: rgba(255, 201, 6, 0.4);
+      border: solid rgba(255, 201, 6, 1) 1px;
+    }
+    .hospital {
+      > div {
+        position: relative;
+        :after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          top: 0.1em;
+          left: 105%;
+          background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
+        }
+      }
+    }
+  `}
+`;
+
+const MapLegend = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    bottom: 26px;
+    right: 10px;
+    background: white;
+    border-radius: 5px;
+    z-index: 999;
+    padding: 10px;
+    font-size: 12px;
+    .map-cluster,
+    .map-hosp {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      margin-right: 2px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+    .map-cluster {
+      background: ${theme.yellow};
+      border-radius: 50%;
+    }
+    .map-hosp {
+      background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
+      background-size: contain;
+    }
+    @media (min-width: ${theme.sm}) {
+      font-size: 14px;
+      bottom: 36px;
+      right: 20px;
+    }
+  `}
+`;
 
 const Map = ({
   center,
@@ -20,9 +137,9 @@ const Map = ({
   maxCases,
   outerBounds,
   innerBounds,
-  theme,
   location,
 }) => {
+  const theme = useTheme();
   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState();
   const [currentZoom, setCurrentZoom] = useState("100");
@@ -32,10 +149,8 @@ const Map = ({
   }, [mapRef.current]);
 
   useEffect(() => {
-    // if (location === "") {
     mapRef.current.leafletElement.closePopup();
     setCurrentLocation("");
-    // }
   }, [location]);
 
   const getRegionIcon = (className, totalCases) => {
@@ -50,7 +165,6 @@ const Map = ({
   const getClusterIcon = (className, totalCases) => {
     const normalise = totalCases / 100;
     const iconSize = 24 + normalise * 15;
-    // const iconSize = 28;
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
@@ -205,125 +319,4 @@ const Map = ({
   );
 };
 
-export default withTheme(Map);
-
-const StyledPopup = styled.div`
-  ${({ theme }) => css`
-    color: ${theme.dark};
-    .head {
-      color: ${theme.teal};
-    }
-    .location {
-      font-weight: bold;
-      font-size: 16px;
-      font-family: ${theme.font};
-    }
-    .cluster-desc {
-      .location {
-        font-size: 14px;
-      }
-    }
-    .cluster-desc + .cluster-desc {
-      margin-top: 0.5em;
-    }
-  `}
-`;
-
-const Styles = createGlobalStyle`
-  ${({ theme, currentZoom }) => css`
-    .leaflet-container {
-      height: 50vh;
-      width: 100%;
-    }
-    @media (min-width: 700px) {
-      .leaflet-container {
-        height: 100vh;
-      }
-    }
-    .marker {
-      transition: all 0.2s;
-      font-family: "Nunito", sans-serif;
-      color: #204e61;
-      border-radius: 50%;
-      font-size: 12px;
-
-      ${currentZoom >= 6 &&
-      css`
-        font-size: 16px;
-      `}
-      ${currentZoom >= 7 &&
-      css`
-        font-size: 18px;
-      `}
-
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .region {
-      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
-        1px 1px 0 white;
-      pointer-events: none !important;
-    }
-    .cluster {
-      color: #204e61;
-      background: rgba(255, 201, 6, 0.4);
-      border: solid rgba(255, 201, 6, 1) 1px;
-    }
-    .hospital {
-      /* background: rgba(170, 205, 110, 1);
-      border: solid rgb(170, 205, 110); 1px; */
-      /* background: white; */
-
-      > div {
-        position: relative;
-        :after {
-          content: "";
-          width: 10px;
-          height: 10px;
-          position: absolute;
-          top: 0.1em;
-          left: 105%;
-          background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
-        }
-      }
-    }
-  `}
-`;
-
-const MapLegend = styled.div`
-  ${({ theme }) => css`
-    position: absolute;
-    bottom: 26px;
-    right: 10px;
-    background: white;
-    border-radius: 5px;
-    z-index: 999;
-    padding: 10px;
-    font-size: 12px;
-    .map-cluster,
-    .map-hosp {
-      width: 14px;
-      height: 14px;
-      display: inline-block;
-      margin-right: 2px;
-      vertical-align: middle;
-      position: relative;
-      top: -2px;
-    }
-    .map-cluster {
-      background: ${theme.yellow};
-      border-radius: 50%;
-    }
-    .map-hosp {
-      background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
-      background-size: contain;
-    }
-    @media (min-width: ${theme.sm}) {
-      font-size: 14px;
-      bottom: 36px;
-      right: 20px;
-    }
-  `}
-`;
+export default Map;

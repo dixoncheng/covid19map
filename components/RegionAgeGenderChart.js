@@ -1,65 +1,9 @@
-import {
-  BarChart,
-  Bar,
-  // Cell,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-} from "recharts";
-import styled, { css, withTheme } from "styled-components";
-
-const RegionAgeGenderChart = ({ data, theme }) => {
-  return (
-    <StyledRegionAgeGenderChart>
-      <h3>Age Groups by DHB</h3>
-      <div className="chart-wrap">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            layout="vertical"
-            margin={{
-              top: 10,
-              right: 0,
-              left: 0,
-              bottom: 10,
-            }}
-            isAnimationActive={false}
-          >
-            <XAxis type="number" hide />
-            <YAxis type="category" dataKey="age" interval={0} width={90} />
-            <Bar
-              dataKey="male"
-              fill={theme.teal}
-              // label={{ position: "insideRight", fill: "white" }}
-              stackId="a"
-            />
-            <Bar
-              dataKey="female"
-              fill={theme.green}
-              // label={{ position: "insideRight", fill: "white" }}
-              stackId="a"
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="legend">
-        <div className="legend-item male">Male</div>
-        <div className="legend-item female">Female</div>
-      </div>
-    </StyledRegionAgeGenderChart>
-  );
-};
-
-export default withTheme(RegionAgeGenderChart);
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import styled, { css, useTheme } from "styled-components";
 
 const StyledRegionAgeGenderChart = styled.div`
   ${({ theme, ...props }) => css`
     font-size: 0.5em;
-    /* width: 100%; */
-    /* padding: 1em 0; */
-    /* border-radius: 0.5em;
-    background: white;
-    padding: 2em; */
 
     h3 {
       color: ${theme.dark};
@@ -68,7 +12,7 @@ const StyledRegionAgeGenderChart = styled.div`
       line-height: 1.1;
       text-align: center;
     }
-    
+
     .chart-wrap {
       /* width: 45em; */
       height: 24em;
@@ -99,14 +43,12 @@ const StyledRegionAgeGenderChart = styled.div`
       padding: 0.6em 0.8em;
       font-size: 1.6em;
       color: ${theme.dark};
-      ${
-        props.wide &&
-        css`
-          @media (min-width: ${theme.sm}) {
-            display: block;
-          }
-        `
-      }
+      ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          display: block;
+        }
+      `}
       strong {
         display: block;
         color: ${theme.green};
@@ -122,7 +64,6 @@ const StyledRegionAgeGenderChart = styled.div`
     }
     .legend-item {
       margin: 0 6px;
-      /* color: ${theme.navy}; */
       :before {
         content: "";
         display: inline-block;
@@ -140,3 +81,38 @@ const StyledRegionAgeGenderChart = styled.div`
     }
   `}
 `;
+
+const RegionAgeGenderChart = ({ data }) => {
+  const theme = useTheme();
+  return (
+    <StyledRegionAgeGenderChart>
+      <h3>Age Groups by DHB</h3>
+      <div className="chart-wrap">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 10,
+            }}
+            isAnimationActive={false}
+          >
+            <XAxis type="number" hide />
+            <YAxis type="category" dataKey="age" interval={0} width={90} />
+            <Bar dataKey="male" fill={theme.teal} stackId="a" />
+            <Bar dataKey="female" fill={theme.green} stackId="a" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="legend">
+        <div className="legend-item male">Male</div>
+        <div className="legend-item female">Female</div>
+      </div>
+    </StyledRegionAgeGenderChart>
+  );
+};
+
+export default RegionAgeGenderChart;

@@ -1,23 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Cases = ({ confirmedTotal, probableTotal, combinedTotal }) => {
-  return (
-    <StyledCases>
-      <div>
-        <strong>{combinedTotal}</strong> Total
-      </div>
-      <div>
-        <strong>{confirmedTotal}</strong> Confirmed
-      </div>
-      <div>
-        <strong>{probableTotal}</strong> Probable
-      </div>
-    </StyledCases>
-  );
-};
-
-export default Cases;
-
 const StyledCases = styled.div`
   ${({ theme, ...props }) => css`
     background: #a6e5e3;
@@ -55,3 +37,19 @@ const StyledCases = styled.div`
     }
   `}
 `;
+
+const Cases = ({ confirmedTotal, probableTotal, combinedTotal }) => (
+  <StyledCases>
+    <div>
+      <strong>{combinedTotal}</strong> Total
+    </div>
+    <div>
+      <strong>{confirmedTotal}</strong> Confirmed
+    </div>
+    <div>
+      <strong>{probableTotal}</strong> Probable
+    </div>
+  </StyledCases>
+);
+
+export default Cases;

@@ -1,8 +1,43 @@
-import styled, { css, withTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import ChartLegend from "./ChartLegend";
 
-const TotalChart = ({ data, theme }) => {
+const Chart = styled.div`
+  ${({ theme, ...props }) => css`
+    background: white;
+    border-radius: 0.5em;
+    padding: 2.5em 2em;
+    .head {
+      text-align: center;
+      color: ${theme.dark};
+      font-family: ${theme.fontFancy};
+      font-size: 2.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2em;
+      line-height: 1.1;
+    }
+    .chart-wrap {
+      height: 30em;
+      padding-bottom: 20px;
+      ${props.wide &&
+      css`
+        @media (min-width: ${theme.sm}) {
+          width: 40em;
+        }
+      `}
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0 0 0px;
+      font-size: 12px;
+      color: black;
+    }
+  `}
+`;
+
+const TotalChart = ({ data }) => {
+  const theme = useTheme();
   const countries = {
     NZL: { name: "NZ", color: theme.teal },
 
@@ -67,38 +102,4 @@ const TotalChart = ({ data, theme }) => {
   );
 };
 
-export default withTheme(TotalChart);
-
-const Chart = styled.div`
-  ${({ theme, ...props }) => css`
-    background: white;
-    border-radius: 0.5em;
-    padding: 2.5em 2em;
-    .head {
-      text-align: center;
-      color: ${theme.dark};
-      font-family: ${theme.fontFancy};
-      font-size: 2.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.2em;
-      line-height: 1.1;
-    }
-    .chart-wrap {
-      height: 30em;
-      padding-bottom: 20px;
-      ${props.wide &&
-      css`
-        @media (min-width: ${theme.sm}) {
-          width: 40em;
-        }
-      `}
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      margin: 5px 0 0 0px;
-      font-size: 12px;
-      color: black;
-    }
-  `}
-`;
+export default TotalChart;

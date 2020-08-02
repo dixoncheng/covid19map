@@ -1,16 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Deaths = ({ deathsTotal }) => {
-  return (
-    <StyledDeaths>
-      <strong>{deathsTotal}</strong>
-      <span>{deathsTotal === 1 ? "Death" : "Deaths"}</span>
-    </StyledDeaths>
-  );
-};
-
-export default Deaths;
-
 const StyledDeaths = styled.div`
   ${({ theme, ...props }) => css`
     display: flex;
@@ -35,3 +24,12 @@ const StyledDeaths = styled.div`
     }
   `}
 `;
+
+const Deaths = ({ deathsTotal }) => (
+  <StyledDeaths>
+    <strong>{deathsTotal}</strong>
+    <span>{deathsTotal === 1 ? "Death" : "Deaths"}</span>
+  </StyledDeaths>
+);
+
+export default Deaths;

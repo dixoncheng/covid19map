@@ -1,25 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Tabs = ({ items, active, setActive }) => {
-  return (
-    <StyledTabs>
-      {items.map((item, i) => (
-        <Tab
-          key={i}
-          typeColor={item.color}
-          active={active === i}
-          onClick={() => setActive(i)}
-        >
-          <img src={require(`../public/${item.icon}`)} />
-          <span>{item.title}</span>
-        </Tab>
-      ))}
-    </StyledTabs>
-  );
-};
-
-export default Tabs;
-
 const StyledTabs = styled.div`
   display: flex;
   border: solid #c0d3c8 1px;
@@ -40,29 +20,11 @@ const Tab = styled.button`
     display: flex;
     align-items: center;
     padding: 0.6em 1.1em;
-    
     color: ${theme.navy};
-    
     background-color: ${active ? "transparent" : "#dee8e2"};
     border-bottom: solid ${active ? "transparent" : "#c0d3c8"} 1px;
-    border-top: solid ${active ? theme.green : "transparent"} .2em;
+    border-top: solid ${active ? theme.green : "transparent"} 0.2em;
 
-    /* transition:  0.3s ease; */
-    /* :hover {
-      background-color: ${theme.light};
-    } */
-
-    /* border-top: solid ${active ? theme.green : "transparent"} .2em;
-    border-bottom: 0; */
-
-
-    /* ${
-      active &&
-      `
-    border-top: solid ${theme.green} .2em;
-    border-bottom: 0;
-    `
-    } */
     + button {
       border-left: solid #c0d3c8 1px;
     }
@@ -77,3 +39,21 @@ const Tab = styled.button`
     }
   `}
 `;
+
+const Tabs = ({ items, active, setActive }) => (
+  <StyledTabs>
+    {items.map((item, i) => (
+      <Tab
+        key={i}
+        typeColor={item.color}
+        active={active === i}
+        onClick={() => setActive(i)}
+      >
+        <img src={require(`../public/${item.icon}`)} />
+        <span>{item.title}</span>
+      </Tab>
+    ))}
+  </StyledTabs>
+);
+
+export default Tabs;

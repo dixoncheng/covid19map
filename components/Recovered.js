@@ -1,31 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Recovered = ({ recovered, combined, regional }) => {
-  const recoveryRate = Math.round((recovered / combined) * 100);
-  return (
-    <StyledRecovered regional={regional}>
-      {!regional && (
-        <div>
-          <strong>{recovered}</strong> Recovered
-        </div>
-      )}
-      <div className="rate-text">
-        <div>
-          Recovery
-          <br />
-          Rate
-        </div>
-        <strong>{recoveryRate}%</strong>
-      </div>
-      <div>
-        <People percent={recoveryRate} regional={regional} />
-      </div>
-    </StyledRecovered>
-  );
-};
-
-export default Recovered;
-
 const StyledRecovered = styled.div`
   ${({ theme, ...props }) => css`
     flex: 1;
@@ -165,3 +139,29 @@ const Person = styled.div`
     }
   `}
 `;
+
+const Recovered = ({ recovered, combined, regional }) => {
+  const recoveryRate = Math.round((recovered / combined) * 100);
+  return (
+    <StyledRecovered regional={regional}>
+      {!regional && (
+        <div>
+          <strong>{recovered}</strong> Recovered
+        </div>
+      )}
+      <div className="rate-text">
+        <div>
+          Recovery
+          <br />
+          Rate
+        </div>
+        <strong>{recoveryRate}%</strong>
+      </div>
+      <div>
+        <People percent={recoveryRate} regional={regional} />
+      </div>
+    </StyledRecovered>
+  );
+};
+
+export default Recovered;

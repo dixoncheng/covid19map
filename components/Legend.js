@@ -1,27 +1,5 @@
 import styled, { css } from "styled-components";
 
-const Legend = () => {
-  return (
-    <StyledLegend>
-      <ul>
-        <li>
-          <img src={require(`../public/active.svg`)} /> Total Cases
-        </li>
-        <li>
-          <img src={require(`../public/recovered.svg`)} />
-          Recovered
-        </li>
-        <li>
-          <img src={require(`../public/deaths.svg`)} />
-          Deaths
-        </li>
-      </ul>
-    </StyledLegend>
-  );
-};
-
-export default Legend;
-
 const StyledLegend = styled.div`
   ${({ theme, ...props }) => css`
     margin-bottom: 0.3em;
@@ -49,3 +27,23 @@ const StyledLegend = styled.div`
     }
   `}
 `;
+
+const Legend = () => (
+  <StyledLegend>
+    <ul>
+      <li>
+        <img src={require(`../public/active.svg`)} /> Total Cases
+      </li>
+      <li>
+        <img src={require(`../public/recovered.svg`)} />
+        Recovered
+      </li>
+      <li>
+        <img src={require(`../public/deaths.svg`)} />
+        Deaths
+      </li>
+    </ul>
+  </StyledLegend>
+);
+
+export default Legend;
