@@ -220,8 +220,8 @@ const Map = ({
         <div className="levels">
           {alertColours.map((item, i) => (
             <div key={i}>
-              <span className={`map-legend-item map-level-${i + 1}`} />
-              Level {i + 1}
+              <span className={`map-legend-item map-level-${i + 1}`} /> Level{" "}
+              {i + 1}
             </div>
           ))}
         </div>
