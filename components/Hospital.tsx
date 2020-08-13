@@ -38,7 +38,7 @@ const Hospital = ({ hospitalTotal }: { hospitalTotal: number }) => (
     <div className="head">
       <strong>{hospitalTotal}</strong>
       <span>
-        Cases in
+        Case{hospitalTotal === 1 ? "" : "s"} in
         <br /> hospital
       </span>
     </div>

@@ -5,9 +5,11 @@ declare module "styled-components" {
     light: string;
     font: string;
     teal: string;
+    halfTeal: string;
     green: string;
     navy: string;
     yellow: string;
+    orange: string;
     light: string;
     dark: string;
     sm: string;
