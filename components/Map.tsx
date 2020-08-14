@@ -70,7 +70,10 @@ const Styles = createGlobalStyle<{ currentZoom: number }>`
     .region {
       text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
         1px 1px 0 white;
-      pointer-events: none !important;
+      /*pointer-events: none !important;*/
+    }
+    .leaflet-marker-icon {
+      white-space: nowrap;
     }
     .cluster {
       color: #204e61;
@@ -167,7 +170,6 @@ const Map = ({
   location: any;
 }) => {
   const theme = useTheme();
-
   const mapRef = useRef<any>(null);
   const [currentLocation, setCurrentLocation] = useState<string>();
   const [currentZoom, setCurrentZoom] = useState(100);
@@ -181,12 +183,18 @@ const Map = ({
     setCurrentLocation("");
   }, [location]);
 
-  const getRegionIcon = (className: string, totalCases: number) => {
+  const getRegionIcon = (
+    className: string,
+    totalCases: number,
+    name: string
+  ) => {
     const iconSize = 24;
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`,
+      html: `<div>${
+        name === "Managed Isolation" ? "MIQ: " : ""
+      }${totalCases}</div>`,
     });
   };
 
@@ -268,13 +276,14 @@ const Map = ({
             i
           ) => (
             <>
-              {latlng && boundary && (
+              {latlng && (
                 <FeatureGroup key={i}>
                   <Marker
                     position={latlng}
                     icon={getRegionIcon(
                       `region ${inHospital > 0 ? "hospital" : ""}`,
-                      active
+                      active,
+                      name
                     )}
                     zIndexOffset={100}
                     onClick={() => {
@@ -303,21 +312,23 @@ const Map = ({
                       )}
                     </StyledPopup>
                   </Popup>
-                  <Polygon
-                    color={currentLocation === name ? "white" : "black"}
-                    opacity={currentLocation === name ? 1 : 0.2}
-                    weight={currentLocation === name ? 3 : 1}
-                    fillColor={theme[alertColours[level - 1]]}
-                    // fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
-                    // fillOpacity={(level - 1) / (4 - 1)}
-                    fillOpacity={0.8}
-                    positions={boundary[0]}
-                    // smoothFactor={10}
-                    onClick={() => {
-                      onLocationClick(name);
-                      gtag.event("Region", "Map", name);
-                    }}
-                  />
+                  {boundary && (
+                    <Polygon
+                      color={currentLocation === name ? "white" : "black"}
+                      opacity={currentLocation === name ? 1 : 0.2}
+                      weight={currentLocation === name ? 3 : 1}
+                      fillColor={theme[alertColours[level - 1]]}
+                      // fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
+                      // fillOpacity={(level - 1) / (4 - 1)}
+                      fillOpacity={0.8}
+                      positions={boundary[0]}
+                      // smoothFactor={10}
+                      onClick={() => {
+                        onLocationClick(name);
+                        gtag.event("Region", "Map", name);
+                      }}
+                    />
+                  )}
                 </FeatureGroup>
               )}
             </>
