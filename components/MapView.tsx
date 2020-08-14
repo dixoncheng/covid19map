@@ -355,7 +355,7 @@ const MapView = ({
           </Details>
         ) : (
           <Summary>
-            <Alert data={news.news} />
+            {news.news && <Alert data={news.news} />}
             <Logo>
               <img className="logo" src={require(`../public/logo.svg`)} />
               <div>

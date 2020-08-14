@@ -11,6 +11,8 @@ import L from "leaflet";
 import styled, { css, createGlobalStyle, useTheme } from "styled-components";
 import * as gtag from "lib/gtag";
 
+const alertColours = ["halfTeal", "teal", "yellow", "orange"];
+
 const StyledPopup = styled.div`
   ${({ theme }) => css`
     color: ${theme.dark};
@@ -68,7 +70,10 @@ const Styles = createGlobalStyle<{ currentZoom: number }>`
     .region {
       text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
         1px 1px 0 white;
-      pointer-events: none !important;
+      /*pointer-events: none !important;*/
+    }
+    .leaflet-marker-icon {
+      white-space: nowrap;
     }
     .cluster {
       color: #204e61;
@@ -102,8 +107,11 @@ const MapLegend = styled.div`
     z-index: 999;
     padding: 10px;
     font-size: 12px;
-    .map-cluster,
-    .map-hosp {
+    .levels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .map-legend-item {
       width: 14px;
       height: 14px;
       display: inline-block;
@@ -111,14 +119,26 @@ const MapLegend = styled.div`
       vertical-align: middle;
       position: relative;
       top: -2px;
+      border-radius: 50%;
     }
     .map-cluster {
       background: ${theme.yellow};
-      border-radius: 50%;
     }
     .map-hosp {
       background: url(${require(`../public/icons/hospo.svg`)}) no-repeat;
       background-size: contain;
+    }
+    .map-level-1 {
+      background: ${theme[alertColours[0]]};
+    }
+    .map-level-2 {
+      background: ${theme[alertColours[1]]};
+    }
+    .map-level-3 {
+      background: ${theme[alertColours[2]]};
+    }
+    .map-level-4 {
+      background: ${theme[alertColours[3]]};
     }
     @media (min-width: ${theme.sm}) {
       font-size: 14px;
@@ -163,12 +183,18 @@ const Map = ({
     setCurrentLocation("");
   }, [location]);
 
-  const getRegionIcon = (className: string, totalCases: number) => {
+  const getRegionIcon = (
+    className: string,
+    totalCases: number,
+    name: string
+  ) => {
     const iconSize = 24;
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div>${totalCases}</div>`,
+      html: `<div>${
+        name === "Managed Isolation" ? "MIQ: " : ""
+      }${totalCases}</div>`,
     });
   };
 
@@ -196,11 +222,20 @@ const Map = ({
   return (
     <div style={{ position: "relative" }}>
       <MapLegend>
-        <div>
-          <span className="map-cluster" /> Clusters
+        {/* <div>
+          <span className="map-legend-item map-cluster" /> Clusters
+        </div> */}
+        <div className="levels">
+          {alertColours.map((item, i) => (
+            <div key={i}>
+              <span className={`map-legend-item map-level-${i + 1}`} /> Level{" "}
+              {i + 1}
+            </div>
+          ))}
         </div>
         <div>
-          <span className="map-hosp" /> Region with cases in hospital
+          <span className="map-legend-item map-hosp" /> Region with cases in
+          hospital
         </div>
       </MapLegend>
       <LeafletMap
@@ -236,17 +271,19 @@ const Map = ({
               recovered,
               deaths,
               inHospital,
+              level,
             },
             i
           ) => (
             <>
-              {latlng && boundary && (
+              {latlng && (
                 <FeatureGroup key={i}>
                   <Marker
                     position={latlng}
                     icon={getRegionIcon(
                       `region ${inHospital > 0 ? "hospital" : ""}`,
-                      active
+                      active,
+                      name
                     )}
                     zIndexOffset={100}
                     onClick={() => {
@@ -275,19 +312,23 @@ const Map = ({
                       )}
                     </StyledPopup>
                   </Popup>
-                  <Polygon
-                    color={currentLocation === name ? "white" : "black"}
-                    opacity={currentLocation === name ? 1 : 0.2}
-                    weight={currentLocation === name ? 3 : 1}
-                    fillColor={theme.teal}
-                    fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
-                    positions={boundary[0]}
-                    // smoothFactor={10}
-                    onClick={() => {
-                      onLocationClick(name);
-                      gtag.event("Region", "Map", name);
-                    }}
-                  />
+                  {boundary && (
+                    <Polygon
+                      color={currentLocation === name ? "white" : "black"}
+                      opacity={currentLocation === name ? 1 : 0.2}
+                      weight={currentLocation === name ? 3 : 1}
+                      fillColor={theme[alertColours[level - 1]]}
+                      // fillOpacity={((active || 0) - -10) / (maxCases + 10 - 1)}
+                      // fillOpacity={(level - 1) / (4 - 1)}
+                      fillOpacity={0.8}
+                      positions={boundary[0]}
+                      // smoothFactor={10}
+                      onClick={() => {
+                        onLocationClick(name);
+                        gtag.event("Region", "Map", name);
+                      }}
+                    />
+                  )}
                 </FeatureGroup>
               )}
             </>

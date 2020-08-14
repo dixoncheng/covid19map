@@ -79,14 +79,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Bowlby+One&display=swap"
           rel="stylesheet"
         />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"
-        />
-        <link
-          href="https://unpkg.com/leaflet-geosearch@latest/assets/css/leaflet.css"
-          rel="stylesheet"
-        />
+        <link rel="stylesheet" href="/leaflet.css" />
+        <link rel="stylesheet" href="/leaflet-geosearch.css" />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=UA-93113-28"
