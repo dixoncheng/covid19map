@@ -13,7 +13,11 @@ const StyledAlert = styled.div`
   }
 `;
 
-const Alert = ({ data }: { data: string }) => (
+export interface IProps {
+  data: string;
+}
+
+const Alert = ({ data }: IProps) => (
   <StyledAlert
     onClick={() => gtag.event("Alert", "", "")}
     dangerouslySetInnerHTML={{

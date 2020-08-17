@@ -1,16 +1,14 @@
 import styled, { css } from "styled-components";
 
-interface IProps {
-  typeColor?: string;
-}
-
 const StyledChartLegend = styled.div`
   margin-top: 1em;
   display: flex;
   justify-content: center;
 `;
 
-const LegendItem = styled.div<IProps>`
+const LegendItem = styled.div<{
+  typeColor?: string;
+}>`
   ${({ theme, typeColor }) => css`
     font-size: 1.2em;
     margin: 0 0.6em;
@@ -31,7 +29,11 @@ const LegendItem = styled.div<IProps>`
   `}
 `;
 
-const ChartLegend = ({ items }: { items: any[] }) => (
+interface IProps {
+  items: any[];
+}
+
+const ChartLegend = ({ items }: IProps) => (
   <StyledChartLegend>
     {items.map((item: any, i: number) => (
       <LegendItem key={i} typeColor={item.color}>

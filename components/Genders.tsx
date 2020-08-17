@@ -89,8 +89,8 @@ const Genders = ({
   genders: any;
   regional?: boolean;
 }) => {
-  const male = genders.find((x: any) => x.gender === "male");
-  const female = genders.find((x: any) => x.gender === "female");
+  const male = genders.find((x: any) => x.gender === "male") || 0;
+  const female = genders.find((x: any) => x.gender === "female") || 0;
   const total = genders.reduce((prev: number, cur: any) => prev + cur.count, 0);
   const percentWomen = Math.round((female.count / total) * 100);
   const percentMen = Math.round((male.count / total) * 100);

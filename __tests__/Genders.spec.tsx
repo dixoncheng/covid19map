@@ -3,7 +3,14 @@ import { mount } from "enzyme";
 import Genders from "components/Genders";
 import data from "./main.json";
 
-test("Displays gender percentages", () => {
+describe('Gender percentages', () => {
   const wrapper = mount(<Genders genders={data.genders} />);
-  expect(wrapper.find("strong")).toMatch(`<strong>${1}</strong> women`);
-});
+  const male = wrapper.find(".female strong");
+  const female = wrapper.find(".male strong");
+  test("male percentage is greater than zero", () => {
+    expect(parseInt(male.text())).toBeGreaterThan(0);
+  });
+  test("female percentage is greater than zero", () => {
+    expect(parseInt(female.text())).toBeGreaterThan(0);
+  });
+})

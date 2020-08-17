@@ -7,7 +7,7 @@ const { confirmedTotal, probableTotal, combinedTotal } = data.summary[
   data.summary.length - 1
 ];
 
-test("Displays case summary numbers", () => {
+describe('Case summary numbers', () => {
   const wrapper = mount(
     <Cases
       confirmedTotal={confirmedTotal}
@@ -15,7 +15,14 @@ test("Displays case summary numbers", () => {
       combinedTotal={combinedTotal}
     />
   );
-  expect(wrapper.text()).toMatch(confirmedTotal.toString());
-  expect(wrapper.text()).toMatch(probableTotal.toString());
-  expect(wrapper.text()).toMatch(combinedTotal.toString());
+  test("confirmed number matches the data", () => {
+    expect(wrapper.text()).toMatch(confirmedTotal.toString());
+  });
+  test("probable number matches the data", () => {
+    expect(wrapper.text()).toMatch(probableTotal.toString());
+  });
+  test("combined number matches the data", () => {
+    expect(wrapper.text()).toMatch(combinedTotal.toString());
+  });
 });
+

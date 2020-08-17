@@ -8,7 +8,7 @@ import theme from "lib/theme.ts";
 
 Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 
-const Styles = createGlobalStyle`
+export const Styles = createGlobalStyle`
   ${({ theme }) => css`
     html,
     body {
