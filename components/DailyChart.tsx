@@ -78,7 +78,7 @@ const TotalChart = ({ summary }: { summary: any }) => {
           items={[
             { title: "New", color: theme.yellow },
             { title: "Recovered", color: theme.green },
-            { title: "Lv4 lockdown", color: theme.navy },
+            // { title: "Lv4 lockdown", color: theme.navy },
           ]}
         />
       </div>
