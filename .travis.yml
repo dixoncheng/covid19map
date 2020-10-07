@@ -7,3 +7,5 @@ deploy:
   site: NETLIFY_SITE
   auth: NETLIFY_AUTH
   edge: true
+  on:
+    branch: ci
