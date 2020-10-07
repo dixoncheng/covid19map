@@ -8,7 +8,7 @@
     "build": "next build && next export",
     "build-dev": "ENV=development next build && next export",
     "start": "next start",
-    "test": "jest",
+    "test": "jest --silent",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
