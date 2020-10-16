@@ -1,45 +1,45 @@
-import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-import styled, { css } from "styled-components";
-import Row from "../components/Row";
-import TotalCases from "../components/TotalCases";
-import Cases from "../components/Cases";
-import NewCases from "../components/NewCases";
-import Deaths from "../components/Deaths";
-import Recovered from "../components/Recovered";
-import Hospital from "../components/Hospital";
-import Genders from "../components/Genders";
-import TotalChart from "../components/TotalChart";
-import DailyChart from "../components/DailyChart";
-import Ages from "../components/Ages";
-import Terms from "../components/Terms";
-import TransmissionChart from "../components/TransmissionChart";
-import Tests from "../components/Tests";
-import Slider from "../components/Slider";
-import Reveal from "../components/Reveal";
-import LocationBar from "../components/LocationBar";
-import LocationDetails from "../components/LocationDetails";
-import Legend from "../components/Legend";
-import Alert from "../components/Alert";
-import Tabs from "../components/Tabs";
-import * as gtag from "../lib/gtag";
+import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import styled, { css } from 'styled-components';
+import Row from '../components/Row';
+import TotalCases from '../components/TotalCases';
+import Cases from '../components/Cases';
+import NewCases from '../components/NewCases';
+import Deaths from '../components/Deaths';
+import Recovered from '../components/Recovered';
+import Hospital from '../components/Hospital';
+import Genders from '../components/Genders';
+import TotalChart from '../components/TotalChart';
+import DailyChart from '../components/DailyChart';
+import Ages from '../components/Ages';
+import Terms from '../components/Terms';
+import TransmissionChart from '../components/TransmissionChart';
+import Tests from '../components/Tests';
+import Slider from '../components/Slider';
+import Reveal from '../components/Reveal';
+import LocationBar from '../components/LocationBar';
+import LocationDetails from '../components/LocationDetails';
+import Legend from '../components/Legend';
+import Alert from '../components/Alert';
+import Tabs from '../components/Tabs';
+import * as gtag from '../lib/gtag';
 
-import InternationalLineChart from "../components/InternationalLineChart";
-import InternationalBarChart from "../components/InternationalBarChart";
+import InternationalLineChart from '../components/InternationalLineChart';
+import InternationalBarChart from '../components/InternationalBarChart';
 
-const Map = dynamic(() => import("./Map"), {
-  ssr: false,
+const Map = dynamic(() => import('./Map'), {
+  ssr: false
 });
 
 const center = { lat: -41.0495881, lng: 173.2682669 };
 const zoom = 6;
 const outerBounds = [
   [-28.00178557, 160.67596054],
-  [-51.57478991, 183.27441406],
+  [-51.57478991, 183.27441406]
 ];
 const innerBounds = [
   [-34.76671725, 166.2361908],
-  [-47.30251579, 177.66849518],
+  [-47.30251579, 177.66849518]
 ];
 
 const Wrap = styled.div`
@@ -253,7 +253,7 @@ const Feature = styled.div`
 const MapView = ({
   data = {},
   news = {},
-  error,
+  error
 }: {
   data: any;
   news: any;
@@ -279,7 +279,7 @@ const MapView = ({
     regionGenders,
     timeseries,
     casesPer1m,
-    ageRows,
+    ageRows
   } = data;
   const {
     combinedTotal = 0,
@@ -288,10 +288,10 @@ const MapView = ({
     combined = 0,
     deathsTotal = 0,
     recoveredTotal = 0,
-    hospitalTotal = 0,
+    hospitalTotal = 0
   } = summary ? summary[summary.length - 1] : {};
 
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState('');
   const [termsOpened, setTermsOpened] = useState(false);
   const [featureOpened, setFeatureOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -328,15 +328,15 @@ const MapView = ({
             <BackButton
               type="button"
               onClick={() => {
-                setLocation("");
+                setLocation('');
               }}
             >
               <div
                 className="icon"
                 dangerouslySetInnerHTML={{
-                  __html: require(`../public/arrow.svg?include`),
+                  __html: require(`../public/arrow.svg?include`)
                 }}
-              />{" "}
+              />{' '}
               Back
             </BackButton>
 
@@ -348,7 +348,7 @@ const MapView = ({
                   (regionOverseas && regionOverseas[location]) || null,
                   (regionGenders && regionGenders[location]) || null,
                   history[location],
-                  clusters[location],
+                  clusters[location]
                 ]}
               />
             )}
@@ -370,7 +370,7 @@ const MapView = ({
                     <small>{asAt}</small>
                     <br />
                     <small>
-                      Source:{" "}
+                      Source:{' '}
                       <a
                         href="https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-current-cases"
                         target="_blank"
@@ -384,14 +384,14 @@ const MapView = ({
                     <Refresh
                       type="button"
                       onClick={() => {
-                        gtag.event("Refresh");
+                        gtag.event('Refresh');
                         window.location.href = `/?${new Date().getTime()}`;
                       }}
                     >
                       <div
                         className="inline-icon"
                         dangerouslySetInnerHTML={{
-                          __html: require(`../public/refresh.svg?original&include`),
+                          __html: require(`../public/refresh.svg?original&include`)
                         }}
                       />
                       Refresh
@@ -404,7 +404,7 @@ const MapView = ({
                     href="https://www.facebook.com/covid19mapnz"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => gtag.event("Follow", "", "Facebook")}
+                    onClick={() => gtag.event('Follow', '', 'Facebook')}
                   >
                     <img src={require(`../public/Facebook.svg`)} /> Facebook
                   </a>
@@ -412,7 +412,7 @@ const MapView = ({
                     href="https://www.instagram.com/covid19mapnz/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => gtag.event("Follow", "", "Instagram")}
+                    onClick={() => gtag.event('Follow', '', 'Instagram')}
                   >
                     <img src={require(`../public/IG.svg`)} /> Instagram
                   </a>
@@ -482,7 +482,7 @@ const MapView = ({
                     {genders?.length > 0 && <Genders genders={genders} />}
                   </div>
                 </Row>
-                {testingData && (
+                {testingData?.yesterdayTotal && (
                   <Row>
                     <Tests tests={testingData.yesterdayTotal} />
                   </Row>
@@ -503,11 +503,11 @@ const MapView = ({
 
                 <Tabs
                   items={[
-                    { title: "Regional", icon: "nz.svg" },
+                    { title: 'Regional', icon: 'nz.svg' },
                     {
-                      title: "World",
-                      icon: "world.svg",
-                    },
+                      title: 'World',
+                      icon: 'world.svg'
+                    }
                   ]}
                   active={activeTab}
                   setActive={setActiveTab}
