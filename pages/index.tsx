@@ -6,10 +6,10 @@ import fetch from "unfetch";
 const Home = () => {
   const fetcher = (url: string) => fetch(url).then((r) => r.json());
   const url = `${process.env.API}/main.json`;
-  const { data, error } = useSWR(url, fetcher);
+  const { data, error } = useSWR(url, fetcher, { revalidateOnMount: true });
 
   const newsUrl = `${process.env.API}/news.json`;
-  const { data: news } = useSWR(newsUrl, fetcher, { refreshInterval: 30000 });
+  const { data: news } = useSWR(newsUrl, fetcher, { revalidateOnMount: true, refreshInterval: 30000 });
 
   return (
     <div className="container">

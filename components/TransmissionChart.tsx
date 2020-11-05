@@ -69,7 +69,7 @@ const TransmissionChart = ({ data = [] }) => {
 
   return (
     <StyledTransmissionChart>
-      <div className="head">Transmission type</div>
+      <div className="head">Source of cases</div>
       <div className="row">
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height="100%">
@@ -88,7 +88,7 @@ const TransmissionChart = ({ data = [] }) => {
         <div>
           {data.map((item: any, i: number) => (
             <LegendItem key={i} typeColor={chartColors[i]}>
-              {item.type}: <span>{item.percent}%</span>
+              {item.type}: <span>{item.percent}</span>
             </LegendItem>
           ))}
         </div>

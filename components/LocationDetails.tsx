@@ -197,8 +197,8 @@ const LocationDetails = ({ location, data }: { location: any; data: any }) => {
     history,
     clusters,
   ] = data;
-  const { name, url, inHospital } = location;
-  const { active, recovered, deaths, total } = history[history.length - 1];
+  const { name, url, inHospital, active, recovered, deaths, totalCases: total } = location;
+  // const { active, recovered, deaths, total } = history[history.length - 1];
 
   return (
     <StyledLocationDetails>
@@ -227,8 +227,8 @@ const LocationDetails = ({ location, data }: { location: any; data: any }) => {
             </div>
           </div>
         </Stats>
-        <hr />
-        <Row>
+        {/* <hr /> */}
+        {/* <Row>
           <Hospital>
             <div>
               <strong>{inHospital}</strong> <span>in hospital</span>
@@ -239,7 +239,7 @@ const LocationDetails = ({ location, data }: { location: any; data: any }) => {
           </Hospital>
           {regionGenders && <Genders genders={regionGenders} regional />}
           <Recovered recovered={recovered} combined={total} regional />
-        </Row>
+        </Row> */}
 
         {clusters ? (
           <Clusters>

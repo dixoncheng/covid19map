@@ -259,7 +259,6 @@ const MapView = ({
   news: any;
   error: Boolean;
 }) => {
-  // console.log(data);
   const infoRef = useRef<any>(null);
   const detailsRef = useRef<any>(null);
 
@@ -270,6 +269,7 @@ const MapView = ({
     maxCases,
     history,
     summary,
+    summaryData,
     transmissions,
     testingData,
     genders,
@@ -282,14 +282,15 @@ const MapView = ({
     ageRows
   } = data;
   const {
-    combinedTotal = 0,
-    confirmedTotal = 0,
-    probableTotal = 0,
-    combined = 0,
-    deathsTotal = 0,
-    recoveredTotal = 0,
-    hospitalTotal = 0
-  } = summary ? summary[summary.length - 1] : {};
+    combinedCases: combinedTotal = 0,
+    confirmedCases: confirmedTotal = 0,
+    probableCases: probableTotal = 0,
+    combinedCasesNew: combined = 0,
+    deaths: deathsTotal = 0,
+    recoveredCases: recoveredTotal = 0,
+    hospitalTotal = 0,
+    newCases = 0
+  } = summaryData || {};
 
   const [location, setLocation] = useState('');
   const [termsOpened, setTermsOpened] = useState(false);
@@ -367,8 +368,8 @@ const MapView = ({
               <>
                 <div className="meta">
                   <div>
-                    <small>{asAt}</small>
-                    <br />
+                    {/* <small>{asAt}</small>
+                    <br /> */}
                     <small>
                       Source:{' '}
                       <a
@@ -466,7 +467,7 @@ const MapView = ({
                 </Row>
                 <Row>
                   <div className="grid">
-                    <NewCases combined={combined} />
+                    <NewCases combined={newCases} />
                     <Deaths deathsTotal={deathsTotal} />
                   </div>
                 </Row>
@@ -475,13 +476,15 @@ const MapView = ({
                     recovered={recoveredTotal}
                     combined={combinedTotal}
                   />
-                </Row>
-                <Row>
-                  <div className="grid">
-                    <Hospital hospitalTotal={hospitalTotal} />
-                    {genders?.length > 0 && <Genders genders={genders} />}
-                  </div>
-                </Row>
+                  </Row>
+                  {hospitalTotal > 0 &&
+                    <Row>
+                      <div className="grid">
+                        <Hospital hospitalTotal={hospitalTotal} />
+                        {genders?.length > 0 && <Genders genders={genders} />}
+                      </div>
+                    </Row>
+                  }
                 {testingData?.yesterdayTotal && (
                   <Row>
                     <Tests tests={testingData.yesterdayTotal} />
@@ -495,10 +498,10 @@ const MapView = ({
                 </Row>
 
                 <Row>
-                  <Slider full>
+                  {/* <Slider full> */}
                     <TransmissionChart data={transmissions} />
-                    <Ages ages={ageRows} />
-                  </Slider>
+                    {/* <Ages ages={ageRows} /> */}
+                  {/* </Slider> */}
                 </Row>
 
                 <Tabs
