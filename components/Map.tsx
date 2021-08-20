@@ -1,17 +1,17 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
 import {
   Map as LeafletMap,
   Marker,
   Popup,
   TileLayer,
   Polygon,
-  FeatureGroup,
-} from "react-leaflet";
-import L from "leaflet";
-import styled, { css, createGlobalStyle, useTheme } from "styled-components";
-import * as gtag from "lib/gtag";
+  FeatureGroup
+} from 'react-leaflet';
+import L from 'leaflet';
+import styled, { css, createGlobalStyle, useTheme } from 'styled-components';
+import * as gtag from 'lib/gtag';
 
-const alertColours = ["halfTeal", "teal", "yellow", "orange"];
+const alertColours = ['halfTeal', 'teal', 'yellow', 'orange'];
 
 const StyledPopup = styled.div`
   ${({ theme }) => css`
@@ -48,7 +48,7 @@ const Styles = createGlobalStyle<{ currentZoom: number }>`
     }
     .marker {
       transition: all 0.2s;
-      font-family: "Nunito", sans-serif;
+      font-family: 'Nunito', sans-serif;
       color: #204e61;
       border-radius: 50%;
       font-size: 12px;
@@ -84,7 +84,7 @@ const Styles = createGlobalStyle<{ currentZoom: number }>`
       > div {
         position: relative;
         :after {
-          content: "";
+          content: '';
           width: 10px;
           height: 10px;
           position: absolute;
@@ -157,7 +157,7 @@ const Map = ({
   maxCases,
   outerBounds,
   innerBounds,
-  location,
+  location
 }: {
   center: any;
   zoom: number;
@@ -180,7 +180,7 @@ const Map = ({
 
   useEffect(() => {
     mapRef?.current?.leafletElement.closePopup();
-    setCurrentLocation("");
+    setCurrentLocation('');
   }, [location]);
 
   const getRegionIcon = (
@@ -193,8 +193,8 @@ const Map = ({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
       html: `<div>${
-        name === "Managed Isolation" ? "MIQ: " : ""
-      }${totalCases}</div>`,
+        name === 'Managed Isolation' ? 'MIQ: ' : ''
+      }${totalCases}</div>`
     });
   };
 
@@ -204,7 +204,7 @@ const Map = ({
     return L.divIcon({
       className: `marker ${className}`,
       iconSize: [iconSize, iconSize],
-      html: `<div></div>`,
+      html: `<div></div>`
     });
   };
 
@@ -220,26 +220,9 @@ const Map = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
-      <MapLegend>
-        {/* <div>
-          <span className="map-legend-item map-cluster" /> Clusters
-        </div> */}
-        <div className="levels">
-          {alertColours.map((item, i) => (
-            <div key={i}>
-              <span className={`map-legend-item map-level-${i + 1}`} /> Level{" "}
-              {i + 1}
-            </div>
-          ))}
-        </div>
-        <div>
-          <span className="map-legend-item map-hosp" /> Region with cases in
-          hospital
-        </div>
-      </MapLegend>
+    <div style={{ position: 'relative' }}>
       <LeafletMap
-        onClick={() => onLocationClick("")}
+        onClick={() => onLocationClick('')}
         ref={mapRef}
         maxBounds={outerBounds}
         center={center}
@@ -253,9 +236,7 @@ const Map = ({
         animate={true}
         easeLinearity={0.35}
         onZoomend={onZoomend}
-        // attributionControl={false}
       >
-        {/* <TileLayer url="//{s}.tile.osm.org/{z}/{x}/{y}.png" /> */}
         <TileLayer
           url="//{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="//www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -271,7 +252,7 @@ const Map = ({
               recovered,
               deaths,
               inHospital,
-              level,
+              level
             },
             i
           ) => (
@@ -281,29 +262,29 @@ const Map = ({
                   <Marker
                     position={latlng}
                     icon={getRegionIcon(
-                      `region ${inHospital > 0 ? "hospital" : ""}`,
+                      `region ${inHospital > 0 ? 'hospital' : ''}`,
                       active,
                       name
                     )}
                     zIndexOffset={100}
                     onClick={() => {
                       onLocationClick(name);
-                      gtag.event("Marker", "Map", name);
+                      gtag.event('Marker', 'Map', name);
                     }}
                   />
                   <Popup>
                     <StyledPopup>
                       <div className="location">{name}</div>
                       <div className="cases">
-                        {active} active case{active > 1 && "s"}
+                        {active} active case{active > 1 && 's'}
                         <br />
                         {recovered} recovered
                         <br />
-                        {totalCases} total case{totalCases > 1 && "s"}
+                        {totalCases} total case{totalCases > 1 && 's'}
                         {deaths > 0 && (
                           <>
                             <br />
-                            {deaths} death{deaths > 1 && "s"}
+                            {deaths} death{deaths > 1 && 's'}
                           </>
                         )}
                       </div>
@@ -314,7 +295,7 @@ const Map = ({
                   </Popup>
                   {boundary && (
                     <Polygon
-                      color={currentLocation === name ? "white" : "black"}
+                      color={currentLocation === name ? 'white' : 'black'}
                       opacity={currentLocation === name ? 1 : 0.2}
                       weight={currentLocation === name ? 3 : 1}
                       fillColor={theme[alertColours[level - 1]]}
@@ -325,7 +306,7 @@ const Map = ({
                       // smoothFactor={10}
                       onClick={() => {
                         onLocationClick(name);
-                        gtag.event("Region", "Map", name);
+                        gtag.event('Region', 'Map', name);
                       }}
                     />
                   )}
@@ -341,26 +322,26 @@ const Map = ({
                 clustLocName
               ];
 
-              return items.filter((x: any) => x.ongoing === "Yes").length >
+              return items.filter((x: any) => x.ongoing === 'Yes').length >
                 0 ? (
                 <Marker
                   key={k}
                   position={latlng}
-                  icon={getClusterIcon("cluster", count)}
-                  onClick={() => gtag.event("Cluster", "Map", clustLocName)}
+                  icon={getClusterIcon('cluster', count)}
+                  onClick={() => gtag.event('Cluster', 'Map', clustLocName)}
                 >
                   <Popup>
                     <StyledPopup>
                       <div className="head">
-                        {clustLocName} cluster{items.length > 1 && "s"}
+                        {clustLocName} cluster{items.length > 1 && 's'}
                       </div>
                       {items
-                        .filter((x: any) => x.ongoing === "Yes")
+                        .filter((x: any) => x.ongoing === 'Yes')
                         .map(
                           (
                             {
                               name,
-                              totalCases,
+                              totalCases
                             }: { name: string; totalCases: number },
                             l: number
                           ) => (

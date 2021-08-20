@@ -3,11 +3,12 @@ import Head from "next/head";
 import Router from "next/router";
 import { ThemeProvider, createGlobalStyle, css } from "styled-components";
 import * as gtag from "lib/gtag";
-import { DefaultTheme } from "styled-components";
+// @ts-ignore
+import theme from "lib/theme.ts";
 
 Router.events.on("routeChangeComplete", (url) => gtag.pageview(url));
 
-const Styles = createGlobalStyle`
+export const Styles = createGlobalStyle`
   ${({ theme }) => css`
     html,
     body {
@@ -41,21 +42,6 @@ const Styles = createGlobalStyle`
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const theme: DefaultTheme = {
-    font: '"Nunito", sans-serif',
-    teal: "#00b6ae",
-    halfTeal: "#99e1de",
-    green: "#aacd6e",
-    navy: "#025064",
-    yellow: "#ffc906",
-    orange: "#e98e23",
-    light: "#edf3f0",
-    dark: "#204e61",
-    sm: "700px",
-    md: "800px",
-    fontFancy: "'Bowlby One', sans-serif",
-  };
-
   return (
     <>
       <Head>
@@ -93,8 +79,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Bowlby+One&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="/leaflet-cloudflare.css" />
-        <link rel="stylesheet" href="/leaflet-unpkg.css" />
+        <link rel="stylesheet" href="/leaflet.css" />
+        <link rel="stylesheet" href="/leaflet-geosearch.css" />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=UA-93113-28"

@@ -259,6 +259,7 @@ const MapView = ({
   news: any;
   error: Boolean;
 }) => {
+  // console.log(data);
   const infoRef = useRef<any>(null);
   const detailsRef = useRef<any>(null);
 
@@ -269,7 +270,6 @@ const MapView = ({
     maxCases,
     history,
     summary,
-    summaryData,
     transmissions,
     testingData,
     genders,
@@ -282,15 +282,14 @@ const MapView = ({
     ageRows
   } = data;
   const {
-    combinedCases: combinedTotal = 0,
-    confirmedCases: confirmedTotal = 0,
-    probableCases: probableTotal = 0,
-    combinedCasesNew: combined = 0,
-    deaths: deathsTotal = 0,
-    recoveredCases: recoveredTotal = 0,
-    hospitalTotal = 0,
-    newCases = 0
-  } = summaryData || {};
+    combinedTotal = 0,
+    confirmedTotal = 0,
+    probableTotal = 0,
+    combined = 0,
+    deathsTotal = 0,
+    recoveredTotal = 0,
+    hospitalTotal = 0
+  } = summary ? summary[summary.length - 1] : {};
 
   const [location, setLocation] = useState('');
   const [termsOpened, setTermsOpened] = useState(false);
@@ -368,8 +367,6 @@ const MapView = ({
               <>
                 <div className="meta">
                   <div>
-                    {/* <small>{asAt}</small>
-                    <br /> */}
                     <small>
                       Source:{' '}
                       <a
@@ -419,123 +416,21 @@ const MapView = ({
                   </a>
                 </Share>
                 <Row>
-                  <TotalCases
-                    total={combinedTotal - recoveredTotal - deathsTotal}
-                  />
+                  <TotalCases total={data.summaryData.activeCases} />
                 </Row>
 
-                {/* <Row>
-                  <Feature>
-                    <Reveal
-                      open={featureOpened}
-                      toggle={() => setFeatureOpened(!featureOpened)}
-                      button={
-                        <Heading className="head">
-                          What does alert level 2 mean?{" "}
-                          <div
-                            className="icon"
-                            dangerouslySetInnerHTML={{
-                              __html: require(`../public/arrow.svg?include`),
-                            }}
-                          />
-                        </Heading>
-                      }
-                      onToggle={() => {
-                        gtag.event("Level 2 slideshow");
-                      }}
-                    >
-                      <Slider full centerPadding="38px" padding>
-                        {[...Array(11)].map((item, i) => (
-                          <img
-                            key={i}
-                            src={require(`../public/What L2 means/Lv2Web${
-                              i + 1
-                            }.png`)}
-                          />
-                        ))}
-                      </Slider>
-                    </Reveal>
-                  </Feature>
-                </Row> */}
-
-                <Row>
-                  <Cases
-                    confirmedTotal={confirmedTotal}
-                    probableTotal={probableTotal}
-                    combinedTotal={combinedTotal}
-                  />
-                </Row>
                 <Row>
                   <div className="grid">
-                    <NewCases combined={newCases} />
-                    <Deaths deathsTotal={deathsTotal} />
+                    <NewCases combined={data.summaryData.newCases} />
+                    <Deaths deathsTotal={data.summaryData.deaths} />
                   </div>
                 </Row>
                 <Row>
                   <Recovered
-                    recovered={recoveredTotal}
-                    combined={combinedTotal}
+                    recovered={data.summaryData.recoveredCases}
+                    combined={data.summaryData.combinedCases}
                   />
-                  </Row>
-                  {hospitalTotal > 0 &&
-                    <Row>
-                      <div className="grid">
-                        <Hospital hospitalTotal={hospitalTotal} />
-                        {genders?.length > 0 && <Genders genders={genders} />}
-                      </div>
-                    </Row>
-                  }
-                {testingData?.yesterdayTotal && (
-                  <Row>
-                    <Tests tests={testingData.yesterdayTotal} />
-                  </Row>
-                )}
-                <Row>
-                  <Slider full>
-                    <DailyChart summary={summary} />
-                    <TotalChart summary={summary} />
-                  </Slider>
                 </Row>
-
-                <Row>
-                  {/* <Slider full> */}
-                    <TransmissionChart data={transmissions} />
-                    {/* <Ages ages={ageRows} /> */}
-                  {/* </Slider> */}
-                </Row>
-
-                <Tabs
-                  items={[
-                    { title: 'Regional', icon: 'nz.svg' },
-                    {
-                      title: 'World',
-                      icon: 'world.svg'
-                    }
-                  ]}
-                  active={activeTab}
-                  setActive={setActiveTab}
-                />
-
-                {activeTab === 0 ? (
-                  <>
-                    <Legend />
-
-                    {locations?.map((item: any, i: number) => (
-                      <div key={i} onClick={() => setLocation(item.location)}>
-                        <LocationBar
-                          location={item}
-                          history={history[item.name]}
-                        />
-                      </div>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {timeseries && <InternationalLineChart data={timeseries} />}
-                    <hr />
-                    {casesPer1m && <InternationalBarChart data={casesPer1m} />}
-                  </>
-                )}
 
                 <Terms
                   termsOpened={termsOpened}

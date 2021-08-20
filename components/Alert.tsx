@@ -13,15 +13,17 @@ const StyledAlert = styled.div`
   }
 `;
 
-const Alert = ({ data }: { data: any }) => (
-  <StyledAlert>
-    <div
-      onClick={() => gtag.event("Alert", "", "")}
-      dangerouslySetInnerHTML={{
-        __html: data,
-      }}
-    />
-  </StyledAlert>
+export interface IProps {
+  data: string;
+}
+
+const Alert = ({ data }: IProps) => (
+  <StyledAlert
+    onClick={() => gtag.event("Alert", "", "")}
+    dangerouslySetInnerHTML={{
+      __html: data,
+    }}
+  />
 );
 
 export default Alert;
