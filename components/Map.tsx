@@ -222,7 +222,7 @@ const Map = ({
   return (
     <div style={{ position: 'relative' }}>
       <LeafletMap
-        onClick={() => onLocationClick('')}
+        // onClick={() => onLocationClick('')}
         ref={mapRef}
         maxBounds={outerBounds}
         center={center}
@@ -267,10 +267,10 @@ const Map = ({
                       name
                     )}
                     zIndexOffset={100}
-                    onClick={() => {
-                      onLocationClick(name);
-                      gtag.event('Marker', 'Map', name);
-                    }}
+                    // onClick={() => {
+                    //   onLocationClick(name);
+                    //   gtag.event('Marker', 'Map', name);
+                    // }}
                   />
                   <Popup>
                     <StyledPopup>
@@ -304,10 +304,10 @@ const Map = ({
                       fillOpacity={0.8}
                       positions={boundary[0]}
                       // smoothFactor={10}
-                      onClick={() => {
-                        onLocationClick(name);
-                        gtag.event('Region', 'Map', name);
-                      }}
+                      // onClick={() => {
+                      //   onLocationClick(name);
+                      //   gtag.event('Region', 'Map', name);
+                      // }}
                     />
                   )}
                 </FeatureGroup>
@@ -328,7 +328,7 @@ const Map = ({
                   key={k}
                   position={latlng}
                   icon={getClusterIcon('cluster', count)}
-                  onClick={() => gtag.event('Cluster', 'Map', clustLocName)}
+                  // onClick={() => gtag.event('Cluster', 'Map', clustLocName)}
                 >
                   <Popup>
                     <StyledPopup>
